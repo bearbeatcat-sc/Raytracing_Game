@@ -1,0 +1,7 @@
+﻿  MainGame.cpp
+  c:\program files (x86)\windows kits\10\include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\bearb\onedrive\desktop\bearengine\bearengine\device\directx\directxinput.h(10): warning C4005: 'DIRECTINPUT_VERSION': マクロが再定義されました。
+  c:\program files (x86)\windows kits\10\include\10.0.19041.0\um\dinput.h(48): note: 'DIRECTINPUT_VERSION' の以前の定義を確認してください
+c:\users\bearb\onedrive\desktop\raytracing_game\raytracing_game\maingame.cpp(62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+c:\users\bearb\onedrive\desktop\raytracing_game\raytracing_game\maingame.cpp(74): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  Raytracing_Game.vcxproj -> C:\Users\bearb\OneDrive\Desktop\Raytracing_Game\x64\Debug\Raytracing_Game.exe
