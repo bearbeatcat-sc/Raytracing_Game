@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+*.log
+
+x64/
+/imgui.ini
