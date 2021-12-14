@@ -54,10 +54,7 @@ void Cube::UpdateActor()
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 
-	if(DirectXInput::GetInstance().IsKeyDown(DIK_SPACE))
-	{
-		_rigidBodyComponent->AddAngularImpulse(SimpleMath::Vector3(0, 0.1f, 0), SimpleMath::Vector3(0,0,1));
-	}
+
 }
 
 void Cube::Generate()
@@ -85,28 +82,29 @@ void Cube::Init()
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	m_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "StaticObject");
-	//m_pCollisionComponent = new SphereCollisionComponent(this, 10.0f, "Object");
+	//m_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "StaticObject");
+	////m_pCollisionComponent = new SphereCollisionComponent(this, 10.0f, "Object");
 
 
-	CollisionManager::GetInstance().AddComponent(m_pCollisionComponent);
-	CollisionManager::GetInstance().AddRegistTree(m_pCollisionComponent);
-	_rigidBodyComponent = std::make_shared<RigidBodyComponent>(this,m_pCollisionComponent);
-	AddComponent(_rigidBodyComponent);
-	m_pCollisionComponent->RegistRigidBody(_rigidBodyComponent);
-	_rigidBodyComponent->_Mass = 1.0f;
-	_rigidBodyComponent->_Elasticty = 1.0f;
-	//_rigidBodyComponent->_AddGravity = SimpleMath::Vector3(0, -8.0f, 0.0f);
+	//CollisionManager::GetInstance().AddComponent(m_pCollisionComponent);
+	//CollisionManager::GetInstance().AddRegistTree(m_pCollisionComponent);
+	//_rigidBodyComponent = std::make_shared<RigidBodyComponent>(this,m_pCollisionComponent);
+	//AddComponent(_rigidBodyComponent);
+	//m_pCollisionComponent->RegistRigidBody(_rigidBodyComponent);
+	//_rigidBodyComponent->_Mass = 10.0f;
+	//_rigidBodyComponent->_Elasticty = 1.0f;
+	////_rigidBodyComponent->_AddGravity = SimpleMath::Vector3(0, -8.0f, 0.0f);
+	//_rigidBodyComponent->_AddGravity = SimpleMath::Vector3::Zero;
 
 
-	_rigidBodyComponent->SetStaticFlag(_IsStaticPosition, _IsStaticRotate);
-	_rigidBodyComponent->_AddGravity = SimpleMath::Vector3::Zero;
+	//_rigidBodyComponent->SetStaticFlag(false, false);
 
 }
 
 void Cube::Shutdown()
 {
-	m_pCollisionComponent->Delete();
+	//m_pCollisionComponent->Delete();
+	_instance->Destroy();
 }
 
 void Cube::OnCollsion(Actor* other)

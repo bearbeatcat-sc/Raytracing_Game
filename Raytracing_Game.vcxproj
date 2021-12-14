@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -147,26 +147,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjects\PlayerSystem\LockOnArea.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\LockOnUIObject.cpp" />
     <ClCompile Include="GameObjects\PointLightObject.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\TargetObject.cpp" />
+    <ClCompile Include="GameObjects\Tracker.cpp" />
     <ClCompile Include="GameObjects\Tunnel.cpp" />
+    <ClCompile Include="GameObjects\TunnelManager.cpp" />
+    <ClCompile Include="GameObjects\TunnerlCollisionObject.cpp" />
     <ClCompile Include="System\CameraAsistant.cpp" />
     <ClCompile Include="GameObjects\Cube.cpp" />
     <ClCompile Include="GameObjects\Flor.cpp" />
     <ClCompile Include="GameObjects\Plane.cpp" />
-    <ClCompile Include="GameObjects\Player.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\Player.cpp" />
     <ClCompile Include="GameObjects\Sphere.cpp" />
     <ClCompile Include="GameObjects\Wall.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObjects\PlayerSystem\LockOnArea.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\LockOnSystem.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\LockOnUIObject.h" />
     <ClInclude Include="GameObjects\PointLightObject.h" />
+    <ClInclude Include="GameObjects\TargetObjects\TargetCube.h" />
+    <ClInclude Include="GameObjects\TargetObjects\TargetObject.h" />
+    <ClInclude Include="GameObjects\Tracker.h" />
     <ClInclude Include="GameObjects\Tunnel.h" />
+    <ClInclude Include="GameObjects\TunnelManager.h" />
+    <ClInclude Include="GameObjects\TunnerlCollisionObject.h" />
     <ClInclude Include="System\CameraAsistant.h" />
     <ClInclude Include="GameObjects\Cube.h" />
     <ClInclude Include="GameObjects\Flor.h" />
     <ClInclude Include="GameObjects\Plane.h" />
-    <ClInclude Include="GameObjects\Player.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\Player.h" />
     <ClInclude Include="GameObjects\Sphere.h" />
     <ClInclude Include="GameObjects\Wall.h" />
     <ClInclude Include="MainGame.h" />

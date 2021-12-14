@@ -19,6 +19,7 @@ class Plane
 public:
 	Plane(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale);
 	~Plane();
+
 	void SetColor(const SimpleMath::Color& color);
 	void SetDrawType(MeshDrawer::DrawType drawType);
 
@@ -30,7 +31,8 @@ private:
 
 private:
 	std::shared_ptr<MeshComponent> m_pMeshComponent;
-	
+
+
 	SimpleMath::Vector3 mScale;
 	MeshDrawer::DrawType mDrawType;
 	SimpleMath::Color mColor;

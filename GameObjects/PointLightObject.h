@@ -22,4 +22,5 @@ private:
 
 	SimpleMath::Color _color;
 	float _distance;
+	float _targetDistance;
 };
