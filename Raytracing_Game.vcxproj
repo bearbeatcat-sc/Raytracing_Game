@@ -147,16 +147,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjects\GameSystem\GameManager.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\ScoreObject.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\ScoreSystem.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\Bullet.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnArea.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnUIObject.cpp" />
     <ClCompile Include="GameObjects\PointLightObject.cpp" />
     <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp" />
-    <ClCompile Include="GameObjects\TargetObjects\TargetObject.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\TargetGroup.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\TrackerCube.cpp" />
     <ClCompile Include="GameObjects\Tracker.cpp" />
-    <ClCompile Include="GameObjects\Tunnel.cpp" />
-    <ClCompile Include="GameObjects\TunnelManager.cpp" />
-    <ClCompile Include="GameObjects\TunnerlCollisionObject.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\Tunnel.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\TunnelManager.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\TunnerlCollisionObject.cpp" />
     <ClCompile Include="System\CameraAsistant.cpp" />
     <ClCompile Include="GameObjects\Cube.cpp" />
     <ClCompile Include="GameObjects\Flor.cpp" />
@@ -168,16 +173,22 @@
     <ClCompile Include="MainGame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObjects\GameSystem\GameManager.h" />
+    <ClInclude Include="GameObjects\GameSystem\ScoreObject.h" />
+    <ClInclude Include="GameObjects\GameSystem\ScoreSystem.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\Bullet.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnArea.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnSystem.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnUIObject.h" />
     <ClInclude Include="GameObjects\PointLightObject.h" />
     <ClInclude Include="GameObjects\TargetObjects\TargetCube.h" />
+    <ClInclude Include="GameObjects\TargetObjects\TargetGroup.h" />
     <ClInclude Include="GameObjects\TargetObjects\TargetObject.h" />
+    <ClInclude Include="GameObjects\TargetObjects\TrackerCube.h" />
     <ClInclude Include="GameObjects\Tracker.h" />
-    <ClInclude Include="GameObjects\Tunnel.h" />
-    <ClInclude Include="GameObjects\TunnelManager.h" />
-    <ClInclude Include="GameObjects\TunnerlCollisionObject.h" />
+    <ClInclude Include="GameObjects\GameSystem\Tunnel.h" />
+    <ClInclude Include="GameObjects\GameSystem\TunnelManager.h" />
+    <ClInclude Include="GameObjects\GameSystem\TunnerlCollisionObject.h" />
     <ClInclude Include="System\CameraAsistant.h" />
     <ClInclude Include="GameObjects\Cube.h" />
     <ClInclude Include="GameObjects\Flor.h" />

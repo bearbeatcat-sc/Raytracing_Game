@@ -42,7 +42,7 @@
     <ClCompile Include="GameObjects\PlayerSystem\Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\Tunnel.cpp">
+    <ClCompile Include="GameObjects\GameSystem\Tunnel.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\PointLightObject.cpp">
@@ -51,10 +51,10 @@
     <ClCompile Include="GameObjects\Tracker.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\TunnerlCollisionObject.cpp">
+    <ClCompile Include="GameObjects\GameSystem\TunnerlCollisionObject.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\TunnelManager.cpp">
+    <ClCompile Include="GameObjects\GameSystem\TunnelManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\PlayerSystem\LockOnArea.cpp">
@@ -63,13 +63,28 @@
     <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\TargetObjects\TargetObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\PlayerSystem\LockOnUIObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\PlayerSystem\Bullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\TargetObjects\TargetGroup.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\GameSystem\ScoreObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\GameSystem\ScoreSystem.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\GameSystem\GameManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\TargetObjects\TrackerCube.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,7 +113,7 @@
     <ClInclude Include="GameObjects\PlayerSystem\Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Tunnel.h">
+    <ClInclude Include="GameObjects\GameSystem\Tunnel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\PointLightObject.h">
@@ -107,10 +122,10 @@
     <ClInclude Include="GameObjects\Tracker.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\TunnerlCollisionObject.h">
+    <ClInclude Include="GameObjects\GameSystem\TunnerlCollisionObject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\TunnelManager.h">
+    <ClInclude Include="GameObjects\GameSystem\TunnelManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\PlayerSystem\LockOnArea.h">
@@ -126,6 +141,24 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\PlayerSystem\LockOnUIObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\PlayerSystem\Bullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\TargetObjects\TargetGroup.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\GameSystem\ScoreObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\GameSystem\ScoreSystem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\GameSystem\GameManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\TargetObjects\TrackerCube.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -46,4 +46,6 @@ private:
 	float _cameraPositionSpeed = 3.0f;
 
 	float _moveSpeed;
+
+	SimpleMath::Vector3 _cameraTarget;
 };

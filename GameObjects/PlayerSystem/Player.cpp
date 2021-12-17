@@ -13,9 +13,10 @@
 #include "LockOnSystem.h"
 #include "Components/Collsions/CollisionManager.h"
 #include "Device/Raytracing/DXRPipeLine.h"
+#include "../PointLightObject.h"
 
 Player::Player(const SimpleMath::Vector3& pos)
-	:Actor(), _moveSpeed(0.01f)
+	:Actor(), _moveSpeed(0.01f), _cameraTarget(SimpleMath::Vector3::Forward)
 {
 	SetPosition(pos);
 	SetTag("Player");
@@ -35,7 +36,7 @@ void Player::UpdateActor()
 	Movement();
 	SpeedUp();
 
-	if(DirectXInput::GetInstance().IsKeyDown(DIK_SPACE))
+	if(DirectXInput::GetInstance().IsKey(DIK_SPACE))
 	{
 		_lockOnSystem->LockOn();
 	}
@@ -64,7 +65,6 @@ void Player::Init()
 
 	 _lockOnSystem = std::make_shared<LockOnSystem>(this);
 	AddComponent(_lockOnSystem);
-
 }
 
 void Player::Shutdown()
@@ -86,20 +86,25 @@ void Player::CameraUpdate()
 
 	auto target = GetPosition();
 
-	ImGui::Begin("Player");
-
-	ImGui::DragFloat("CameraTargetSpeed", &_cameraTargetSpeed, 0.01f, 0.1f, 3.0f);
-	ImGui::DragFloat("CameraPositionSpeed", &_cameraPositionSpeed, 0.01f, 0.1f, 3.0f);
-
-	ImGui::End();
-
-	_camera->SetTarget(SimpleMath::Vector3::Lerp(_camera->GetTarget(), _pTracker->GetPosition() + SimpleMath::Vector3(0, 0.0f,1.0f), Time::DeltaTime * _cameraTargetSpeed));
+	_camera->SetTarget(SimpleMath::Vector3::Lerp(_camera->GetTarget(), _pTracker->GetPosition() + _cameraTarget, Time::DeltaTime * _cameraTargetSpeed));
 	_camera->SetPosition(SimpleMath::Vector3::Lerp(_camera->GetPosition(), GetPosition() + SimpleMath::Vector3(0, 3.0f, -3.0f), Time::DeltaTime * _cameraPositionSpeed));
+
+	if(DirectXInput::GetInstance().IsKey(DIK_LEFT))
+	{
+		_cameraTarget -= SimpleMath::Vector3(0.2f, 0.0f, 0.0f);
+		_cameraTarget.Clamp(SimpleMath::Vector3(-4.0f, 0.0f, 1.0f), SimpleMath::Vector3(4.0f, 10.0f, 1.0f));
+	}
+
+	if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
+	{
+		_cameraTarget += SimpleMath::Vector3(0.2f, 0.0f, 0.0f);
+		_cameraTarget.Clamp(SimpleMath::Vector3(-4.0f, 0.0f, 1.0f), SimpleMath::Vector3(4.0f, 10.0f, 1.0f));
+	}
 }
 
 void Player::SpeedUp()
 {
-	_moveSpeed = std::clamp(_moveSpeed + Time::DeltaTime * 0.1f, 0.01f, 3.0f);
+	_moveSpeed = std::clamp(_moveSpeed + Time::DeltaTime * 0.1f, 0.01f, 1.0f);
 
 }
 

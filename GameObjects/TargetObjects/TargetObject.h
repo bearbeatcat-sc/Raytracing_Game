@@ -3,11 +3,16 @@
 #include <Game_Object/Actor.h>
 #include <Device/Raytracing/DXRInstance.h>
 
+class GameManager;
+
 class TargetObject
 	:public Actor
 {
 public:
-	TargetObject() = default;
+	TargetObject(GameManager* pGameManager)
+		:_pGameManager(pGameManager)
+	{}
+
 	virtual ~TargetObject() {}
 
 	const int GetInstanceID()
@@ -23,6 +28,6 @@ private:
 
 protected:
 	std::shared_ptr<DXRInstance> _instance;
-
+	GameManager* _pGameManager;
 
 };

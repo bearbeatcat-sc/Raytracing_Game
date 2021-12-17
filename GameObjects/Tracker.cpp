@@ -19,6 +19,21 @@ Tracker::Tracker(Actor* pPlayer)
 
 void Tracker::AddPoint(std::vector<SimpleMath::Vector3>& points)
 {
+	if(_movePoints.size() > 1)
+	{
+		const SimpleMath::Vector3 connectionPoint = _movePoints.back();
+
+
+		for (int i = 0; i < 100; ++i)
+		{
+			_movePoints.push_back(SimpleMath::Vector3::Lerp(connectionPoint, *(points.begin() + 20), 0.01f * i));
+		}
+
+		points.erase(points.begin(), points.begin() + 20);
+	}
+
+
+
 	_movePoints.insert(_movePoints.end(), points.begin(), points.end());
 }
 
@@ -80,8 +95,11 @@ void Tracker::Movement()
 	auto targetPoint = _movePoints.front();
 	auto currentPos = GetPosition();
 
-	_moveSpeed = std::clamp(_moveSpeed + Time::DeltaTime * 2.0f, 1.0f, 24.0f);
-	auto setPos = SimpleMath::Vector3(MathUtility::Lerp(currentPos.x, targetPoint.x, Time::DeltaTime * _moveSpeed), MathUtility::Lerp(currentPos.y, targetPoint.y, Time::DeltaTime * _moveSpeed), MathUtility::Lerp(currentPos.z, targetPoint.z, Time::DeltaTime * _moveSpeed));
+	auto vec = (targetPoint - currentPos);
+	const float distance = vec.Length();
+
+	_moveSpeed = std::clamp(_moveSpeed + Time::DeltaTime * 4.0f, 1.0f, 62.0f);
+	auto setPos = SimpleMath::Vector3::Lerp(currentPos, targetPoint, Time::DeltaTime * _moveSpeed);
 
 
 	SetPosition(setPos);

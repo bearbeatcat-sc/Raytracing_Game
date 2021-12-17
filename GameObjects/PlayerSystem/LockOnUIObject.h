@@ -3,12 +3,13 @@
 #include <Game_Object/Actor.h>
 
 class DXRInstance;
+class Timer;
 
 class LockOnUIObject
 	:public Actor
 {
 public:
-	LockOnUIObject() = default;
+	LockOnUIObject(const float destroyTime);
 	~LockOnUIObject() = default;
 
 private:
@@ -20,4 +21,9 @@ private:
 private:
 	std::shared_ptr<DXRInstance> _instance;
 
+	std::shared_ptr<Timer> _generateTimer;
+	std::shared_ptr<Timer> _destroyTimer;
+
+	bool _isGenerate;
+	SimpleMath::Vector3 _initScale;
 };

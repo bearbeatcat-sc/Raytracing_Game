@@ -18,7 +18,7 @@ Cube::Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale, flo
 	SetScale(scale);
 
 	_DestroyTimer = std::make_shared<Timer>(destroyTime);
-	_GenerateTimer = std::make_shared<Timer>(0.3f);
+	_GenerateTimer = std::make_shared<Timer>(1.0f);
 
 	_Acc = SimpleMath::Vector3(0, 4.0f, 0.0f);
 }
@@ -36,11 +36,11 @@ void Cube::UpdateActor()
 	//_Acc += SimpleMath::Vector3(0, -2.0f, 0) * Time::DeltaTime;
 	//m_Position += Time::DeltaTime * _Acc;
 
-	//if (!_IsGenerate)
-	//{
-	//	Generate();
-	//	return;
-	//}
+	if (!_IsGenerate)
+	{
+		Generate();
+		return;
+	}
 
 	//_DestroyTimer->Update();
 	//if (_DestroyTimer->IsTime())
@@ -68,7 +68,7 @@ void Cube::Generate()
 		return;
 	}
 
-	m_Scale = SimpleMath::Vector3::Lerp(SimpleMath::Vector3(0.0f), _initScale, _GenerateTimer->GetRatio() * 1.1f);
+	m_Scale = SimpleMath::Vector3::Lerp(SimpleMath::Vector3(0.0f), _initScale, _GenerateTimer->GetRatio() * 1.0f);
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 }

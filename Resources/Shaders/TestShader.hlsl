@@ -559,10 +559,10 @@ void miss(inout Payload payload)
     float3 color = gBackGround.SampleLevel(
     gSampler, WorldRayDirection(), 0.0).xyz;
 	
-    payload.color = color;
+    payload.color = color * 0.02f;
 
-    float t = RayTCurrent();
-    payload.color = lerp(payload.color, 0.2f, 1.0f - exp(-0.000002f * t * t * t));
+    //float t = RayTCurrent();
+    //payload.color = lerp(payload.color, 0.0f, 1.0f - exp(-0.000002f * t * t * t));
 }
 
 [shader("miss")]
@@ -684,8 +684,8 @@ void chs(inout Payload payload, in MyAttribute attribs)
             payload.color.rgb *= 0.5;
         }
 
-        float t = RayTCurrent();
-        payload.color = lerp(payload.color, 0.2f, 1.0f - exp(-0.000002f * t * t * t));
+        //float t = RayTCurrent();
+        //payload.color = lerp(payload.color, 0.0f, 1.0f - exp(-0.000002f * t * t * t));
     	
         return;
     }
@@ -707,8 +707,8 @@ void chs(inout Payload payload, in MyAttribute attribs)
         payload.color.rgb *= 0.5;
     }
 
-    float t = RayTCurrent();
-    payload.color = lerp(payload.color, 0.2f, 1.0f - exp(-0.000002f * t * t * t));
+    //float t = RayTCurrent();
+    //payload.color = lerp(payload.color, 0.0f, 1.0f - exp(-0.000002f * t * t * t));
 
 }
 

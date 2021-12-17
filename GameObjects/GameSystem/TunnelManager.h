@@ -2,15 +2,16 @@
 
 #include <Game_Object/Actor.h>
 
+class GameManager;
 class Tunnel;
 
 class TunnelManager
 	:public Actor
 {
 public:
-	TunnelManager();
+	TunnelManager(GameManager* pGameManager);
 	~TunnelManager() = default;
-	void AddTask(std::function<Tunnel* (Actor* actor)> task);
+	void AddTask(std::function<Tunnel* (Actor* actor, GameManager* pGameManager)> task);
 
 private:
 	
@@ -23,8 +24,10 @@ private:
 	void DestroyTunnel();
 
 private:
-	std::vector<std::function<Tunnel* (Actor* actor)>> _createTasks;
+	std::vector<std::function<Tunnel* (Actor* actor, GameManager* pGameManager)>> _createTasks;
 	std::vector<Tunnel*> _generateTunnels;
 	const int _maxGenerateCount = 4;
 	int _generateIndex;
+
+	GameManager* _pGamaManager;
 };

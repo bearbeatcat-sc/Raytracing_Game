@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include "TargetObject.h"
 
 class AnimationQue;
@@ -8,14 +7,16 @@ class CollisionComponent;
 class Timer;
 class AnimationComponent;
 
-class TargetCube
+class TrackerCube
 	:public TargetObject
 {
 public:
-	TargetCube(const std::string& dxrMeshName, GameManager* pGameManager);
-	~TargetCube() = default;
+	TrackerCube(const std::string& dxrMeshName, GameManager* pGameManager);
+	bool AnimationUpdate();
+	~TrackerCube() = default;
 
 private:
+	void Move();
 	void UpdateActor() override;
 	void Init() override;
 	void Shutdown() override;
@@ -31,4 +32,5 @@ private:
 	std::shared_ptr<AnimationQue> _DestroyAnimationQue;
 
 	bool _isDelete;
+	float _moveSpeed;
 };

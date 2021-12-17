@@ -4,6 +4,7 @@
 #include <SimpleMath.h>
 #include <memory>
 
+class GameManager;
 class CollisionComponent;
 class TunnerlCollisionObject;
 class Timer;
@@ -13,9 +14,10 @@ class Tunnel
 	:public Actor
 {
 public:
-	Tunnel(const SimpleMath::Vector3& pos,const SimpleMath::Vector3& scale);
+	Tunnel(const SimpleMath::Vector3& scale, GameManager* pGameManager);
 	~Tunnel() = default;
-	void SetCollisionEvent(std::function<void(Actor* actor)> );
+	void SetCollisionEvent(std::function<void(Actor* actor, GameManager* pGameManager)> );
+	void SetCreateEvent(std::function<void(Actor* actor, GameManager* pGameManager)> );
 	bool IsExit();
 	void AddPoint(const SimpleMath::Vector3& point);
 
@@ -37,5 +39,8 @@ private:
 	bool _isPreviousEnter;
 
 	TunnerlCollisionObject* _pTunnerlCollsionObject;
-	std::function<void(Actor* actor)> _pCollisionEvent = nullptr;
+	GameManager* _pGameManager;
+
+	std::function<void(Actor* actor, GameManager* pGameManager)> _pCollisionEvent = nullptr;
+	std::function<void(Actor* actor, GameManager* pGameManager)> _pCreateEvent = nullptr;
 };
