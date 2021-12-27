@@ -6,11 +6,9 @@
 #include "Device/DirectX/DirectXGraphics.h"
 #include "Device/DirectX/Core/Model/MeshManager.h"
 #include "Game_Object/ActorManager.h"
-#include "GameObjects/Sphere.h"
 #include "Device/Raytracing/DXRPipeLine.h"
 #include "GameObjects/Cube.h"
-#include "Utility/Timer.h"
-#include "Utility/Random.h"
+
 
 #include "System/CameraAsistant.h"
 
@@ -19,17 +17,10 @@
 #include <Device/DirectX/Core/Sounds/SoundManager.h>
 #include <Device/Rendering/RenderingPipeline.h>
 #include <Components/Collsions/CollisionTagManager.h>
-#include <Utility/Math/MathUtility.h>
 #include <Device/TextureManager.h>
 
-#include "GameObjects/PointLightObject.h"
-#include "GameObjects/Tracker.h"
 #include "GameObjects/GameSystem/GameManager.h"
-#include "GameObjects/GameSystem/ScoreSystem.h"
 
-#include "GameObjects/GameSystem/TunnelManager.h"
-#include "GameObjects/PlayerSystem/Player.h"
-#include "GameObjects/TargetObjects/TargetCube.h"
 
 MainGame::MainGame()
 	:Game(L"MainGame", 1920, 1080)
@@ -88,9 +79,9 @@ void MainGame::Init()
 	DXRPipeLine::GetInstance().AddMeshData(planeMeshData, L"HitGroup", "NumberObject9", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f), "Number9");
 	
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "WhiteCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0.1f));
-	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "GrayCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.2f, 0.2f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0.1));
+	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "GrayCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.2f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.5f), 0.1));
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "RoughCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
-	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "RedCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
+	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "RedCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "ClearCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.4f, 1.24f));
 
 	DXRPipeLine::GetInstance().AddMeshData(sphereMeshData, L"HitGroup", "Sphere", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.2f, 0.2f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0.2f));
@@ -108,7 +99,6 @@ void MainGame::Init()
 	m_CameraAsistant = new CameraAsistant();
 
 
-	const SimpleMath::Vector3 base_position = Vector3(2.5f, 0.0f, 2.5f);
 
 	RenderingPipeLine::GetInstance().SetSkyBox("Resources/SpaceSkyBox.dds", SimpleMath::Vector3(10.0f));
 	RenderingPipeLine::GetInstance().SetDrawFluidFlag(false);
@@ -121,7 +111,7 @@ void MainGame::Init()
 
 	std::vector<bool> DynamicObjectCollTable =
 	{
-		true,false
+		true,true
 	};
 
 	CollisionTagManagaer::GetInstance().AddTag("StaticObject", StaticObjectCollTable);

@@ -24,5 +24,4 @@ private:
 	 std::shared_ptr<DXRInstance> _instance;
 
 	 std::shared_ptr<AnimationComponent> _AnimationComponent;
-	 std::shared_ptr<AnimationQue> _GenerateAnimationQue;
 };

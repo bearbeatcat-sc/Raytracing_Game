@@ -17,6 +17,14 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Test|Win32">
+      <Configuration>Test</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Test|x64">
+      <Configuration>Test</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -39,6 +47,13 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -46,6 +61,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
@@ -63,10 +85,16 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -76,12 +104,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTex;C:\Users\bearb\OneDrive\Desktop\BearEngine\BearEngine;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTK12\Inc;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTex\Bin\Desktop_2017_Win10\x64\Debug;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTK12\Bin\Desktop_2017_Win10\x64\Debug;C:\Users\bearb\OneDrive\Desktop\BearEngine\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\bearb\OneDrive\Desktop\BearEngine\BearEngine;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTex;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTK12\Inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\bearb\OneDrive\Desktop\BearEngine\x64\Release;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTex\Bin\Desktop_2017_Win10\x64\Release;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTK12\Bin\Desktop_2017_Win10\x64\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Users\bearb\OneDrive\Desktop\BearEngine\BearEngine;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTex;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTK12\Inc;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\bearb\OneDrive\Desktop\BearEngine\x64\Release;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTex\Bin\Desktop_2017_Win10\x64\Release;C:\Users\bearb\OneDrive\Desktop\BearEngine\DirectXTK12\Bin\Desktop_2017_Win10\x64\Release;$(LibraryPath)</LibraryPath>
@@ -99,6 +135,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -146,29 +198,47 @@
       <AdditionalDependencies>BearEngine.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>BearEngine.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\GameSystem\GameManager.cpp" />
     <ClCompile Include="GameObjects\GameSystem\ScoreObject.cpp" />
     <ClCompile Include="GameObjects\GameSystem\ScoreSystem.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\Stage.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\Bullet.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnArea.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnUIObject.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\PlayerCamera.cpp" />
     <ClCompile Include="GameObjects\PointLightObject.cpp" />
     <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp" />
     <ClCompile Include="GameObjects\TargetObjects\TargetGroup.cpp" />
-    <ClCompile Include="GameObjects\TargetObjects\TrackerCube.cpp" />
-    <ClCompile Include="GameObjects\Tracker.cpp" />
-    <ClCompile Include="GameObjects\GameSystem\Tunnel.cpp" />
+    <ClCompile Include="GameObjects\TrackerObjects\Tracker.cpp" />
     <ClCompile Include="GameObjects\GameSystem\TunnelManager.cpp" />
-    <ClCompile Include="GameObjects\GameSystem\TunnerlCollisionObject.cpp" />
+    <ClCompile Include="GameObjects\TrackerObjects\TrackerBody.cpp" />
+    <ClCompile Include="GameObjects\TrackerObjects\TrackerBullet.cpp" />
+    <ClCompile Include="GameObjects\TrackerObjects\TrackerShotObject.cpp" />
+    <ClCompile Include="GameObjects\VerticalMoveBlock.cpp" />
     <ClCompile Include="System\CameraAsistant.cpp" />
     <ClCompile Include="GameObjects\Cube.cpp" />
-    <ClCompile Include="GameObjects\Flor.cpp" />
-    <ClCompile Include="GameObjects\Plane.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\Player.cpp" />
     <ClCompile Include="GameObjects\Sphere.cpp" />
-    <ClCompile Include="GameObjects\Wall.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
   </ItemGroup>
@@ -176,26 +246,26 @@
     <ClInclude Include="GameObjects\GameSystem\GameManager.h" />
     <ClInclude Include="GameObjects\GameSystem\ScoreObject.h" />
     <ClInclude Include="GameObjects\GameSystem\ScoreSystem.h" />
+    <ClInclude Include="GameObjects\GameSystem\Stage.h" />
     <ClInclude Include="GameObjects\PlayerSystem\Bullet.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnArea.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnSystem.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnUIObject.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\PlayerCamera.h" />
     <ClInclude Include="GameObjects\PointLightObject.h" />
     <ClInclude Include="GameObjects\TargetObjects\TargetCube.h" />
     <ClInclude Include="GameObjects\TargetObjects\TargetGroup.h" />
     <ClInclude Include="GameObjects\TargetObjects\TargetObject.h" />
-    <ClInclude Include="GameObjects\TargetObjects\TrackerCube.h" />
-    <ClInclude Include="GameObjects\Tracker.h" />
-    <ClInclude Include="GameObjects\GameSystem\Tunnel.h" />
+    <ClInclude Include="GameObjects\TrackerObjects\Tracker.h" />
     <ClInclude Include="GameObjects\GameSystem\TunnelManager.h" />
-    <ClInclude Include="GameObjects\GameSystem\TunnerlCollisionObject.h" />
+    <ClInclude Include="GameObjects\TrackerObjects\TrackerBody.h" />
+    <ClInclude Include="GameObjects\TrackerObjects\TrackerBullet.h" />
+    <ClInclude Include="GameObjects\TrackerObjects\TrackerShotObject.h" />
+    <ClInclude Include="GameObjects\VerticalMoveBlock.h" />
     <ClInclude Include="System\CameraAsistant.h" />
     <ClInclude Include="GameObjects\Cube.h" />
-    <ClInclude Include="GameObjects\Flor.h" />
-    <ClInclude Include="GameObjects\Plane.h" />
     <ClInclude Include="GameObjects\PlayerSystem\Player.h" />
     <ClInclude Include="GameObjects\Sphere.h" />
-    <ClInclude Include="GameObjects\Wall.h" />
     <ClInclude Include="MainGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

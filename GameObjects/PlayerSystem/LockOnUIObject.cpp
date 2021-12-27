@@ -3,15 +3,22 @@
 #include <Device/Raytracing/DXRPipeLine.h>
 #include <Utility/Timer.h>
 
-LockOnUIObject::LockOnUIObject(const float destroyTime)
-	:_isGenerate(false)
+LockOnUIObject::LockOnUIObject(const float destroyTime, Actor* lockonTarget)
+	:_isGenerate(false),_pTarget(lockonTarget)
 {
-	_generateTimer = std::make_shared<Timer>(1.0f);
+	_generateTimer = std::make_shared<Timer>(0.4f);
 	_destroyTimer = std::make_shared<Timer>(destroyTime);
 }
 
 void LockOnUIObject::UpdateActor()
 {
+	if(_pTarget->GetDestroyFlag())
+	{
+		Destroy();
+		return;
+	}
+
+	SetPosition(_pTarget->GetPosition());
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 

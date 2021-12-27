@@ -1,10 +1,8 @@
 ﻿#include "Player.h"
 
-#include <Components/MeshComponent.h>
 #include <Utility/CameraManager.h>
 #include <Utility/Time.h>
 #include <Utility/Random.h>
-#include <Components/Collsions/SphereCollisionComponent.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
 #include <Device/DirectX/DirectXInput.h>
 #include <imgui/imgui.h>
@@ -14,9 +12,11 @@
 #include "Components/Collsions/CollisionManager.h"
 #include "Device/Raytracing/DXRPipeLine.h"
 #include "../PointLightObject.h"
+#include "PlayerCamera.h"
+#include "../GameSystem/GameManager.h"
 
-Player::Player(const SimpleMath::Vector3& pos)
-	:Actor(), _moveSpeed(0.01f), _cameraTarget(SimpleMath::Vector3::Forward)
+Player::Player(const SimpleMath::Vector3& pos, GameManager* pGameManager)
+	:Actor(), _moveSpeed(0.01f),_pGameManager(pGameManager)
 {
 	SetPosition(pos);
 	SetTag("Player");
@@ -32,75 +32,59 @@ void Player::UpdateActor()
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 
-	CameraUpdate();
 	Movement();
 	SpeedUp();
 
-	if(DirectXInput::GetInstance().IsKey(DIK_SPACE))
+	if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
 	{
 		_lockOnSystem->LockOn();
 	}
+
 }
 
 void Player::Init()
 {
-	
-	_camera = std::make_shared<Camera>();
-	CameraManager::GetInstance().AddCamera("PlayerCamera", _camera);
-	CameraManager::GetInstance().SetMainCamera("PlayerCamera");
 
-	_camera->SetPosition(GetPosition() + SimpleMath::Vector3(0, 4.0f, -10.0f));
-	
-	CameraUpdate();
-	
-	_instance = DXRPipeLine::GetInstance().AddInstance("Sphere", 0);
-	_sphereCollisionComponent = new SphereCollisionComponent(this, m_Scale.x * 0.5f, "DynamicObject");
-	CollisionManager::GetInstance().AddComponent(_sphereCollisionComponent);
-	CollisionManager::GetInstance().AddRegistTree(_sphereCollisionComponent);
+
+
+	_instance = DXRPipeLine::GetInstance().AddInstance("GrayCube", 0);
+	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "DynamicObject");
+	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
+	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
 
 
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	 _lockOnSystem = std::make_shared<LockOnSystem>(this);
+	_lockOnSystem = std::make_shared<LockOnSystem>(this);
 	AddComponent(_lockOnSystem);
+
+	_pPlayerCamera = new PlayerCamera(_pTracker);
+	SetChild(_pPlayerCamera);
 }
 
 void Player::Shutdown()
 {
-	if (_sphereCollisionComponent != nullptr)
-		_sphereCollisionComponent->Delete();
-
+	_pCollisionComponent->Delete();
 	_instance->Destroy();
+}
+
+void Player::Damage()
+{
+	_pPlayerCamera->Shake(0.4f, 0.1f);
+	_pGameManager->AddScore(-100);
 }
 
 void Player::OnCollsion(Actor* other)
 {
-
-}
-
-void Player::CameraUpdate()
-{
-	auto cameraPos = _camera->GetPosition();
-
-	auto target = GetPosition();
-
-	_camera->SetTarget(SimpleMath::Vector3::Lerp(_camera->GetTarget(), _pTracker->GetPosition() + _cameraTarget, Time::DeltaTime * _cameraTargetSpeed));
-	_camera->SetPosition(SimpleMath::Vector3::Lerp(_camera->GetPosition(), GetPosition() + SimpleMath::Vector3(0, 3.0f, -3.0f), Time::DeltaTime * _cameraPositionSpeed));
-
-	if(DirectXInput::GetInstance().IsKey(DIK_LEFT))
+	if(other->IsContainsTag("Target"))
 	{
-		_cameraTarget -= SimpleMath::Vector3(0.2f, 0.0f, 0.0f);
-		_cameraTarget.Clamp(SimpleMath::Vector3(-4.0f, 0.0f, 1.0f), SimpleMath::Vector3(4.0f, 10.0f, 1.0f));
-	}
-
-	if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
-	{
-		_cameraTarget += SimpleMath::Vector3(0.2f, 0.0f, 0.0f);
-		_cameraTarget.Clamp(SimpleMath::Vector3(-4.0f, 0.0f, 1.0f), SimpleMath::Vector3(4.0f, 10.0f, 1.0f));
+		Damage();
 	}
 }
+
+
 
 void Player::SpeedUp()
 {

@@ -2,9 +2,10 @@
 
 #include <Device/Raytracing/DXRPipeLine.h>
 
-#include <Components/AnimationQue.h>
-#include <Components/AnimationComponent.h>
-#include <Components/Vector3AnimationCommand.h>
+#include <Components/Animations//AnimationQue.h>
+#include <Components/Animations/AnimationComponent.h>
+#include <Components/Animations/AnimationCommandList.h>
+#include <Components/Animations/Vector3AnimationCommand.h>
 
 ScoreObject::ScoreObject(const int number)
 {
@@ -29,10 +30,11 @@ void ScoreObject::Init()
 	_AnimationComponent = std::make_shared<AnimationComponent>(this);
 	AddComponent(_AnimationComponent);
 
-	_GenerateAnimationQue = std::make_shared<AnimationQue>();
-	_GenerateAnimationQue->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, SimpleMath::Vector3(0.25f), m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
-	_GenerateAnimationQue->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero,SimpleMath::Vector3(0.0f, 6.0f,0.0f), m_Rotation, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
-	_AnimationComponent->AddAnimationQue("Generate", _GenerateAnimationQue);
+	auto generateAnimationCommandList = std::make_shared<AnimationCommandList>();
+	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, SimpleMath::Vector3(0.25f), m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero,SimpleMath::Vector3(0.0f, 6.0f,0.0f), m_Rotation, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+
+	_AnimationComponent->AddAnimationState(generateAnimationCommandList,"Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");
 }
 

@@ -1,64 +1,39 @@
-﻿#include "TargetCube.h"
+﻿#include "TrackerBody.h"
 
+#include <algorithm>
+#include <Components/Animations/AnimationCommand.h>
+#include <Components/Animations/AnimationCommandList.h>
 #include <Components/Animations/AnimationComponent.h>
+#include <Components/Animations/AnimationQue.h>
+#include <Components/Animations/Vector3AnimationCommand.h>
 #include <Components/Collsions/CollisionManager.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
 #include <Device/Raytracing/DXRPipeLine.h>
-#include <Utility/Random.h>
-#include <Utility/Time.h>
-#include <Utility/Timer.h>
-
-#include <Components/Animations/AnimationComponent.h>
-#include <Components/Animations/AnimationCommandList.h>
-#include <Components/Animations/Vector3AnimationCommand.h>
 
 #include "../GameSystem/GameManager.h"
 
-TargetCube::TargetCube(const std::string& dxrMeshName, GameManager* pGameManager)
-	:TargetObject(pGameManager)
+TrackerBody::TrackerBody(const int maxHP, const std::string& dxrMeshName, GameManager* pGameManager)
+	:_hp(maxHP), TargetObject(pGameManager), _maxHP(maxHP)
 {
 	_instance = DXRPipeLine::GetInstance().AddInstance(dxrMeshName, 0);
 
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
-
-	_ChangeTargetRotateTimer = std::make_shared<Timer>(3.0f);
-
-
 }
 
-void TargetCube::UpdateActor()
+void TrackerBody::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
-
-	if (_AnimationComponent->GetCurrentState() == "Generate")
-	{
-		return;
-	}
 
 	if (_isDelete && _AnimationComponent->GetCurrentState() == "End")
 	{
 		Destroy();
 	}
-
-	auto rotate = GetVecRotation();
-	SetRotation(SimpleMath::Vector3::Lerp(rotate, _targetRotate, Time::DeltaTime));
-
-	_ChangeTargetRotateTimer->Update();
-	if (_ChangeTargetRotateTimer->IsTime())
-	{
-		const float rand_x = Random::GetRandom(-10.0f, 10.0f);
-		const float rand_y = Random::GetRandom(-10.0f, 10.0f);
-
-		_ChangeTargetRotateTimer->Reset();
-		_targetRotate = SimpleMath::Vector3(rand_x, rand_y, 0);
-
-	}
 }
 
-void TargetCube::Init()
+void TrackerBody::Init()
 {
 	m_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "DynamicObject");
 	//m_pCollisionComponent = new SphereCollisionComponent(this, 10.0f, "Object");
@@ -67,6 +42,7 @@ void TargetCube::Init()
 	CollisionManager::GetInstance().AddRegistTree(m_pCollisionComponent);
 
 	SetTag("Target");
+
 	_AnimationComponent = std::make_shared<AnimationComponent>(this);
 	AddComponent(_AnimationComponent);
 
@@ -77,27 +53,50 @@ void TargetCube::Init()
 	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::One, SimpleMath::Vector3(2.0f), m_Scale, 4.0f));
 	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3(2.0f), SimpleMath::Vector3::Zero, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
-	_AnimationComponent->AddAnimationState(generateAnimationCommandList, "Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
-	_AnimationComponent->AddAnimationState(destroyAnimationCommandList, "Destroy", AnimationQue::StandardAnimationStateType::AnimationStateType_End);
-	_AnimationComponent->PlayAnimation("Generate");
+	auto damageAnimationCommandList = std::make_shared<AnimationCommandList>();
+	damageAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 4.0f));
+	//damageAnimationQue->AddAnimation(std::make_shared<Vector3AnimationCommand>(_damageScale, m_Scale, m_Scale, 8.0f));
 
+	_AnimationComponent->AddAnimationState(generateAnimationCommandList,"Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+
+	_AnimationComponent->AddAnimationState(destroyAnimationCommandList, "Destroy", AnimationQue::StandardAnimationStateType::AnimationStateType_End);
+	_AnimationComponent->AddAnimationState(damageAnimationCommandList,"Damage", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+	_AnimationComponent->PlayAnimation("Generate");
 }
 
-void TargetCube::Shutdown()
+void TrackerBody::Shutdown()
 {
 	_instance->Destroy();
 	m_pCollisionComponent->Delete();
 }
 
-void TargetCube::OnCollsion(Actor* other)
+bool TrackerBody::IsDeath()
+{
+	return _hp <= 0;
+}
+
+void TrackerBody::Damage()
+{
+	_hp = std::clamp(_hp - 1, 0, _maxHP);
+	_AnimationComponent->PlayAnimation("Damage");
+
+	_damageScale = (SimpleMath::Vector3::One * (_hp / _maxHP));
+}
+
+void TrackerBody::OnCollsion(Actor* other)
 {
 	if (_isDelete)return;
 
 	if (other->IsContainsTag("Bullet"))
 	{
-		_AnimationComponent->PlayAnimation("Destroy");
-		_isDelete = true;
-		_pGameManager->AddScore(1000);
-		return;
+		Damage();
+
+		if(IsDeath())
+		{
+			_AnimationComponent->PlayAnimation("Destroy");
+			_isDelete = true;
+			_pGameManager->AddScore(1000);
+			return;
+		}
 	}
 }

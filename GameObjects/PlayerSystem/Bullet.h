@@ -2,8 +2,8 @@
 
 #include <Game_Object/Actor.h>
 
+class OBBCollisionComponent;
 class DXRInstance;
-class SphereCollisionComponent;
 
 class Bullet
 	:public Actor
@@ -23,13 +23,16 @@ private:
 	float _point0X;
 	float _point1X;
 
+	float _moveTime;
+	float _rotate;
+
+
 	Actor* _targetActor;
 
-	std::shared_ptr<Timer> _moveTimer;
 	std::shared_ptr<DXRInstance> _instance;
 
 	SimpleMath::Vector3 _createPoint;
 
-	SphereCollisionComponent* _sphereCollisionComponent;
+	OBBCollisionComponent* _pCollisionComponent;
 
 };

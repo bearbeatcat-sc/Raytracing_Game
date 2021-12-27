@@ -9,7 +9,7 @@ class LockOnUIObject
 	:public Actor
 {
 public:
-	LockOnUIObject(const float destroyTime);
+	LockOnUIObject(const float destroyTime,Actor* lockonTarget);
 	~LockOnUIObject() = default;
 
 private:
@@ -23,6 +23,8 @@ private:
 
 	std::shared_ptr<Timer> _generateTimer;
 	std::shared_ptr<Timer> _destroyTimer;
+
+	Actor* _pTarget;
 
 	bool _isGenerate;
 	SimpleMath::Vector3 _initScale;

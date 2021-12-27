@@ -14,7 +14,7 @@ LockOnArea::LockOnArea(Actor* pActor)
 {
 }
 
-const std::vector<Actor*>& LockOnArea::GetLockOnTargets()
+const std::vector<TargetObject*>& LockOnArea::GetLockOnTargets()
 {
 	return _lockOnTargets;
 }
@@ -32,6 +32,9 @@ void LockOnArea::Init()
 	_obbCollisionComponent = new OBBCollisionComponent(this, GetPosition(), GetScale(), "StaticObject");
 	CollisionManager::GetInstance().AddComponent(_obbCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_obbCollisionComponent);
+
+	SetTag("LockOnArea");
+
 }
 
 void LockOnArea::Shutdown()
@@ -41,7 +44,7 @@ void LockOnArea::Shutdown()
 
 }
 
-void LockOnArea::AddTarget(Actor* target)
+void LockOnArea::AddTarget(TargetObject* target)
 {
 	_lockOnTargets.push_back(target);
 }
@@ -59,7 +62,7 @@ void LockOnArea::OnCollsion(Actor* other)
 
 		if(hitList.at(instanceID)._isHit == 0)
 		{
-			AddTarget(other);
+			AddTarget(static_cast<TargetObject*>(other));
 		}
 
 	}

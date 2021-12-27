@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include <Game_Object/Actor.h>
 #include <SimpleMath.h>
 #include <memory>
@@ -8,16 +7,13 @@
 using namespace DirectX;
 
 class DXRInstance;
-class Timer;
-class CollisionComponent;
-class RigidBodyComponent;
 
-class Cube
+class VerticalMoveBlock
 	:public Actor
 {
 public:
-	Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale,float destroyTime,const std::string& meshName,bool moveFlag = true);
-	~Cube() = default;
+	VerticalMoveBlock(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale, const std::string& meshName,float angle = 0.0f);
+	~VerticalMoveBlock() = default;
 
 private:
 	virtual void UpdateActor() override;
@@ -26,13 +22,17 @@ private:
 	virtual void OnCollsion(Actor* other) override;
 
 	void Generate();
+	void Move();
 
-private:	
+private:
 	std::shared_ptr<DXRInstance> _instance;
 	std::shared_ptr<Timer> _GenerateTimer;
 	SimpleMath::Vector3 _initScale;
+	SimpleMath::Vector3 _initPosition;
 	bool _IsGenerate;
 
+	float _angle;
+	float _moveSpeed;
 
 private:
 

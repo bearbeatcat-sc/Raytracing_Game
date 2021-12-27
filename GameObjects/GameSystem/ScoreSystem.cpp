@@ -1,5 +1,6 @@
 ﻿#include "ScoreSystem.h"
 
+#include <algorithm>
 #include <iomanip>
 #include <sstream>
 
@@ -15,7 +16,7 @@ ScoreSystem::ScoreSystem()
 
 void ScoreSystem::AddScore(int score)
 {
-	_score += score;
+	_score = std::clamp(_score + score, 0, 100000);
 
 	std::ostringstream sout;
 

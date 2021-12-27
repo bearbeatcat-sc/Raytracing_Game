@@ -4,6 +4,7 @@
 #include <vector>
 #include <Components/Component.h>
 
+class TargetObject;
 class LockOnArea;
 
 class LockOnSystem
@@ -16,7 +17,7 @@ public:
 
 	struct AttackTargetInfo
 	{
-		Actor* _target;
+		TargetObject* _target;
 
 		Actor* _lockOnUI0;
 		Actor* _lockOnUI1;
@@ -28,7 +29,7 @@ private:
 	void Update() override;
 	void DrawProperties() override;
 
-	void AddTarget(Actor* target);
+	void AddTarget(TargetObject* target);
 
 private:
 	LockOnArea* _pLockOnArea;

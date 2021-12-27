@@ -2,6 +2,7 @@
 
 #include <Game_Object/Actor.h>
 
+class Stage;
 class GameManager;
 class Tunnel;
 
@@ -11,7 +12,6 @@ class TunnelManager
 public:
 	TunnelManager(GameManager* pGameManager);
 	~TunnelManager() = default;
-	void AddTask(std::function<Tunnel* (Actor* actor, GameManager* pGameManager)> task);
 
 private:
 	
@@ -20,14 +20,8 @@ private:
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
 
-	void CreateTunnel();
-	void DestroyTunnel();
 
 private:
-	std::vector<std::function<Tunnel* (Actor* actor, GameManager* pGameManager)>> _createTasks;
-	std::vector<Tunnel*> _generateTunnels;
-	const int _maxGenerateCount = 4;
-	int _generateIndex;
-
+	Stage* _pStage;
 	GameManager* _pGamaManager;
 };

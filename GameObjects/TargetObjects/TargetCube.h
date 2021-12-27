@@ -27,8 +27,6 @@ private:
 
 	std::shared_ptr<Timer> _ChangeTargetRotateTimer;
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
-	std::shared_ptr<AnimationQue> _GenerateAnimationQue;
-	std::shared_ptr<AnimationQue> _DestroyAnimationQue;
 
-	bool _isDelete;
+
 };

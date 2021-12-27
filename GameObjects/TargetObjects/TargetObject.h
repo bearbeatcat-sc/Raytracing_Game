@@ -10,13 +10,20 @@ class TargetObject
 {
 public:
 	TargetObject(GameManager* pGameManager)
-		:_pGameManager(pGameManager)
+		:_pGameManager(pGameManager), _isDelete(false)
 	{}
+
+	bool IsDelete()
+	{
+		return _isDelete;
+	}
 
 	virtual ~TargetObject() {}
 
 	const int GetInstanceID()
 	{
+		if (_instance == nullptr) return -1;
+
 		return _instance->_instnaceID;
 	}
 
@@ -30,4 +37,5 @@ protected:
 	std::shared_ptr<DXRInstance> _instance;
 	GameManager* _pGameManager;
 
+	bool _isDelete;
 };
