@@ -29,7 +29,7 @@ void LockOnArea::UpdateActor()
 
 void LockOnArea::Init()
 {
-	_obbCollisionComponent = new OBBCollisionComponent(this, GetPosition(), GetScale(), "StaticObject");
+	_obbCollisionComponent = new OBBCollisionComponent(this, GetPosition(), GetScale(), "PlayerObject");
 	CollisionManager::GetInstance().AddComponent(_obbCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_obbCollisionComponent);
 

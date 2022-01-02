@@ -1,6 +1,7 @@
 ﻿#include "LockOnSystem.h"
 
 #include <Game_Object/ActorManager.h>
+#include <Utility/Timer.h>
 
 #include "Bullet.h"
 #include "LockOnArea.h"
@@ -14,6 +15,8 @@ LockOnSystem::LockOnSystem(Actor* pUser)
 	_pLockOnArea->SetScale(SimpleMath::Vector3(50, 30, 500));
 	ActorManager::GetInstance().AddActor(_pLockOnArea);
 	_pLockOnArea->SetActorName("PlayerLockOnArea");
+
+	_lockonCoolTimer = std::make_shared<Timer>(_lockonCoolTime);
 }
 
 LockOnSystem::~LockOnSystem()
@@ -24,6 +27,7 @@ LockOnSystem::~LockOnSystem()
 void LockOnSystem::LockOn()
 {
 	auto canLockOnTargets = _pLockOnArea->GetLockOnTargets();
+	_lockonCoolTimer->Update();
 
 	for(int i = 0; i < canLockOnTargets.size(); ++i)
 	{
@@ -76,6 +80,7 @@ void LockOnSystem::Update()
 	{
 		Attack();
 		ClearTarget();
+		_lockonCoolTimer->Reset();
 	}
 
 	_isPreviousLockOn = _isCurrentLockOn;
@@ -96,16 +101,25 @@ void LockOnSystem::AddTarget(TargetObject* target)
 		}
 	}
 
+	if(!_lockonCoolTimer->IsTime())
+	{
+		return;
+	}
+
+	_lockonCoolTimer->Reset();
+
+
 	auto targetInfo = AttackTargetInfo
 	{
 		target,
-		new LockOnUIObject(3.0f,target),
+		new LockOnUIObject(120.0f,target),
 	};
 
 	auto pos = targetInfo._target->GetPosition();
+	auto scale = targetInfo._target->GetScale();
 
 	targetInfo._lockOnUI0->SetPosition(pos);
-	targetInfo._lockOnUI0->SetScale(SimpleMath::Vector3(1.0f));
+	targetInfo._lockOnUI0->SetScale(SimpleMath::Vector3(scale.x * 2.0f, scale.y * 2.0f,1.0f));
 	targetInfo._lockOnUI0->SetRotation(SimpleMath::Vector3(4.0f, 4.0f, 4.0f));
 	ActorManager::GetInstance().AddActor(targetInfo._lockOnUI0);
 

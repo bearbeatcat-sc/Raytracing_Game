@@ -4,6 +4,7 @@
 
 class ScoreSystem;
 class Player;
+class ObjectGenerator;
 
 class GameManager
 	:public Actor
@@ -20,9 +21,11 @@ private:
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
 
+	void CreateStage();
 	void StartGame();
 
 private:
 	Player* _pPlayer;
 	ScoreSystem* _pScoreSystem;
+	ObjectGenerator* _pObjectGenerator;
 };

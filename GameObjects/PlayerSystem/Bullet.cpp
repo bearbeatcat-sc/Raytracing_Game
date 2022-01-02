@@ -49,11 +49,11 @@ void Bullet::UpdateActor()
 
 void Bullet::Init()
 {
-	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "DynamicObject");
+	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "PlayerObject");
 	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
 
-	_instance = DXRPipeLine::GetInstance().AddInstance("GrayCube", 0);
+	_instance = DXRPipeLine::GetInstance().AddInstance("BlueCube", 0);
 
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);

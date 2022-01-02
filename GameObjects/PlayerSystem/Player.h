@@ -22,10 +22,11 @@ class Player
 public:
 	Player(const SimpleMath::Vector3& pos, GameManager* pGameManager);
 	~Player() = default;
-	void SetTracker(Actor* pTracker);
 
 private:
+	void ShotMirror();
 	virtual void UpdateActor() override;
+	void LockOn();
 	virtual void Init() override;
 	virtual void Shutdown() override;
 	void Damage();
@@ -36,7 +37,6 @@ private:
 
 private:
 
-	Actor* _pTracker;
 	PlayerCamera* _pPlayerCamera;
 	GameManager* _pGameManager;
 	
@@ -47,5 +47,6 @@ private:
 
 
 	float _moveSpeed;
+	const float _maxMoveSpeed = 34.0f;
 
 };

@@ -16,7 +16,7 @@ class Cube
 	:public Actor
 {
 public:
-	Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale,float destroyTime,const std::string& meshName,bool moveFlag = true);
+	Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale,const std::string& meshName);
 	~Cube() = default;
 
 private:

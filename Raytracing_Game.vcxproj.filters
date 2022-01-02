@@ -36,9 +36,6 @@
     <ClCompile Include="GameObjects\PointLightObject.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\TrackerObjects\Tracker.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\GameSystem\TunnelManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -46,9 +43,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\PlayerSystem\LockOnUIObject.cpp">
@@ -75,16 +69,25 @@
     <ClCompile Include="GameObjects\GameSystem\Stage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\TrackerObjects\TrackerBullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\TrackerObjects\TrackerShotObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\PlayerSystem\PlayerCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\TrackerObjects\TrackerBody.cpp">
+    <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\PlayerSystem\MirrorBullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\TargetObjects\NineSideCube.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\GameSystem\ObjectGenerator.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\TargetObjects\MirrorCube.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\TargetObjects\SnakeCube.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,9 +110,6 @@
     <ClInclude Include="GameObjects\PointLightObject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\TrackerObjects\Tracker.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\GameSystem\TunnelManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -120,9 +120,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\TargetObjects\TargetObject.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\TargetObjects\TargetCube.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\PlayerSystem\LockOnUIObject.h">
@@ -149,16 +146,28 @@
     <ClInclude Include="GameObjects\GameSystem\Stage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\TrackerObjects\TrackerBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\TrackerObjects\TrackerShotObject.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\PlayerSystem\PlayerCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\TrackerObjects\TrackerBody.h">
+    <ClInclude Include="GameObjects\TargetObjects\TargetCube.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\PlayerSystem\MirrorBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\TargetObjects\NineSideCube.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\GameSystem\ObjectGenerateInfo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\GameSystem\ObjectGenerator.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\TargetObjects\MirrorCube.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\TargetObjects\SnakeCube.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

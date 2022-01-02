@@ -14,6 +14,7 @@ private:
 	void Init() override;
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
+	void DeleteFloor();
 
 	void CreateFloor();
 

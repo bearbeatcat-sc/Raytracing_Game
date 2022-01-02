@@ -4,6 +4,7 @@
 #include <vector>
 #include <Components/Component.h>
 
+class Timer;
 class TargetObject;
 class LockOnArea;
 
@@ -34,6 +35,9 @@ private:
 private:
 	LockOnArea* _pLockOnArea;
 	std::vector<AttackTargetInfo> _targets;
+	std::shared_ptr<Timer> _lockonCoolTimer;
+
+	const float _lockonCoolTime = 0.02f;
 
 	bool _isPreviousLockOn;
 	bool _isCurrentLockOn;

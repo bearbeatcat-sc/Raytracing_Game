@@ -218,6 +218,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\GameSystem\GameManager.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\ObjectGenerator.cpp" />
     <ClCompile Include="GameObjects\GameSystem\ScoreObject.cpp" />
     <ClCompile Include="GameObjects\GameSystem\ScoreSystem.cpp" />
     <ClCompile Include="GameObjects\GameSystem\Stage.cpp" />
@@ -225,15 +226,15 @@
     <ClCompile Include="GameObjects\PlayerSystem\LockOnArea.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnUIObject.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\MirrorBullet.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\PlayerCamera.cpp" />
     <ClCompile Include="GameObjects\PointLightObject.cpp" />
-    <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\MirrorCube.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\NineSideCube.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\SnakeCube.cpp" />
     <ClCompile Include="GameObjects\TargetObjects\TargetGroup.cpp" />
-    <ClCompile Include="GameObjects\TrackerObjects\Tracker.cpp" />
     <ClCompile Include="GameObjects\GameSystem\TunnelManager.cpp" />
-    <ClCompile Include="GameObjects\TrackerObjects\TrackerBody.cpp" />
-    <ClCompile Include="GameObjects\TrackerObjects\TrackerBullet.cpp" />
-    <ClCompile Include="GameObjects\TrackerObjects\TrackerShotObject.cpp" />
+    <ClCompile Include="GameObjects\TargetObjects\TargetCube.cpp" />
     <ClCompile Include="GameObjects\VerticalMoveBlock.cpp" />
     <ClCompile Include="System\CameraAsistant.cpp" />
     <ClCompile Include="GameObjects\Cube.cpp" />
@@ -244,6 +245,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObjects\GameSystem\GameManager.h" />
+    <ClInclude Include="GameObjects\GameSystem\ObjectGenerateInfo.h" />
+    <ClInclude Include="GameObjects\GameSystem\ObjectGenerator.h" />
     <ClInclude Include="GameObjects\GameSystem\ScoreObject.h" />
     <ClInclude Include="GameObjects\GameSystem\ScoreSystem.h" />
     <ClInclude Include="GameObjects\GameSystem\Stage.h" />
@@ -251,16 +254,16 @@
     <ClInclude Include="GameObjects\PlayerSystem\LockOnArea.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnSystem.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnUIObject.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\MirrorBullet.h" />
     <ClInclude Include="GameObjects\PlayerSystem\PlayerCamera.h" />
     <ClInclude Include="GameObjects\PointLightObject.h" />
-    <ClInclude Include="GameObjects\TargetObjects\TargetCube.h" />
+    <ClInclude Include="GameObjects\TargetObjects\MirrorCube.h" />
+    <ClInclude Include="GameObjects\TargetObjects\NineSideCube.h" />
+    <ClInclude Include="GameObjects\TargetObjects\SnakeCube.h" />
     <ClInclude Include="GameObjects\TargetObjects\TargetGroup.h" />
     <ClInclude Include="GameObjects\TargetObjects\TargetObject.h" />
-    <ClInclude Include="GameObjects\TrackerObjects\Tracker.h" />
     <ClInclude Include="GameObjects\GameSystem\TunnelManager.h" />
-    <ClInclude Include="GameObjects\TrackerObjects\TrackerBody.h" />
-    <ClInclude Include="GameObjects\TrackerObjects\TrackerBullet.h" />
-    <ClInclude Include="GameObjects\TrackerObjects\TrackerShotObject.h" />
+    <ClInclude Include="GameObjects\TargetObjects\TargetCube.h" />
     <ClInclude Include="GameObjects\VerticalMoveBlock.h" />
     <ClInclude Include="System\CameraAsistant.h" />
     <ClInclude Include="GameObjects\Cube.h" />

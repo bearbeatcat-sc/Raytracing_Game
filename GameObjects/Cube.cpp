@@ -11,7 +11,7 @@
 #include "Utility/LogSystem.h"
 
 
-Cube::Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale, float destroyTime, const std::string& meshName, bool moveFlag)
+Cube::Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale, const std::string& meshName)
 	:_initScale(scale), _IsGenerate(false), _DXRMeshName(meshName),Actor()
 {
 	SetPosition(pos);

@@ -79,10 +79,12 @@ void MainGame::Init()
 	DXRPipeLine::GetInstance().AddMeshData(planeMeshData, L"HitGroup", "NumberObject9", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f), "Number9");
 	
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "WhiteCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0.1f));
-	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "GrayCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.2f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.5f), 0.1));
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "RoughCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "RedCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
+	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "PurpleCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.203f,0.133f,0.2f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
+	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "BlackCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.082f,0.054,0.082, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "ClearCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.4f, 1.24f));
+	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "BlueCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.0f, 0.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.4f, 1.24f));
 
 	DXRPipeLine::GetInstance().AddMeshData(sphereMeshData, L"HitGroup", "Sphere", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.2f, 0.2f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0.2f));
 	DXRPipeLine::GetInstance().AddMeshData(sphereMeshData, L"HitGroup", "RoughSphere", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));
@@ -104,18 +106,19 @@ void MainGame::Init()
 	RenderingPipeLine::GetInstance().SetDrawFluidFlag(false);
 
 
-	std::vector<bool> StaticObjectCollTable =
+
+	std::vector<bool> PlayerObjectCollTable =
 	{
-		false,true,
+		false,true
 	};
 
-	std::vector<bool> DynamicObjectCollTable =
+	std::vector<bool> TargetObjectCollTable =
 	{
-		true,true
+		true,false
 	};
 
-	CollisionTagManagaer::GetInstance().AddTag("StaticObject", StaticObjectCollTable);
-	CollisionTagManagaer::GetInstance().AddTag("DynamicObject", DynamicObjectCollTable);
+	CollisionTagManagaer::GetInstance().AddTag("PlayerObject", PlayerObjectCollTable);
+	CollisionTagManagaer::GetInstance().AddTag("TargetObject", TargetObjectCollTable);
 
 	auto gameManager = new GameManager();
 	ActorManager::GetInstance().AddActor(gameManager);
