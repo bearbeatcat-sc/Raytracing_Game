@@ -8,9 +8,11 @@ class ScoreSystem
 	:public Actor
 {
 public:
-	ScoreSystem();
+	ScoreSystem(const SimpleMath::Vector3& generatePos);
 	~ScoreSystem() = default;
+
 	void AddScore(int score);
+	void ChangeResultMode();
 
 private:
 
@@ -32,4 +34,11 @@ private:
 
 	std::string _stringScore;
 	int _score;
+
+	bool _isEnd;
+
+	SimpleMath::Vector3 _resultPosition;
+	SimpleMath::Vector3 _generatePosition;
+
+	std::shared_ptr<Timer> _pMoveResultTimer;
 };

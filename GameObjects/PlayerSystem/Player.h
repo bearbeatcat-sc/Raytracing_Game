@@ -15,6 +15,7 @@ class MeshComponent;
 class OBBCollisionComponent;
 class PlayerCamera;
 class LockOnSystem;
+class TargetObject;
 
 class Player
 	:public Actor
@@ -22,18 +23,15 @@ class Player
 public:
 	Player(const SimpleMath::Vector3& pos, GameManager* pGameManager);
 	~Player() = default;
+	void Shot(TargetObject* pTarget, const SimpleMath::Vector3& vec);
 
 private:
-	void ShotMirror();
 	virtual void UpdateActor() override;
 	void LockOn();
 	virtual void Init() override;
 	virtual void Shutdown() override;
 	void Damage();
 	virtual void OnCollsion(Actor* other) override;
-
-	void SpeedUp();
-	void Movement();
 
 private:
 
@@ -44,9 +42,6 @@ private:
 	OBBCollisionComponent* _pCollisionComponent;
 	std::shared_ptr<RigidBodyComponent> _rigidBodyComponent;
 	std::shared_ptr<LockOnSystem> _lockOnSystem;
-
-
-	float _moveSpeed;
-	const float _maxMoveSpeed = 34.0f;
+	bool _isGenerateLeft;
 
 };

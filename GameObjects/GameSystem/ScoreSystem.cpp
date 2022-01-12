@@ -3,15 +3,18 @@
 #include <algorithm>
 #include <iomanip>
 #include <sstream>
-
 #include <Game_Object/ActorManager.h>
+#include <Utility/Time.h>
+#include <Utility/Timer.h>
 
 #include "ScoreObject.h"
 #include "../PlayerSystem/Player.h"
 
-ScoreSystem::ScoreSystem()
+ScoreSystem::ScoreSystem(const SimpleMath::Vector3& generatePos)
+	:_isEnd(false),_generatePosition(generatePos)
 {
-
+	_pMoveResultTimer = std::make_shared<Timer>(0.1f);
+	SetPosition(generatePos);
 }
 
 void ScoreSystem::AddScore(int score)
@@ -27,8 +30,29 @@ void ScoreSystem::AddScore(int score)
 	UpdateScoreObject();
 }
 
+void ScoreSystem::ChangeResultMode()
+{
+	_isEnd = true;
+}
+
 void ScoreSystem::UpdateActor()
 {
+	if (!_isEnd)
+		return;;
+
+	if(!_pMoveResultTimer->IsTime())
+	{
+		_pMoveResultTimer->Update();
+	}
+
+	auto pos = SimpleMath::Vector3::Lerp(_generatePosition, _resultPosition, _pMoveResultTimer->GetRatio());
+	SetPosition(pos);
+
+	auto scale = SimpleMath::Vector3::Lerp(GetScale(), SimpleMath::Vector3(2.0f), _pMoveResultTimer->GetRatio());
+	SetScale(scale);
+
+	auto rotate = SimpleMath::Vector3::Lerp(GetEulerRotation(), SimpleMath::Vector3::Zero, _pMoveResultTimer->GetRatio());
+	SetRotation(rotate);
 }
 
 void ScoreSystem::Init()
@@ -44,6 +68,8 @@ void ScoreSystem::Init()
 
 	_stringScore = sout.str();
 	UpdateScoreObject();
+
+	_resultPosition = SimpleMath::Vector3(-2, -1, 6);
 }
 
 void ScoreSystem::Shutdown()

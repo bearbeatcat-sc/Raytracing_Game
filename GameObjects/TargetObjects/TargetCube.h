@@ -26,6 +26,8 @@ private:
 private:
 	CollisionComponent* m_pCollisionComponent;
 
+	const std::string _dxrMeshName;
+
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand0;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand1;

@@ -14,7 +14,7 @@ LockOnArea::LockOnArea(Actor* pActor)
 {
 }
 
-const std::vector<TargetObject*>& LockOnArea::GetLockOnTargets()
+const std::vector<LockOnArea::LockOnInfo>& LockOnArea::GetLockOnTargets()
 {
 	return _lockOnTargets;
 }
@@ -34,7 +34,6 @@ void LockOnArea::Init()
 	CollisionManager::GetInstance().AddRegistTree(_obbCollisionComponent);
 
 	SetTag("LockOnArea");
-
 }
 
 void LockOnArea::Shutdown()
@@ -44,7 +43,7 @@ void LockOnArea::Shutdown()
 
 }
 
-void LockOnArea::AddTarget(TargetObject* target)
+void LockOnArea::AddTarget(LockOnInfo target)
 {
 	_lockOnTargets.push_back(target);
 }
@@ -60,9 +59,9 @@ void LockOnArea::OnCollsion(Actor* other)
 
 		if (instanceID == -1)return;
 
-		if(hitList.at(instanceID)._isHit == 0)
+		if(hitList.at(instanceID)._isHit == 1)
 		{
-			AddTarget(static_cast<TargetObject*>(other));
+			AddTarget(LockOnInfo(static_cast<TargetObject*>(other),hitList.at(instanceID)._isHit));
 		}
 
 	}

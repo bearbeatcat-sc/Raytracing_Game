@@ -81,33 +81,33 @@ void PlayerCamera::CameraUpdate()
 	auto cameraTarget = _camera->GetTarget();
 
 
-	float shake[2] =
-	{
-	_shake.x,
-	_shake.y
-	};
+	//float shake[2] =
+	//{
+	//_shake.x,
+	//_shake.y
+	//};
 
-	float cameraTargets[3] =
-	{
-	cameraTarget.x,
-	cameraTarget.y,
-	cameraTarget.z,
-	};
+	//float cameraTargets[3] =
+	//{
+	//cameraTarget.x,
+	//cameraTarget.y,
+	//cameraTarget.z,
+	//};
 
-	float cameraPosition[3] =
-	{
-	cameraPos.x,
-	cameraPos.y,
-	cameraPos.z,
-	};
+	//float cameraPosition[3] =
+	//{
+	//cameraPos.x,
+	//cameraPos.y,
+	//cameraPos.z,
+	//};
 
-	ImGui::Begin("PlayerParameters");
-	ImGui::DragFloat2("shake", shake, 0.1f);
-	ImGui::DragFloat3("CameraTarget", cameraTargets, 0.1f);
-	ImGui::DragFloat("Pitch", &_Pitch, 0.1f);
-	ImGui::DragFloat("Yaw", &_Yaw, 0.1f);
-	ImGui::DragFloat3("CameraPosition", cameraPosition, 0.1f);
-	ImGui::End();
+	//ImGui::Begin("PlayerParameters");
+	//ImGui::DragFloat2("shake", shake, 0.1f);
+	//ImGui::DragFloat3("CameraTarget", cameraTargets, 0.1f);
+	//ImGui::DragFloat("Pitch", &_Pitch, 0.1f);
+	//ImGui::DragFloat("Yaw", &_Yaw, 0.1f);
+	//ImGui::DragFloat3("CameraPosition", cameraPosition, 0.1f);
+	//ImGui::End();
 
 
 	_camera->SetTarget(SimpleMath::Vector3::Lerp(_camera->GetTarget(), _pTracker->GetPosition() + _cameraTarget, Time::DeltaTime * _cameraTargetSpeed));
@@ -115,19 +115,19 @@ void PlayerCamera::CameraUpdate()
 	_camera->SetPosition(_pTracker->GetPosition());
 	_camera->SetPosition(_camera->GetPosition() + SimpleMath::Vector3(_shake.x, _shake.y, 0));
 
-	if (DirectXInput::GetInstance().IsKey(DIK_LEFT))
-	{
-		//_cameraTarget -= SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
-		//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
-		ViewMove(SimpleMath::Vector3::Left);
-	}
+	//if (DirectXInput::GetInstance().IsKey(DIK_LEFT))
+	//{
+	//	//_cameraTarget -= SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
+	//	//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
+	//	ViewMove(SimpleMath::Vector3::Left);
+	//}
 
-	if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
-	{
-		//_cameraTarget += SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
-		//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
-		ViewMove(SimpleMath::Vector3::Right);
-	}
+	//if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
+	//{
+	//	//_cameraTarget += SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
+	//	//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
+	//	ViewMove(SimpleMath::Vector3::Right);
+	//}
 
 
 

@@ -9,6 +9,7 @@
 #include <Utility/Camera.h>
 #include <Utility/Math/MathUtility.h>
 
+#include "Bullet.h"
 #include "LockOnSystem.h"
 #include "MirrorBullet.h"
 #include "Components/Collsions/CollisionManager.h"
@@ -17,25 +18,35 @@
 #include "../GameSystem/GameManager.h"
 
 Player::Player(const SimpleMath::Vector3& pos, GameManager* pGameManager)
-	:Actor(), _moveSpeed(0.01f),_pGameManager(pGameManager)
+	:Actor(), _pGameManager(pGameManager), _isGenerateLeft(false)
 {
 	SetPosition(pos);
 	SetTag("Player");
 }
 
 
-
-void Player::ShotMirror()
+void Player::Shot(TargetObject* pTarget,const SimpleMath::Vector3& vec)
 {
-	auto forward = _pPlayerCamera->GetForward();
-	auto playerPos = GetPosition();
+	//auto bullet = new Bullet(1.0f, pTarget);
 
-	auto qu = MathUtility::LookAt(playerPos * forward * 3.0f, playerPos);
+	//bullet->SetScale(SimpleMath::Vector3(0.4f));
+	//bullet->SetRotation(SimpleMath::Vector3(0.0f, 0.0f, 2.4f));
+	//ActorManager::GetInstance().AddActor(bullet);
+	//bullet->SetActorName("Bullet");
+	//bullet->Destroy(10.0f);
 
-	auto mirrorbullet = new MirrorBullet(128.0f * _moveSpeed, 1.0f, forward, SimpleMath::Vector3(16.0f,8.0f,1.0f));
-	mirrorbullet->SetPosition(playerPos + forward * 3.0f);
-	mirrorbullet->SetScale(SimpleMath::Vector3(0.4f));
-	ActorManager::GetInstance().AddActor(mirrorbullet);
+	//_isGenerateLeft = !_isGenerateLeft;
+
+	//if (_isGenerateLeft)
+	//{
+	//	bullet->SetPosition(GetPosition() + SimpleMath::Vector3(1, -1.0f, 0) * 2.0f);
+
+	//	return;
+	//}
+
+	//bullet->SetPosition(GetPosition() + SimpleMath::Vector3(-1, -1.0f, 0) * 2.0f);
+
+	_pPlayerCamera->Shake(0.1f, 0.1f);
 }
 
 void Player::UpdateActor()
@@ -43,18 +54,13 @@ void Player::UpdateActor()
 	auto mtx = GetWorldMatrix();
 	//_instance->SetMatrix(mtx);
 
-	Movement();
-	SpeedUp();
 
 	if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
 	{
 		LockOn();
 	}
 
-	if(DirectXInput::GetInstance().IsKeyDown(DIK_Z))
-	{
-		ShotMirror();
-	}
+
 
 	auto cameraPitch = _pPlayerCamera->GetPitch();
 	SetRotation(SimpleMath::Vector3(cameraPitch, 0, 0));
@@ -72,7 +78,7 @@ void Player::Init()
 
 
 	//_instance = DXRPipeLine::GetInstance().AddInstance("BlueCube", 0);
-	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "PlayerObject");
+	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale * 1.4f, "PlayerObject");
 	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
 
@@ -108,27 +114,5 @@ void Player::OnCollsion(Actor* other)
 	{
 		Damage();
 	}
-}
-
-
-
-void Player::SpeedUp()
-{
-	_moveSpeed = std::clamp(_moveSpeed + Time::DeltaTime * 0.1f, 0.01f, 1.0f);
-
-}
-
-void Player::Movement()
-{
-	//auto trackerPos = _pTracker->GetPosition();
-	//auto pos = trackerPos;
-
-	//SetPosition(SimpleMath::Vector3::Lerp(GetPosition(), pos, Time::DeltaTime * _moveSpeed));
-
-	_moveSpeed = std::clamp(_moveSpeed + Time::DeltaTime * 4.0f, 1.0f, _maxMoveSpeed);
-	_moveSpeed = _maxMoveSpeed;
-
-	auto setPos = GetPosition() + (SimpleMath::Vector3::Backward * _moveSpeed * Time::DeltaTime);
-	SetPosition(setPos);
 }
 

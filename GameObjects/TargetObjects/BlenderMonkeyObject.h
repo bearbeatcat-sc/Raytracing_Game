@@ -1,4 +1,5 @@
-﻿
+﻿#pragma once
+
 #include "../TargetObjects/TargetObject.h"
 
 class Vector3AnimationCommand;
@@ -7,51 +8,44 @@ class CollisionComponent;
 class AnimationComponent;
 class GameManager;
 
-class SnakeCube
+class BlenderMonkeyObject
 	:public TargetObject
 {
 public:
-	SnakeCube(const int maxHP,const SimpleMath::Vector3& moveVec,const std::string& dxrMeshName, GameManager* pGameManager);
-	~SnakeCube() = default;
-	void SetTarget(SnakeCube* pParent);
-	void OnDestroyTarget();
+	enum BlenderMonkyObjectType
+	{
+		BlenderMonkyObjectType_Mirror,
+		BlenderMonkyObjectType_Clear,
+	};
+
+	BlenderMonkeyObject(const int maxHP, BlenderMonkyObjectType blenderMonkyType, GameManager* pGameManager);
+	~BlenderMonkeyObject() = default;
+
+
 
 private:
 	void UpdateActor() override;
-	bool IsSetTarget();
-	void KnockBack();
-	void Move();
-	void Chase();
 	void Init() override;
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
-	void SetTracker(SnakeCube* pTracker);
-
 	bool IsDeath();
 	void Damage();
 
 private:
-	SnakeCube* _pTarget;
-	SnakeCube* _pTracker;
-
 	CollisionComponent* m_pCollisionComponent;
+
+	 std::string _dxrMeshName;
+	 std::string _effectMeshName;
+
 
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand0;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand1;
 
-	std::shared_ptr<Vector3AnimationCommand> _knockBackAnimationCommand;
+	BlenderMonkyObjectType _blenderMonkeyType;
 
-
+	float _bombRadius;
 	int _hp;
 	const int _maxHP;
-
 	SimpleMath::Vector3 _damageScale;
-	SimpleMath::Vector3 _moveVec;
-
-	float _moveSpeed;
-	float _keepDistance;
-
-	float _roll;
-	const float _rotateSpeed;;
 };

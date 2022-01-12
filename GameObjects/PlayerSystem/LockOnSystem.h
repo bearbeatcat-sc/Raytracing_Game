@@ -4,9 +4,12 @@
 #include <vector>
 #include <Components/Component.h>
 
+#include "LockOnArea.h"
+
 class Timer;
 class TargetObject;
 class LockOnArea;
+
 
 class LockOnSystem
 	:public Component
@@ -18,10 +21,11 @@ public:
 
 	struct AttackTargetInfo
 	{
-		TargetObject* _target;
+		TargetObject* _target = nullptr;
+		int _lockOnCount = 0;
 
-		Actor* _lockOnUI0;
-		Actor* _lockOnUI1;
+		Actor* _lockOnUI0 = nullptr;
+		Actor* _lockOnUI1 = nullptr;
 	};
 
 private:
@@ -30,15 +34,19 @@ private:
 	void Update() override;
 	void DrawProperties() override;
 
-	void AddTarget(TargetObject* target);
+	void AddTarget(const LockOnArea::LockOnInfo& target);
 
 private:
 	LockOnArea* _pLockOnArea;
 	std::vector<AttackTargetInfo> _targets;
 	std::shared_ptr<Timer> _lockonCoolTimer;
+	std::shared_ptr<Timer> _shotCoolTimer;
 
-	const float _lockonCoolTime = 0.02f;
+	const float _lockonCoolTime = 0.002f;
+	const float _shotCollTime = 0.02f;
 
 	bool _isPreviousLockOn;
 	bool _isCurrentLockOn;
+
+	bool _isGenerateLeft;
 };

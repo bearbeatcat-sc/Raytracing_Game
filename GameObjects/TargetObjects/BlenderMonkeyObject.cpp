@@ -1,31 +1,39 @@
-﻿#include "TargetCube.h"
+﻿#include "BlenderMonkeyObject.h"
 
-#include <algorithm>
-#include <Components/Animations/AnimationCommand.h>
 #include <Components/Animations/AnimationCommandList.h>
-#include <Components/Animations/AnimationComponent.h>
-#include <Components/Animations/AnimationQue.h>
-#include <Components/Animations/Vector3AnimationCommand.h>
 #include <Components/Collsions/CollisionManager.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
 #include <Device/Raytracing/DXRPipeLine.h>
-#include <Game_Object/ActorManager.h>
+#include <Components/Animations/AnimationComponent.h>
 #include <Utility/Random.h>
+#include <Game_Object/ActorManager.h>
 
 #include "../GameSystem/GameManager.h"
 #include "../BreakEffect.h"
+#include "../PlayerSystem/BombArea.h"
 
-TargetCube::TargetCube(const int maxHP, const std::string& dxrMeshName, GameManager* pGameManager)
-	:_hp(maxHP), TargetObject(pGameManager), _maxHP(maxHP),_dxrMeshName(dxrMeshName)
+BlenderMonkeyObject::BlenderMonkeyObject(const int maxHP, BlenderMonkyObjectType blenderMonkyType, GameManager* pGameManager)
+	:TargetObject(pGameManager),_maxHP(maxHP), _hp(maxHP),_blenderMonkeyType(blenderMonkyType)
 {
-	_instance = DXRPipeLine::GetInstance().AddInstance(dxrMeshName, 0);
+	if(blenderMonkyType == BlenderMonkyObjectType_Clear)
+	{
+		_dxrMeshName = "BlenderMonkeyClear";
+		_effectMeshName = "ClearCube";
+	}
+	else
+	{
+		_dxrMeshName = "BlenderMonkeyMirror";
+		_effectMeshName = "WhiteCube";
+	}
+
+	_instance = DXRPipeLine::GetInstance().AddInstance(_dxrMeshName, 0);
 
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
-	_instance->CreateRaytracingInstanceDesc();
+	_instance->CreateRaytracingInstanceDesc(0x08);
 }
 
-void TargetCube::UpdateActor()
+void BlenderMonkeyObject::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
@@ -36,7 +44,7 @@ void TargetCube::UpdateActor()
 	}
 }
 
-void TargetCube::Init()
+void BlenderMonkeyObject::Init()
 {
 	m_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "TargetObject");
 	//m_pCollisionComponent = new SphereCollisionComponent(this, 10.0f, "Object");
@@ -57,76 +65,46 @@ void TargetCube::Init()
 	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3(2.0f), SimpleMath::Vector3::Zero, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
 	auto damageAnimationCommandList0 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.6f, m_Scale, 4.0f,AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.2f, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList0->AddAnimation(_damageAnimationCommand0);
 
 	auto damageAnimationCommandList1 = std::make_shared<AnimationCommandList>();
 	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 4.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList1->AddAnimation(_damageAnimationCommand1);
 
-	_AnimationComponent->AddAnimationState(generateAnimationCommandList,"Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+	_AnimationComponent->AddAnimationState(generateAnimationCommandList, "Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 
-	_AnimationComponent->AddAnimationState(damageAnimationCommandList0,"Damage0", "Damage1");
-	_AnimationComponent->AddAnimationState(damageAnimationCommandList1,"Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+	_AnimationComponent->AddAnimationState(damageAnimationCommandList0, "Damage0", "Damage1");
+	_AnimationComponent->AddAnimationState(damageAnimationCommandList1, "Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");
+
+	_bombRadius = GetScale().x;
 }
 
-void TargetCube::Shutdown()
+void BlenderMonkeyObject::Shutdown()
 {
 	_instance->Destroy();
 	m_pCollisionComponent->Delete();
 }
 
-bool TargetCube::IsDeath()
-{
-	return _hp <= 0;
-}
-
-void TargetCube::Damage()
-{
-	_hp = std::clamp(_hp - 1, 0, _maxHP);
-
-	_damageScale = (SimpleMath::Vector3::One * ((float)_hp / (float)_maxHP));
-
-	_damageAnimationCommand0->_start = m_Scale;
-	_damageAnimationCommand0->_target = m_Scale *  1.6f;
-
-	_damageAnimationCommand1->_start = m_Scale * 1.6f;
-	_damageAnimationCommand1->_target = _damageScale;
-	_AnimationComponent->PlayAnimation("Damage0");
-
-	for (int i = 0; i < 6; ++i)
-	{
-		float x = Random::GetRandom(-1.0f, 1.0f);
-		float y = Random::GetRandom(-1.0f, 1.0f);
-		float z = Random::GetRandom(-1.0f, 1.0f);
-
-		auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 10.0f, _dxrMeshName);
-		breakEffect->SetPosition(GetPosition());
-		breakEffect->Destroy(4.0f);
-		breakEffect->SetScale(SimpleMath::Vector3(0.1f));
-		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
-		ActorManager::GetInstance().AddActor(breakEffect);
-	}
-
-}
-
-void TargetCube::OnCollsion(Actor* other)
+void BlenderMonkeyObject::OnCollsion(Actor* other)
 {
 	if (_isDelete)return;
-
-
 
 	if (other->IsContainsTag("Bullet"))
 	{
 		Damage();
 
-		if(IsDeath())
+		if (IsDeath())
 		{
 			_isDelete = true;
-			_pGameManager->AddScore(100);
+			_pGameManager->AddScore(1000);
 
-			for (int i = 0; i < 6; ++i)
+			auto bombArea = new BombArea(10.0f);
+			bombArea->SetPosition(GetPosition());
+			ActorManager::GetInstance().AddActor(bombArea);
+
+			for (int i = 0; i < 120; ++i)
 			{
 				float x = Random::GetRandom(-1.0f, 1.0f);
 				float y = Random::GetRandom(-1.0f, 1.0f);
@@ -135,13 +113,15 @@ void TargetCube::OnCollsion(Actor* other)
 				float cos = std::cosf(i * 30.0f);
 				float sin = std::sinf(i * 30.0f);
 
-				auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _dxrMeshName);
+				auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _effectMeshName);
 				breakEffect->SetPosition(GetPosition());
 				breakEffect->Destroy(4.0f);
-				breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
+				breakEffect->SetScale(SimpleMath::Vector3(0.5f) * m_Scale);
 				breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 				ActorManager::GetInstance().AddActor(breakEffect);
 			}
+			return;
+
 		}
 		return;
 	}
@@ -159,14 +139,49 @@ void TargetCube::OnCollsion(Actor* other)
 			float cos = std::cosf(i * 30.0f);
 			float sin = std::sinf(i * 30.0f);
 
-			auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _dxrMeshName);
+			auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _effectMeshName);
 			breakEffect->SetPosition(GetPosition());
 			breakEffect->Destroy(4.0f);
-			breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
+			breakEffect->SetScale(SimpleMath::Vector3(0.5f) * m_Scale);
 			breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 			ActorManager::GetInstance().AddActor(breakEffect);
 		}
 
 		return;
+	}
+
+
+}
+
+bool BlenderMonkeyObject::IsDeath()
+{
+	return _hp <= 0;
+}
+
+void BlenderMonkeyObject::Damage()
+{
+	_hp = std::clamp(_hp - 1, 0, _maxHP);
+
+	_damageScale = (SimpleMath::Vector3::One * ((float)_hp / (float)_maxHP));
+
+	_damageAnimationCommand0->_start = m_Scale;
+	_damageAnimationCommand0->_target = m_Scale * 1.2f;
+
+	_damageAnimationCommand1->_start = m_Scale * 1.2f;
+	_damageAnimationCommand1->_target = _damageScale;
+	_AnimationComponent->PlayAnimation("Damage0");
+
+	for (int i = 0; i < 6; ++i)
+	{
+		float x = Random::GetRandom(-1.0f, 1.0f);
+		float y = Random::GetRandom(-1.0f, 1.0f);
+		float z = Random::GetRandom(-1.0f, 1.0f);
+
+		auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 10.0f, _effectMeshName);
+		breakEffect->SetPosition(GetPosition());
+		breakEffect->Destroy(4.0f);
+		breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
+		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
+		ActorManager::GetInstance().AddActor(breakEffect);
 	}
 }

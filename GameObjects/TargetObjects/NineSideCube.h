@@ -1,16 +1,18 @@
 ﻿#pragma once
 #include <memory>
-#include <Game_Object/Actor.h>
+
+#include "TargetObject.h"
 
 class GameManager;
 class CollisionComponent;
 class DXRInstance;
+class AnimationComponent;
 
 class NineSideCube
-	:public Actor
+	:public TargetObject
 {
 public:
-	NineSideCube(GameManager* pGameManager);
+	NineSideCube(GameManager* pGameManager, float radius);
 	~NineSideCube() = default;
 
 private:
@@ -21,13 +23,20 @@ private:
 	virtual void OnCollsion(Actor* other) override;
 
 	void Move();
+	void Rotate(float angle);
 
 private:
-	std::shared_ptr<DXRInstance> _instance;
-	GameManager* _pGameManager;
+
 	CollisionComponent* m_pCollisionComponent;
+
+	std::shared_ptr<AnimationComponent> _AnimationComponent;
 
 	float _cos;
 	float _moveSpeed;
-	const float _verticalRange ;
+	const float _verticalRange;
+
+
+	float _angle;
+	float _radius;
+	const float _rotateSpeed;
 };

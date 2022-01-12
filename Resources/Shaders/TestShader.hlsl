@@ -562,7 +562,7 @@ void miss(inout Payload payload)
 	float3 color = gBackGround.SampleLevel(
 		gSampler, WorldRayDirection(), 0.0).xyz;
 
-	payload.color = color * 0.02f;
+	payload.color = float4(1, 1, 1, 1);
 
 }
 
@@ -599,7 +599,7 @@ void chs(inout Payload payload, in MyAttribute attribs)
 	uint id = InstanceID();
 	uint3 dispatchRayIndex = DispatchRaysIndex();
 
-	hitResultBuffer[id]._isHit = 0;
+	hitResultBuffer[id]._isHit = 1;
 
 	float3 worldNormal = normalize(mul(vtx.normal, (float3x3) ObjectToWorld4x3()));
 	float3 worldPosition = mul(float4(vtx.pos, 1), ObjectToWorld4x3());
@@ -684,8 +684,8 @@ void chs(inout Payload payload, in MyAttribute attribs)
 			payload.color.rgb *= 0.5;
 		}
 
-		//float t = RayTCurrent();
-		//payload.color = lerp(payload.color, float3(66.0f / 255.0f, 44.0f / 255.0f, 65.0f / 255.0f), 1.0f - exp(-0.000006f * t * t * t));
+		float t = RayTCurrent();
+		payload.color = lerp(payload.color, float3(1,1,1), 1.0f - exp(-0.0000001f * t * t * t));
 
 		return;
 	}
@@ -707,8 +707,8 @@ void chs(inout Payload payload, in MyAttribute attribs)
 		payload.color.rgb *= 0.5;
 	}
 
-	//float t = RayTCurrent();
-	//payload.color = lerp(payload.color, float3(66.0f / 255.0f, 44.0f / 255.0f, 65.0f / 255.0f), 1.0f - exp(-0.000006f * t * t * t));
+	float t = RayTCurrent();
+	payload.color = lerp(payload.color, float3(1, 1, 1), 1.0f - exp(-0.0000001f * t * t * t));
 
 }
 

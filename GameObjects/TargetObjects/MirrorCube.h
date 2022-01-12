@@ -1,16 +1,18 @@
 ﻿#pragma once
 
-#include "TargetObject.h"
+#include <Game_Object/Actor.h>
 
+class DXRInstance;
 class CollisionComponent;
 class AnimationComponent;
 class Vector3AnimationCommand;
+class GameManager;
 
 class MirrorCube
-	:public TargetObject
+	:public Actor
 {
 public:
-	MirrorCube(GameManager* pGameManager,const SimpleMath::Vector3& addScale,const SimpleMath::Vector3& maxScale);
+	MirrorCube(GameManager* pGameManager,bool controllFlag,float angle = 0.0f);
 	~MirrorCube() = default;
 
 private:
@@ -18,20 +20,16 @@ private:
 	void Init() override;
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
-
-	void Expand();
-	void KnockBack();
-	void Hit();
+	void Rotate(float angle);
 
 private:
-	CollisionComponent* _pCollisionComponent;
-	std::shared_ptr<AnimationComponent> _pAnimationComponent;
-	std::shared_ptr<Vector3AnimationCommand> _pKnockBackAnimationCommand;
-	std::shared_ptr<Vector3AnimationCommand> _pExpandkAnimationCommand;
+	CollisionComponent* m_pCollisionComponent;
 
-	const SimpleMath::Vector3 _maxScale;
-	const SimpleMath::Vector3 _addScale;
-	const float _knockBackAmount;
+	GameManager* _pGameManager;
+	std::shared_ptr<DXRInstance> _instance;
 
-	bool _isKnockBack;
+	float _angle;
+	const float _radius;
+	const float _rotateSpeed;
+	bool _controllFlag;
 };

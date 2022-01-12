@@ -1,15 +1,19 @@
 ﻿#include "MirrorCube.h"
 
 #include <Components/Animations/AnimationCommandList.h>
-#include <Components/Animations/AnimationComponent.h>
 #include <Components/Animations/Vector3AnimationCommand.h>
 #include <Components/Collsions/CollisionManager.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
+#include <Device/DirectX/DirectXInput.h>
 #include <Device/Raytracing/DXRPipeLine.h>
+#include <Utility/Time.h>
+#include <Utility/Math/MathUtility.h>
 
-MirrorCube::MirrorCube(GameManager* pGameManager, const SimpleMath::Vector3& addScale, const SimpleMath::Vector3& maxScale)
-	:TargetObject(pGameManager), _addScale(addScale), _maxScale(maxScale),
-	_isKnockBack(false), _knockBackAmount(40.0f)
+#include "../GameSystem/GameManager.h"
+#include "../PlayerSystem/Player.h"
+
+MirrorCube::MirrorCube(GameManager* pGameManager,bool controllFlag,float angle)
+	:_pGameManager(pGameManager),_radius(6.0f), _angle(angle), _rotateSpeed(3.0f),_controllFlag(controllFlag)
 {
 	_instance = DXRPipeLine::GetInstance().AddInstance("WhiteCube", 0);
 
@@ -20,66 +24,87 @@ MirrorCube::MirrorCube(GameManager* pGameManager, const SimpleMath::Vector3& add
 
 void MirrorCube::UpdateActor()
 {
+	if(_controllFlag)
+	{
+		if (DirectXInput::GetInstance().IsKey(DIK_LEFTARROW))
+		{
+			Rotate(-1.0f);
+		}
+
+		if (DirectXInput::GetInstance().IsKey(DIK_RIGHTARROW))
+		{
+			Rotate(1.0f);
+		}
+	}
+	else
+	{
+		if (DirectXInput::GetInstance().IsKey(DIK_A))
+		{
+			Rotate(-1.0f);
+		}
+
+		if (DirectXInput::GetInstance().IsKey(DIK_D))
+		{
+			Rotate(1.0f);
+		}
+	}
+
+
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
+
 }
 
 void MirrorCube::Init()
 {
-	SetTag("Target");
+	SetTag("Mirror");
 	SetActorName("MirrorCube");
 
+	m_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "AllHitObject");
+	//m_pCollisionComponent = new SphereCollisionComponent(this, 10.0f, "Object");
 
-	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "TargetObject");
-	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
-	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
+	CollisionManager::GetInstance().AddComponent(m_pCollisionComponent);
+	CollisionManager::GetInstance().AddRegistTree(m_pCollisionComponent);
 
+	auto pPlayer = _pGameManager->GetPlayer();
 
-	_pAnimationComponent = std::make_shared<AnimationComponent>(this);
-	AddComponent(_pAnimationComponent);
+	if (pPlayer == nullptr)
+	{
+		throw std::runtime_error("Unable to retrieve the player.");
+	}
 
-	auto knockback = std::make_shared<AnimationCommandList>();
-	_pKnockBackAnimationCommand = std::make_shared<Vector3AnimationCommand>(GetPosition(), GetPosition() + GetBackward() * _knockBackAmount, m_Position,8.0f);
-	_pExpandkAnimationCommand = std::make_shared<Vector3AnimationCommand>(GetScale(),GetScale(),m_Scale,4.0f);
-	knockback->AddAnimation(_pKnockBackAnimationCommand);
-	knockback->AddAnimation(_pExpandkAnimationCommand);
-
-	_pAnimationComponent->AddAnimationState(knockback, "Hit", AnimationQue::AnimationStateType_None);
+	Rotate(0.0f);
 }
 
 void MirrorCube::Shutdown()
 {
+	m_pCollisionComponent->Delete();
+	_instance->Destroy();
 }
 
 void MirrorCube::OnCollsion(Actor* other)
 {
-	if(other->IsContainsTag("Bullet"))
-	{
-		Hit();
-	}
+
 }
 
-void MirrorCube::Expand()
+void MirrorCube::Rotate(float angle)
 {
-	auto scale = GetScale() + _addScale;
-	scale.Clamp(GetScale(), _maxScale);
+	auto pPlayer = _pGameManager->GetPlayer();
 
-	_pExpandkAnimationCommand->_start = GetScale();
-	_pExpandkAnimationCommand->_target = scale;
-}
-
-void MirrorCube::KnockBack()
-{
-	_pKnockBackAnimationCommand->_start = GetPosition();
-	_pKnockBackAnimationCommand->_target = GetPosition() + SimpleMath::Vector3::Backward * _knockBackAmount;
+	if (pPlayer == nullptr)return;
 
 
 
-	_pAnimationComponent->PlayAnimation("Hit");
-}
+	_angle += Time::DeltaTime * _rotateSpeed * angle;
 
-void MirrorCube::Hit()
-{
-	KnockBack();
-	Expand();
+	auto playerPosition = pPlayer->GetPosition();
+
+	SimpleMath::Vector3 pos = playerPosition + SimpleMath::Vector3(_radius * cos(_angle), 0, _radius * sin(_angle));
+
+	SetPosition(pos);
+
+
+	auto rotate = MathUtility::LookAt(GetPosition(), playerPosition);
+	SetRotation(rotate);
+
 }

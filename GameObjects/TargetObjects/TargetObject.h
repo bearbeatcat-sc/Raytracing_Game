@@ -3,6 +3,8 @@
 #include <Game_Object/Actor.h>
 #include <Device/Raytracing/DXRInstance.h>
 
+#include "../GameSystem/GameManager.h"
+
 class GameManager;
 
 class TargetObject
@@ -25,6 +27,12 @@ public:
 		if (_instance == nullptr) return -1;
 
 		return _instance->_instnaceID;
+	}
+
+	void DestoryOrder()
+	{
+		_pGameManager->DestroyObject(this);
+		this->Destroy();
 	}
 
 private:

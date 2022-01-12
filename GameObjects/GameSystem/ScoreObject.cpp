@@ -16,6 +16,8 @@ void ScoreObject::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
+
+	SetRotation(m_EulerRotation);
 }
 
 void ScoreObject::Init()
@@ -31,8 +33,8 @@ void ScoreObject::Init()
 	AddComponent(_AnimationComponent);
 
 	auto generateAnimationCommandList = std::make_shared<AnimationCommandList>();
-	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, SimpleMath::Vector3(0.25f), m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
-	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero,SimpleMath::Vector3(0.0f, 6.0f,0.0f), m_Rotation, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, SimpleMath::Vector3(0.25f), m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero,SimpleMath::Vector3(0.0f, 6.0f,0.0f), m_EulerRotation, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
 	_AnimationComponent->AddAnimationState(generateAnimationCommandList,"Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");

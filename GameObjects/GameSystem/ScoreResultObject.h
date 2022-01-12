@@ -2,12 +2,15 @@
 
 #include <Game_Object/Actor.h>
 
-class Stage
+class AnimationComponent;
+class DXRInstance;
+
+class ScoreResultObject
 	:public Actor
 {
 public:
-	Stage();
-	~Stage() = default;
+	ScoreResultObject();
+	~ScoreResultObject();
 
 private:
 	void UpdateActor() override;
@@ -15,10 +18,8 @@ private:
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
 
-
 private:
-	const float _floorCreateTime;
+	std::shared_ptr<DXRInstance> _instance;
 
-
-	std::vector<Actor*> _floors;
+	std::shared_ptr<AnimationComponent> _AnimationComponent;
 };
