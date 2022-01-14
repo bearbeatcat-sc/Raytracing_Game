@@ -58,11 +58,11 @@ void TargetTitleLogo::Init()
 	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3(2.0f), SimpleMath::Vector3::Zero, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
 	auto damageAnimationCommandList0 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.2f, m_Scale, 4.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.2f, m_Scale, 16.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList0->AddAnimation(_damageAnimationCommand0);
 
 	auto damageAnimationCommandList1 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 4.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 16.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList1->AddAnimation(_damageAnimationCommand1);
 
 	_AnimationComponent->AddAnimationState(generateAnimationCommandList, "Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
@@ -71,7 +71,7 @@ void TargetTitleLogo::Init()
 	_AnimationComponent->AddAnimationState(damageAnimationCommandList1, "Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");
 
-	auto cube1 = new Cube(SimpleMath::Vector3(0, -0.5f, 55.0f), SimpleMath::Vector3(1,1,1), "ControllUI");
+	auto cube1 = new Cube(SimpleMath::Vector3(0, -0.29f, 55.0f), SimpleMath::Vector3(1,1,1), "ControllUI");
 	SetChild(cube1);
 
 	auto cube2 = new Cube(SimpleMath::Vector3(0,-2.7f,55), SimpleMath::Vector3(1,0.5f,1), "BreakTitleUI");

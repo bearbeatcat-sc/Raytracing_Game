@@ -47,6 +47,8 @@ void Player::Shot(TargetObject* pTarget,const SimpleMath::Vector3& vec)
 	//bullet->SetPosition(GetPosition() + SimpleMath::Vector3(-1, -1.0f, 0) * 2.0f);
 
 	_pPlayerCamera->Shake(0.1f, 0.1f);
+
+
 }
 
 void Player::UpdateActor()
@@ -54,13 +56,20 @@ void Player::UpdateActor()
 	auto mtx = GetWorldMatrix();
 	//_instance->SetMatrix(mtx);
 
-
-	if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
+	if (DirectXInput::GetInstance().IsActiveGamePad())
 	{
-		LockOn();
+		if (DirectXInput::GetInstance().IsTrigger(GamePad_RightTrigger))
+		{
+			LockOn();
+		}
 	}
-
-
+	else
+	{
+		if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
+		{
+			LockOn();
+		}
+	}
 
 	auto cameraPitch = _pPlayerCamera->GetPitch();
 	SetRotation(SimpleMath::Vector3(cameraPitch, 0, 0));
@@ -106,6 +115,11 @@ void Player::Damage()
 {
 	_pPlayerCamera->Shake(0.4f, 0.1f);
 	_pGameManager->AddScore(-100);
+
+	if (DirectXInput::GetInstance().IsActiveGamePad())
+	{
+		DirectXInput::GetInstance().OnVibration(0, 60000, 60000, 1.0f);
+	}
 }
 
 void Player::OnCollsion(Actor* other)

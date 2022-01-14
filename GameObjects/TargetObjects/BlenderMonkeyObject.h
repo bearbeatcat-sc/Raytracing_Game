@@ -48,4 +48,5 @@ private:
 	int _hp;
 	const int _maxHP;
 	SimpleMath::Vector3 _damageScale;
+	SimpleMath::Vector3 _initScale;
 };

@@ -1,5 +1,6 @@
 ﻿#include "LockOnSystem.h"
 
+#include <Device/DirectX/DirectXInput.h>
 #include <Game_Object/ActorManager.h>
 #include <Utility/Timer.h>
 
@@ -96,7 +97,10 @@ void LockOnSystem::Attack()
 		if (_isGenerateLeft)
 		{
 			bullet->SetPosition(_user->GetPosition() + SimpleMath::Vector3(1, -1.0f, 0) * 2.0f);
-
+			if (DirectXInput::GetInstance().IsActiveGamePad())
+			{
+				DirectXInput::GetInstance().OnVibration(0, 30000, 0.0f, 0.1f);
+			}
 			return;
 		}
 
@@ -104,6 +108,10 @@ void LockOnSystem::Attack()
 
 		static_cast<Player*>(_user)->Shot(target, targetVec);
 
+		if (DirectXInput::GetInstance().IsActiveGamePad())
+		{
+			DirectXInput::GetInstance().OnVibration(0, 0.0f, 30000, 0.1f);
+		}
 		return;
 	}
 }

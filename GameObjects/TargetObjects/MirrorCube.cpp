@@ -1,5 +1,6 @@
 ﻿#include "MirrorCube.h"
 
+#include <algorithm>
 #include <Components/Animations/AnimationCommandList.h>
 #include <Components/Animations/Vector3AnimationCommand.h>
 #include <Components/Collsions/CollisionManager.h>
@@ -24,6 +25,46 @@ MirrorCube::MirrorCube(GameManager* pGameManager,bool controllFlag,float angle)
 
 void MirrorCube::UpdateActor()
 {
+
+	auto mtx = GetWorldMatrix();;
+	_instance->SetMatrix(mtx);
+
+
+	if(DirectXInput::GetInstance().IsActiveGamePad())
+	{
+		if(_controllFlag)
+		{
+			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) >= 0.2f)
+			{
+				const float input = -DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+				Rotate(input);
+			}
+
+			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) <= -0.2f)
+			{
+				const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+				Rotate(input * -1.0f);
+			}
+			return;
+		}
+		else
+		{
+			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) >= 0.2f)
+			{
+				const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
+				Rotate(input * -1.0f);
+			}
+
+			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) <= -0.2f)
+			{
+				const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
+				Rotate(input * -1.0f);
+			}
+		}
+
+		return;
+	}
+
 	if(_controllFlag)
 	{
 		if (DirectXInput::GetInstance().IsKey(DIK_LEFTARROW))
@@ -49,9 +90,6 @@ void MirrorCube::UpdateActor()
 		}
 	}
 
-
-	auto mtx = GetWorldMatrix();;
-	_instance->SetMatrix(mtx);
 
 }
 

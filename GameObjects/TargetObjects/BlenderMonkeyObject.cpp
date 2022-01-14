@@ -30,7 +30,7 @@ BlenderMonkeyObject::BlenderMonkeyObject(const int maxHP, BlenderMonkyObjectType
 
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
-	_instance->CreateRaytracingInstanceDesc(0x08);
+	_instance->CreateRaytracingInstanceDesc();
 }
 
 void BlenderMonkeyObject::UpdateActor()
@@ -57,19 +57,22 @@ void BlenderMonkeyObject::Init()
 	_AnimationComponent = std::make_shared<AnimationComponent>(this);
 	AddComponent(_AnimationComponent);
 
+	_initScale = GetScale();
+
+
 	auto generateAnimationCommandList = std::make_shared<AnimationCommandList>();
-	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, SimpleMath::Vector3::One, m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, _initScale, m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
 	auto destroyAnimationCommandList = std::make_shared<AnimationCommandList>();
 	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::One, SimpleMath::Vector3(2.0f), m_Scale, 4.0f));
 	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3(2.0f), SimpleMath::Vector3::Zero, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
 	auto damageAnimationCommandList0 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.2f, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.2f, m_Scale, 24.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList0->AddAnimation(_damageAnimationCommand0);
 
 	auto damageAnimationCommandList1 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 4.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 24.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList1->AddAnimation(_damageAnimationCommand1);
 
 	_AnimationComponent->AddAnimationState(generateAnimationCommandList, "Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
@@ -79,6 +82,7 @@ void BlenderMonkeyObject::Init()
 	_AnimationComponent->PlayAnimation("Generate");
 
 	_bombRadius = GetScale().x;
+
 }
 
 void BlenderMonkeyObject::Shutdown()
@@ -100,23 +104,23 @@ void BlenderMonkeyObject::OnCollsion(Actor* other)
 			_isDelete = true;
 			_pGameManager->AddScore(1000);
 
-			auto bombArea = new BombArea(10.0f);
+			auto bombArea = new BombArea(2.5f * _initScale.x);
 			bombArea->SetPosition(GetPosition());
 			ActorManager::GetInstance().AddActor(bombArea);
 
-			for (int i = 0; i < 120; ++i)
+			for (int i = 0; i < 240; ++i)
 			{
 				float x = Random::GetRandom(-1.0f, 1.0f);
 				float y = Random::GetRandom(-1.0f, 1.0f);
 				float z = Random::GetRandom(-1.0f, 1.0f);
 
-				float cos = std::cosf(i * 30.0f);
-				float sin = std::sinf(i * 30.0f);
+				float cos = std::cosf(i * 90.0f);
+				float sin = std::sinf(i * 90.0f);
 
 				auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _effectMeshName);
 				breakEffect->SetPosition(GetPosition());
 				breakEffect->Destroy(4.0f);
-				breakEffect->SetScale(SimpleMath::Vector3(0.5f) * m_Scale);
+				breakEffect->SetScale(SimpleMath::Vector3(0.1f) * _initScale);
 				breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 				ActorManager::GetInstance().AddActor(breakEffect);
 			}
@@ -136,13 +140,12 @@ void BlenderMonkeyObject::OnCollsion(Actor* other)
 			float y = Random::GetRandom(-1.0f, 1.0f);
 			float z = Random::GetRandom(-1.0f, 1.0f);
 
-			float cos = std::cosf(i * 30.0f);
-			float sin = std::sinf(i * 30.0f);
-
+			float cos = std::cosf(i * 90.0f);
+			float sin = std::sinf(i * 90.0f);
 			auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _effectMeshName);
 			breakEffect->SetPosition(GetPosition());
 			breakEffect->Destroy(4.0f);
-			breakEffect->SetScale(SimpleMath::Vector3(0.5f) * m_Scale);
+			breakEffect->SetScale(SimpleMath::Vector3(0.1f) * _initScale);
 			breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 			ActorManager::GetInstance().AddActor(breakEffect);
 		}
@@ -162,13 +165,12 @@ void BlenderMonkeyObject::Damage()
 {
 	_hp = std::clamp(_hp - 1, 0, _maxHP);
 
-	_damageScale = (SimpleMath::Vector3::One * ((float)_hp / (float)_maxHP));
 
-	_damageAnimationCommand0->_start = m_Scale;
-	_damageAnimationCommand0->_target = m_Scale * 1.2f;
+	_damageAnimationCommand0->_start = _initScale;
+	_damageAnimationCommand0->_target = _initScale * 1.2f;
 
-	_damageAnimationCommand1->_start = m_Scale * 1.2f;
-	_damageAnimationCommand1->_target = _damageScale;
+	_damageAnimationCommand1->_start = _initScale * 1.2f;
+	_damageAnimationCommand1->_target = _initScale;
 	_AnimationComponent->PlayAnimation("Damage0");
 
 	for (int i = 0; i < 6; ++i)
@@ -180,7 +182,7 @@ void BlenderMonkeyObject::Damage()
 		auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 10.0f, _effectMeshName);
 		breakEffect->SetPosition(GetPosition());
 		breakEffect->Destroy(4.0f);
-		breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
+		breakEffect->SetScale(SimpleMath::Vector3(0.04f) * _initScale);
 		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 		ActorManager::GetInstance().AddActor(breakEffect);
 	}

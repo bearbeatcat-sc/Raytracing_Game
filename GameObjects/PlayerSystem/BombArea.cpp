@@ -24,7 +24,7 @@ BombArea::BombArea(float maxRadius)
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	_expandTimer = std::make_shared<Timer>(2.0f);
+	_expandTimer = std::make_shared<Timer>(1.4f);
 }
 
 void BombArea::UpdateActor()

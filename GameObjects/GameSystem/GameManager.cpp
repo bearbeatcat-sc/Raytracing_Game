@@ -133,8 +133,9 @@ void GameManager::ResetGame()
 	_pMirror1->SetScale(SimpleMath::Vector3(1.6f, 2, 0.8f));
 
 	auto cube = new TargetTitleLogo(30,this);
-	cube->SetPosition(SimpleMath::Vector3(3, 16, -30));
+	cube->SetPosition(SimpleMath::Vector3(0, 17.6f, -18.0f));
 	cube->SetScale(SimpleMath::Vector3(12, 4, 1.0f));
+	cube->SetActorName("TargetTitleLogo");
 	ActorManager::GetInstance().AddActor(cube);
 
 
@@ -182,12 +183,22 @@ void GameManager::ResultUpdate()
 	{
 		ChangeGameState(GameStete_Title);
 	}
+
+	if(DirectXInput::GetInstance().IsActiveGamePad())
+	{
+		if(DirectXInput::GetInstance().isButtonDown(GAMEPAD_BUTTON_A))
+		{
+			ChangeGameState(GameStete_Title);
+		}
+	}
 }
 
 void GameManager::CreateStage()
 {
 
 #pragma region 00 ~ 40Time
+
+
 	_pObjectGenerator->CreateSnake(1.0f, SimpleMath::Vector3(0, 0, 300), 1, 3);
 	_pObjectGenerator->CreateSnake(3.0f, SimpleMath::Vector3(-100, 0, 300), 1, 3);
 	_pObjectGenerator->CreateSnake(2.0f, SimpleMath::Vector3(100, 0, 300), 1, 3);
@@ -251,18 +262,51 @@ void GameManager::CreateStage()
 
 	for (int i = 0; i < 5; ++i)
 	{
-		_pObjectGenerator->CreateSnake(baseTime + 30.0f, SimpleMath::Vector3( -20 + 10 * i, 30, 300), 3, 3);
+		_pObjectGenerator->CreateSnake(baseTime + 30.0f, SimpleMath::Vector3( -20 + 10 * i, 30, -300), 3, 3);
 	}
 
 	for (int i = 0; i < 5; ++i)
 	{
-		_pObjectGenerator->CreateSnake(baseTime + 35.0f, SimpleMath::Vector3(-20 + 10 * i, 30, -300), 3, 3);
+		_pObjectGenerator->CreateSnake(baseTime + 30.0f, SimpleMath::Vector3(-20 + 10 * i, 20, -300), 3, 3);
 	}
 
 	for (int i = 0; i < 5; ++i)
 	{
-		_pObjectGenerator->CreateSnake(baseTime + 40.0f, SimpleMath::Vector3(-20 + 10 * i, 30, 300), 3, 3);
+		_pObjectGenerator->CreateSnake(baseTime + 30.0f, SimpleMath::Vector3(-20 + 10 * i, 10, -300), 3, 3);
 	}
+
+
+	for (int i = 0; i < 5; ++i)
+	{
+		_pObjectGenerator->CreateSnake(baseTime + 35.0f, SimpleMath::Vector3(-10 + 10 * i, 30, 300), 3, 3);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		_pObjectGenerator->CreateSnake(baseTime + 35.0f, SimpleMath::Vector3(-10 + 10 * i, 20, 300), 3, 3);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		_pObjectGenerator->CreateSnake(baseTime + 35.0f, SimpleMath::Vector3(-10 + 10 * i, 10, 300), 3, 3);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		_pObjectGenerator->CreateSnake(baseTime + 40.0f, SimpleMath::Vector3(-20 + 10 * i, 30, 340), 3, 3);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		_pObjectGenerator->CreateSnake(baseTime + 40.0f, SimpleMath::Vector3(-20 + 10 * i, 20, 340), 3, 3);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		_pObjectGenerator->CreateSnake(baseTime + 40.0f, SimpleMath::Vector3(-20 + 10 * i, 10, 340), 3, 3);
+	}
+
+	_pObjectGenerator->CreateBlenderMonkeyObjcet(baseTime + 38.0f, SimpleMath::Vector3(0, 8, 40), SimpleMath::Vector3(6.0f), 30, BlenderMonkeyObject::BlenderMonkyObjectType_Clear);
 
 #pragma endregion
 }
@@ -281,7 +325,7 @@ void GameManager::StartGame()
 	_pScoreSystem->SetScale(SimpleMath::Vector3(1.0f));
 	_pScoreSystem->SetRotation(SimpleMath::Vector3(0.6f, 0.0f, 0.0f));
 
-	_pGameTimer = new GameTimer(180);
+	_pGameTimer = new GameTimer(220);
 	_pPlayer->SetChild(_pGameTimer);
 	_pGameTimer->SetScale(SimpleMath::Vector3(1.0f));
 	_pGameTimer->SetPosition(SimpleMath::Vector3(-1.5f, -1.0f, 1.6f));
