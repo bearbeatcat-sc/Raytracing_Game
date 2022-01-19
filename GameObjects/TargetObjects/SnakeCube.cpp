@@ -14,8 +14,8 @@
 #include "../GameSystem/GameManager.h"
 #include "../BreakEffect.h"
 
-SnakeCube::SnakeCube(const int maxHP, const SimpleMath::Vector3& moveVec, const std::string& dxrMeshName, GameManager* pGameManager)
-	:_hp(maxHP), TargetObject(pGameManager), _maxHP(maxHP), _pTarget(nullptr), _moveSpeed(40.0f), _keepDistance(3.0f),
+SnakeCube::SnakeCube(const int maxHP,float destroyTime, const SimpleMath::Vector3& moveVec, const std::string& dxrMeshName, GameManager* pGameManager)
+	:TargetObject(pGameManager, destroyTime), _hp(maxHP), _maxHP(maxHP), _pTarget(nullptr), _moveSpeed(30.0f), _keepDistance(3.0f),
 	_moveVec(moveVec), _rotateSpeed(30.0f),_roll(0.0f)
 {
 	SetActorName("SnakeCube");
@@ -27,6 +27,8 @@ SnakeCube::SnakeCube(const int maxHP, const SimpleMath::Vector3& moveVec, const 
 	_instance->CreateRaytracingInstanceDesc();
 
 }
+
+
 
 void SnakeCube::SetTarget(SnakeCube* pParent)
 {
@@ -280,4 +282,9 @@ void SnakeCube::Damage()
 		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 		ActorManager::GetInstance().AddActor(breakEffect);
 	}
+}
+
+void SnakeCube::ActiveAction()
+{
+
 }

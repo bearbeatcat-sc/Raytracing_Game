@@ -12,8 +12,8 @@
 #include "../BreakEffect.h"
 #include "../PlayerSystem/BombArea.h"
 
-BlenderMonkeyObject::BlenderMonkeyObject(const int maxHP, BlenderMonkyObjectType blenderMonkyType, GameManager* pGameManager)
-	:TargetObject(pGameManager),_maxHP(maxHP), _hp(maxHP),_blenderMonkeyType(blenderMonkyType)
+BlenderMonkeyObject::BlenderMonkeyObject(const int maxHP, float destroyTime, BlenderMonkyObjectType blenderMonkyType, GameManager* pGameManager)
+	:TargetObject(pGameManager, destroyTime),_maxHP(maxHP), _hp(maxHP),_blenderMonkeyType(blenderMonkyType)
 {
 	if(blenderMonkyType == BlenderMonkyObjectType_Clear)
 	{
@@ -38,9 +38,17 @@ void BlenderMonkeyObject::UpdateActor()
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 
-	if (_isDelete)
+	if (_AnimationComponent->GetCurrentState() == "End")
 	{
 		DestoryOrder();
+		return;
+	}
+
+	_deleteTimer->Update();
+	if (_deleteTimer->IsTime() && _AnimationComponent->GetCurrentState() != "Destroy")
+	{
+		_AnimationComponent->PlayAnimation("Destroy");
+		return;
 	}
 }
 
@@ -63,9 +71,8 @@ void BlenderMonkeyObject::Init()
 	auto generateAnimationCommandList = std::make_shared<AnimationCommandList>();
 	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, _initScale, m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
-	auto destroyAnimationCommandList = std::make_shared<AnimationCommandList>();
-	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::One, SimpleMath::Vector3(2.0f), m_Scale, 4.0f));
-	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3(2.0f), SimpleMath::Vector3::Zero, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	auto destroyAnimation = std::make_shared<AnimationCommandList>();
+	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(GetScale(), SimpleMath::Vector3::Zero, m_Scale, 6.0f));
 
 	auto damageAnimationCommandList0 = std::make_shared<AnimationCommandList>();
 	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.2f, m_Scale, 24.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
@@ -79,6 +86,7 @@ void BlenderMonkeyObject::Init()
 
 	_AnimationComponent->AddAnimationState(damageAnimationCommandList0, "Damage0", "Damage1");
 	_AnimationComponent->AddAnimationState(damageAnimationCommandList1, "Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+	_AnimationComponent->AddAnimationState(destroyAnimation, "Destroy", AnimationQue::AnimationStateType_End);
 	_AnimationComponent->PlayAnimation("Generate");
 
 	_bombRadius = GetScale().x;
@@ -101,6 +109,7 @@ void BlenderMonkeyObject::OnCollsion(Actor* other)
 
 		if (IsDeath())
 		{
+			_AnimationComponent->PlayAnimation("Destroy");
 			_isDelete = true;
 			_pGameManager->AddScore(1000);
 
@@ -132,6 +141,7 @@ void BlenderMonkeyObject::OnCollsion(Actor* other)
 
 	if (other->IsContainsTag("Player"))
 	{
+		_AnimationComponent->PlayAnimation("Destroy");
 		_isDelete = true;
 
 		for (int i = 0; i < 6; ++i)
@@ -167,9 +177,9 @@ void BlenderMonkeyObject::Damage()
 
 
 	_damageAnimationCommand0->_start = _initScale;
-	_damageAnimationCommand0->_target = _initScale * 1.2f;
+	_damageAnimationCommand0->_target = _initScale * 1.6f;
 
-	_damageAnimationCommand1->_start = _initScale * 1.2f;
+	_damageAnimationCommand1->_start = _initScale * 1.6f;
 	_damageAnimationCommand1->_target = _initScale;
 	_AnimationComponent->PlayAnimation("Damage0");
 
@@ -186,4 +196,9 @@ void BlenderMonkeyObject::Damage()
 		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 		ActorManager::GetInstance().AddActor(breakEffect);
 	}
+}
+
+void BlenderMonkeyObject::ActiveAction()
+{
+
 }

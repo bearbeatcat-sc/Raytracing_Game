@@ -14,14 +14,16 @@ class ObjectGenerator
 public:
 	ObjectGenerator(GameManager* pGameManager);
 	~ObjectGenerator();
-	void CreateSnake(float generateTime, const SimpleMath::Vector3& position,
+	void CreateSnake(float generateTime,float destroyTime, const SimpleMath::Vector3& position,
 		int maxHp, int bodyCount, const SimpleMath::Vector3& velocity);
-	void CreateSnake(float generateTime, const SimpleMath::Vector3& position,
+	void CreateSnake(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
 		int maxHp, int bodyCount);
-	void CreateBlenderMonkeyObjcet(float generateTime, const SimpleMath::Vector3& position,
+	void CreateBlenderMonkeyObjcet(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
 		const SimpleMath::Vector3& scale,int maxHP, BlenderMonkeyObject::BlenderMonkyObjectType type);
+	void CreateTargetCube(float generateTime, float destroyTime, int maxHP, const SimpleMath::Vector3& position,
+		const SimpleMath::Vector3& scale,const std::string& dxrMeshName);
 
-	void CreateNineSideCube(float generateTime, const SimpleMath::Vector3& position,float radius);
+	void CreateNineSideCube(float generateTime, float destroyTime, const SimpleMath::Vector3& position,float radius);
 	void Reset();
 	void OnDestroyObject(Actor* pActor);
 	void End();

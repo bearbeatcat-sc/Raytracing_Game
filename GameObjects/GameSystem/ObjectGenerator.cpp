@@ -16,33 +16,37 @@ ObjectGenerator::~ObjectGenerator()
 	_objectGenerateInfos.clear();
 }
 
-void ObjectGenerator::CreateSnake(float generateTime, const SimpleMath::Vector3& position, int maxHp, int bodyCount,
+void ObjectGenerator::CreateSnake(float generateTime, float destroyTime, const SimpleMath::Vector3& position, int maxHp, int bodyCount,
 	const SimpleMath::Vector3& velocity)
 {
-	AddGenerateInfo(std::make_shared<SnakeCubesGenerateInfo>(generateTime, position, maxHp, bodyCount, velocity));
+	AddGenerateInfo(std::make_shared<SnakeCubesGenerateInfo>(generateTime, destroyTime,position, maxHp, bodyCount, velocity));
 }
 
-void ObjectGenerator::CreateSnake(float generateTime, const SimpleMath::Vector3& position, int maxHp, int bodyCount)
+void ObjectGenerator::CreateSnake(float generateTime, float destroyTime, const SimpleMath::Vector3& position, int maxHp, int bodyCount)
 {
 	auto createPoint = position;
 	auto vec = SimpleMath::Vector3(0, 8, 0) - createPoint;;
 	vec.Normalize();
 
-	AddGenerateInfo(std::make_shared<SnakeCubesGenerateInfo>(generateTime, createPoint, maxHp, bodyCount, vec));
+	AddGenerateInfo(std::make_shared<SnakeCubesGenerateInfo>(generateTime, destroyTime,createPoint, maxHp, bodyCount, vec));
 }
 
-void ObjectGenerator::CreateBlenderMonkeyObjcet(float generateTime, const SimpleMath::Vector3& position,
+void ObjectGenerator::CreateBlenderMonkeyObjcet(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
 	const SimpleMath::Vector3& scale, int maxHP, BlenderMonkeyObject::BlenderMonkyObjectType type)
 {
-	AddGenerateInfo(std::make_shared<BlenderMonkeyObjectGenerateInfo>(generateTime, position,scale, maxHP, type));
+	AddGenerateInfo(std::make_shared<BlenderMonkeyObjectGenerateInfo>(generateTime, destroyTime, position,scale, maxHP, type));
 
 }
 
-
-void ObjectGenerator::CreateNineSideCube(float generateTime, const SimpleMath::Vector3& position, float radius)
+void ObjectGenerator::CreateTargetCube(float generateTime, float destroyTime, int maxHP,
+	const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, const std::string& dxrMeshName)
 {
-	AddGenerateInfo(std::make_shared<NineSideGenerateInfo>(generateTime, position,radius));
+	AddGenerateInfo(std::make_shared<TargetCubeGenerateInfo>(generateTime, destroyTime, maxHP, position,scale, dxrMeshName));
+}
 
+void ObjectGenerator::CreateNineSideCube(float generateTime, float destroyTime, const SimpleMath::Vector3& position, float radius)
+{
+	AddGenerateInfo(std::make_shared<NineSideGenerateInfo>(generateTime, destroyTime, position,radius));
 }
 
 void ObjectGenerator::Reset()

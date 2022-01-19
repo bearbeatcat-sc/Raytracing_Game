@@ -12,10 +12,11 @@ class TargetCube
 	:public TargetObject
 {
 public:
-	TargetCube(const int maxHP,const std::string& dxrMeshName, GameManager* pGameManager);
+	TargetCube(const int maxHP,float destroyTime,const std::string& dxrMeshName, GameManager* pGameManager);
 	~TargetCube() = default;
 
 private:
+	void ActiveAction() override;
 	void UpdateActor() override;
 	void Init() override;
 	void Shutdown() override;
@@ -36,4 +37,5 @@ private:
 	int _hp;
 	const int _maxHP;
 	SimpleMath::Vector3 _damageScale;
+	SimpleMath::Vector3 _initScale;
 };

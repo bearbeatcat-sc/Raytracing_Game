@@ -18,7 +18,7 @@ public:
 		BlenderMonkyObjectType_Clear,
 	};
 
-	BlenderMonkeyObject(const int maxHP, BlenderMonkyObjectType blenderMonkyType, GameManager* pGameManager);
+	BlenderMonkeyObject(const int maxHP,float destroyTime, BlenderMonkyObjectType blenderMonkyType, GameManager* pGameManager);
 	~BlenderMonkeyObject() = default;
 
 
@@ -30,8 +30,8 @@ private:
 	void OnCollsion(Actor* other) override;
 	bool IsDeath();
 	void Damage();
+	void ActiveAction() override;
 
-private:
 	CollisionComponent* m_pCollisionComponent;
 
 	 std::string _dxrMeshName;

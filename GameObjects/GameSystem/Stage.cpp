@@ -40,7 +40,15 @@ void Stage::Init()
 				continue;
 			}
 
-			auto cube = new VerticalMoveBlock(pos, SimpleMath::Vector3(1.8f), "RoughCube");
+			if( z <= 12)
+			{
+				auto cube = new VerticalMoveBlock(pos, SimpleMath::Vector3(1.8f), "RedCube");
+				SetChild(cube);
+				_floors.push_back(cube);
+				continue;
+			}
+
+			auto cube = new VerticalMoveBlock(pos, SimpleMath::Vector3(1.8f), "BlueCube");
 			SetChild(cube);
 			_floors.push_back(cube);
 

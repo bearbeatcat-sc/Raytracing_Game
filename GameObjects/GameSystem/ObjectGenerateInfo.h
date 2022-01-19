@@ -5,12 +5,13 @@
 #include "../TargetObjects/NineSideCube.h"
 #include "../TargetObjects/SnakeCube.h"
 #include "../TargetObjects/BlenderMonkeyObject.h"
+#include "../TargetObjects/TargetCube.h"
 
 struct ObjectGenerateInfo
 {
 public:
-	ObjectGenerateInfo(float generateTime, const SimpleMath::Vector3& position)
-		:_generateTime(generateTime), _generatePosition(position)
+	ObjectGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position)
+		:_generateTime(generateTime), _generatePosition(position),_destroyTime(destroyTime)
 	{
 
 	}
@@ -27,21 +28,46 @@ public:
 
 protected:
 	float _generateTime;
+	float _destroyTime;
 	SimpleMath::Vector3 _generatePosition;
+};
+
+struct TargetCubeGenerateInfo
+	:public ObjectGenerateInfo
+{
+public:
+	TargetCubeGenerateInfo(float generateTime,float destroyTime,int hp,const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale,const std::string& dxrMeshName)
+		:ObjectGenerateInfo(generateTime,destroyTime,position), _dxrMeshName(dxrMeshName), _maxHP(hp), _scale(scale)
+	{
+		
+	}
+
+	std::vector<Actor*> Create(GameManager* pGameManager) override
+	{
+		auto instance = new TargetCube(_maxHP,_destroyTime, _dxrMeshName, pGameManager);
+		instance->SetPosition(_generatePosition);
+		instance->SetScale(_scale);
+
+		return std::vector<Actor*>{instance};
+	}
+
+	std::string _dxrMeshName;
+	int _maxHP;
+	SimpleMath::Vector3 _scale;
 };
 
 struct NineSideGenerateInfo
 	:public ObjectGenerateInfo
 {
-	NineSideGenerateInfo(float generateTime, const SimpleMath::Vector3& position, float radius)
-		: ObjectGenerateInfo(generateTime, position), _radius(radius)
+	NineSideGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position, float radius)
+		: ObjectGenerateInfo(generateTime, destroyTime, position), _radius(radius)
 	{
 
 	}
 
 	std::vector<Actor*> Create(GameManager* pGameManager) override
 	{
-		auto instance = new NineSideCube(pGameManager, _radius);
+		auto instance = new NineSideCube(pGameManager, _radius, _destroyTime);
 		instance->SetPosition(_generatePosition);
 
 		return std::vector<Actor*>{instance};
@@ -53,15 +79,15 @@ struct NineSideGenerateInfo
 struct BlenderMonkeyObjectGenerateInfo
 	:public ObjectGenerateInfo
 {
-	BlenderMonkeyObjectGenerateInfo(float generateTime, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, int maxHp,BlenderMonkeyObject::BlenderMonkyObjectType type)
-		:ObjectGenerateInfo(generateTime,position),_type(type),_maxHP(maxHp),_scale(scale)
+	BlenderMonkeyObjectGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, int maxHp,BlenderMonkeyObject::BlenderMonkyObjectType type)
+		:ObjectGenerateInfo(generateTime,  destroyTime, position),_type(type),_maxHP(maxHp),_scale(scale)
 	{
 		
 	}
 
 	std::vector<Actor*> Create(GameManager* pGameManager) override
 	{
-		auto instance = new BlenderMonkeyObject(_maxHP, _type, pGameManager);
+		auto instance = new BlenderMonkeyObject(_maxHP, _destroyTime, _type, pGameManager);
 		instance->SetPosition(_generatePosition);
 		instance->SetScale(_scale);
 
@@ -76,9 +102,9 @@ struct BlenderMonkeyObjectGenerateInfo
 struct SnakeCubesGenerateInfo
 	:public ObjectGenerateInfo
 {
-	SnakeCubesGenerateInfo(float generateTime, const SimpleMath::Vector3& position,
+	SnakeCubesGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
 		int maxHp, int bodyCount, const SimpleMath::Vector3& velocity)
-		:ObjectGenerateInfo(generateTime, position), _maxHP(maxHp), _bodyCount(bodyCount), _veloicty(velocity)
+		:ObjectGenerateInfo(generateTime, destroyTime, position), _maxHP(maxHp), _bodyCount(bodyCount), _veloicty(velocity)
 	{
 
 	}
@@ -87,7 +113,7 @@ struct SnakeCubesGenerateInfo
 	{
 		std::vector<Actor*> _acts;
 
-		auto head = new SnakeCube(_maxHP, _veloicty, "RedCube", pGameManager);
+		auto head = new SnakeCube(_maxHP, _destroyTime,_veloicty, "RedCube", pGameManager);
 		head->SetScale(SimpleMath::Vector3::One * 1.2f);
 		head->SetPosition(_generatePosition);
 		_acts.push_back(head);
@@ -96,7 +122,7 @@ struct SnakeCubesGenerateInfo
 
 		for (int i = 0; i < _bodyCount; ++i)
 		{
-			auto body = new SnakeCube(_maxHP, _veloicty, "RedCube", pGameManager);
+			auto body = new SnakeCube(_maxHP, _destroyTime, _veloicty, "RedCube", pGameManager);
 			body->SetScale(SimpleMath::Vector3::One);
 			body->SetPosition(_generatePosition - (_veloicty * SimpleMath::Vector3(1.0f)));
 			bodys.push_back(body);

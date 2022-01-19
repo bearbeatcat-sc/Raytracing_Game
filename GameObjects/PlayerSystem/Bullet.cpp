@@ -97,6 +97,10 @@ void Bullet::Init()
 	_moveVec = _targetActor->GetPosition() - GetPosition();
 	_moveVec.Normalize();
 
+	// 相手の移動先の少し先を狙う。
+	_moveVec = (_moveVec * 6.0f + _targetActor->GetPosition()) - GetPosition();
+	_moveVec.Normalize();
+
 	_point0X = Random::GetRandom(-12.0f, 12.0f);
 	_point1X = Random::GetRandom(-12.0f, 12.0f);
 

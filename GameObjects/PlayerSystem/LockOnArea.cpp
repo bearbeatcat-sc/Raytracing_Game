@@ -61,7 +61,10 @@ void LockOnArea::OnCollsion(Actor* other)
 
 		if(hitList.at(instanceID)._isHit == 1)
 		{
-			AddTarget(LockOnInfo(static_cast<TargetObject*>(other),hitList.at(instanceID)._isHit));
+			auto target = static_cast<TargetObject*>(other);
+			target->Active();
+
+			AddTarget(LockOnInfo(target,hitList.at(instanceID)._isHit));
 		}
 
 	}

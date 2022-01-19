@@ -11,7 +11,7 @@ class SnakeCube
 	:public TargetObject
 {
 public:
-	SnakeCube(const int maxHP,const SimpleMath::Vector3& moveVec,const std::string& dxrMeshName, GameManager* pGameManager);
+	SnakeCube(const int maxHP,float destroyTime,const SimpleMath::Vector3& moveVec,const std::string& dxrMeshName, GameManager* pGameManager);
 	~SnakeCube() = default;
 	void SetTarget(SnakeCube* pParent);
 	void OnDestroyTarget();
@@ -29,8 +29,8 @@ private:
 
 	bool IsDeath();
 	void Damage();
+	void ActiveAction() override;
 
-private:
 	SnakeCube* _pTarget;
 	SnakeCube* _pTracker;
 

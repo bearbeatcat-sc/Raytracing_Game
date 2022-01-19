@@ -68,7 +68,8 @@ void Cube::Init()
 
 void Cube::Shutdown()
 {
-	_instance->Destroy();
+	if(_instance)
+		_instance->Destroy();
 }
 
 void Cube::OnCollsion(Actor* other)

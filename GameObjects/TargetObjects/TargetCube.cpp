@@ -14,9 +14,10 @@
 
 #include "../GameSystem/GameManager.h"
 #include "../BreakEffect.h"
+#include "../Cube.h"
 
-TargetCube::TargetCube(const int maxHP, const std::string& dxrMeshName, GameManager* pGameManager)
-	:_hp(maxHP), TargetObject(pGameManager), _maxHP(maxHP),_dxrMeshName(dxrMeshName)
+TargetCube::TargetCube(const int maxHP, float destroyTime, const std::string& dxrMeshName, GameManager* pGameManager)
+	:_hp(maxHP), TargetObject(pGameManager, destroyTime), _maxHP(maxHP),_dxrMeshName(dxrMeshName)
 {
 	_instance = DXRPipeLine::GetInstance().AddInstance(dxrMeshName, 0);
 
@@ -25,19 +26,52 @@ TargetCube::TargetCube(const int maxHP, const std::string& dxrMeshName, GameMana
 	_instance->CreateRaytracingInstanceDesc();
 }
 
+void TargetCube::ActiveAction()
+{
+	if(_findUI == nullptr)
+	{
+		_findUI = new Cube(SimpleMath::Vector3(0, 2.0f, 0.0f), SimpleMath::Vector3(2, 1, 1), "FoundUI");
+		SetChild(_findUI);
+	}
+
+}
+
 void TargetCube::UpdateActor()
 {
+
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 
-	if (_isDelete)
+	if (_AnimationComponent->GetCurrentState() == "End")
 	{
 		DestoryOrder();
+		return;
 	}
+
+	_deleteTimer->Update();
+	if (_deleteTimer->IsTime() && _AnimationComponent->GetCurrentState() != "Destroy")
+	{
+		_AnimationComponent->PlayAnimation("Destroy");
+		return;
+	}
+
+	if(IsExitActive())
+	{
+		if(_findUI)
+		{
+			_findUI->Destroy();
+			_findUI = nullptr;
+		}
+	}
+
+	ActiveUpdate();
+	SetRotation(m_EulerRotation);
 }
 
 void TargetCube::Init()
 {
+	_initScale = GetScale();
+
 	m_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale, "TargetObject");
 	//m_pCollisionComponent = new SphereCollisionComponent(this, 10.0f, "Object");
 
@@ -50,11 +84,10 @@ void TargetCube::Init()
 	AddComponent(_AnimationComponent);
 
 	auto generateAnimationCommandList = std::make_shared<AnimationCommandList>();
-	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, SimpleMath::Vector3::One, m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, _initScale, m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
-	auto destroyAnimationCommandList = std::make_shared<AnimationCommandList>();
-	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::One, SimpleMath::Vector3(2.0f), m_Scale, 4.0f));
-	destroyAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3(2.0f), SimpleMath::Vector3::Zero, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	auto destroyAnimation = std::make_shared<AnimationCommandList>();
+	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(GetScale(), SimpleMath::Vector3::Zero, m_Scale,6.0f));
 
 	auto damageAnimationCommandList0 = std::make_shared<AnimationCommandList>();
 	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.6f, m_Scale, 16.0f,AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
@@ -64,11 +97,15 @@ void TargetCube::Init()
 	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 16.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList1->AddAnimation(_damageAnimationCommand1);
 
+
+
 	_AnimationComponent->AddAnimationState(generateAnimationCommandList,"Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 
 	_AnimationComponent->AddAnimationState(damageAnimationCommandList0,"Damage0", "Damage1");
 	_AnimationComponent->AddAnimationState(damageAnimationCommandList1,"Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+	_AnimationComponent->AddAnimationState(destroyAnimation,"Destroy",AnimationQue::AnimationStateType_End);
 	_AnimationComponent->PlayAnimation("Generate");
+
 }
 
 void TargetCube::Shutdown()
@@ -86,13 +123,12 @@ void TargetCube::Damage()
 {
 	_hp = std::clamp(_hp - 1, 0, _maxHP);
 
-	_damageScale = (SimpleMath::Vector3::One * ((float)_hp / (float)_maxHP));
 
-	_damageAnimationCommand0->_start = m_Scale;
-	_damageAnimationCommand0->_target = m_Scale *  1.6f;
+	_damageAnimationCommand0->_start = _initScale;
+	_damageAnimationCommand0->_target = _initScale * 1.6f;
 
-	_damageAnimationCommand1->_start = m_Scale * 1.6f;
-	_damageAnimationCommand1->_target = _damageScale;
+	_damageAnimationCommand1->_start = _initScale * 1.6f;
+	_damageAnimationCommand1->_target = _initScale;
 	_AnimationComponent->PlayAnimation("Damage0");
 
 	for (int i = 0; i < 6; ++i)
@@ -123,7 +159,9 @@ void TargetCube::OnCollsion(Actor* other)
 
 		if(IsDeath())
 		{
+			_AnimationComponent->PlayAnimation("Destroy");
 			_isDelete = true;
+
 			_pGameManager->AddScore(100);
 
 			for (int i = 0; i < 6; ++i)
@@ -148,6 +186,7 @@ void TargetCube::OnCollsion(Actor* other)
 
 	if (other->IsContainsTag("Player"))
 	{
+		_AnimationComponent->PlayAnimation("Destroy");
 		_isDelete = true;
 
 		for (int i = 0; i < 6; ++i)

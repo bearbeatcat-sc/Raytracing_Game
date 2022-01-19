@@ -22,8 +22,8 @@ private:
 	bool IsDeath();
 	void Damage();
 	void OnCollsion(Actor* other) override;
+	void ActiveAction() override;
 
-private:
 	CollisionComponent* m_pCollisionComponent;
 
 	const std::string _dxrMeshName;

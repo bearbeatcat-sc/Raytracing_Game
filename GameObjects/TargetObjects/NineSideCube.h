@@ -12,7 +12,7 @@ class NineSideCube
 	:public TargetObject
 {
 public:
-	NineSideCube(GameManager* pGameManager, float radius);
+	NineSideCube(GameManager* pGameManager, float radius,float destroyTime);
 	~NineSideCube() = default;
 
 private:
@@ -24,15 +24,15 @@ private:
 
 	void Move();
 	void Rotate(float angle);
-
-private:
+	void ActiveAction() override;
 
 	CollisionComponent* m_pCollisionComponent;
 
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 
 	float _cos;
-	float _moveSpeed;
+	const float _moveSpeed;
+	const float _bodyDestoryTime;
 	const float _verticalRange;
 
 

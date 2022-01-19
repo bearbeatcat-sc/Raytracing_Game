@@ -17,7 +17,7 @@
 #include "../Cube.h"
 
 TargetTitleLogo::TargetTitleLogo(const int maxHP, GameManager* pGameManager)
-	:_hp(maxHP), TargetObject(pGameManager), _maxHP(maxHP), _dxrMeshName("TitleLogo")
+	:_hp(maxHP), TargetObject(pGameManager,100000.0f), _maxHP(maxHP), _dxrMeshName("TitleLogo")
 {
 	_instance = DXRPipeLine::GetInstance().AddInstance("TitleLogo", 0);
 
@@ -155,5 +155,9 @@ void TargetTitleLogo::OnCollsion(Actor* other)
 	}
 
 
+}
+
+void TargetTitleLogo::ActiveAction()
+{
 }
 

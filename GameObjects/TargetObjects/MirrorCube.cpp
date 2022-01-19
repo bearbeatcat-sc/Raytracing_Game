@@ -69,26 +69,15 @@ void MirrorCube::UpdateActor()
 	{
 		if (DirectXInput::GetInstance().IsKey(DIK_LEFTARROW))
 		{
-			Rotate(-1.0f);
+			Rotate(1.0f);
 		}
 
 		if (DirectXInput::GetInstance().IsKey(DIK_RIGHTARROW))
 		{
-			Rotate(1.0f);
-		}
-	}
-	else
-	{
-		if (DirectXInput::GetInstance().IsKey(DIK_A))
-		{
 			Rotate(-1.0f);
 		}
-
-		if (DirectXInput::GetInstance().IsKey(DIK_D))
-		{
-			Rotate(1.0f);
-		}
 	}
+
 
 
 }
@@ -133,7 +122,9 @@ void MirrorCube::Rotate(float angle)
 
 
 
+
 	_angle += Time::DeltaTime * _rotateSpeed * angle;
+	_angle = std::clamp(_angle, 1.0f, 2.2f);
 
 	auto playerPosition = pPlayer->GetPosition();
 

@@ -52,7 +52,6 @@ private:
 	ScoreResultObject* _pScoreResultObject;
 
 	Actor* _pMirror0;
-	Actor* _pMirror1;
 
 	GameState _gameState;
 
