@@ -16,9 +16,8 @@
 
 #include "../TargetObjects/TargetObject.h"
 
-Bullet::Bullet(const float moveSpeed, TargetObject* targetActor)
-	:_moveSpeed(0.0f), _addmoveSpeed(moveSpeed), _targetActor(targetActor), _moveTime(0.0f), _rotate(0.0f),
-	_isTargetLost(false)
+Bullet::Bullet(const float moveSpeed, const SimpleMath::Vector3& vec)
+	:_moveSpeed(120.0f), _addmoveSpeed(moveSpeed), _moveVec(vec), _moveTime(0.0f), _rotate(0.0f)
 {
 
 }
@@ -31,12 +30,12 @@ void Bullet::UpdateActor()
 	//if (_AnimationComponent->GetCurrentState() == "Generate")return;
 
 
-	if(_targetActor->IsDelete())
-	{
-		_isTargetLost = true;
- 		Destroy();
-		return;
-	}
+	//if(_targetActor->IsDelete())
+	//{
+	//	_isTargetLost = true;
+ //		Destroy();
+	//	return;
+	//}
 
 	_addRotate = std::clamp(_addRotate + 16.0f * Time::DeltaTime, 0.0f, 16.0f);
 	_rotate += Time::DeltaTime * _addRotate;
@@ -56,7 +55,6 @@ void Bullet::UpdateActor()
 	//_moveTime += Time::DeltaTime * _moveSpeed;
 
 
-	_moveSpeed = 120.0f;
 
 	SetRotation(GetEulerRotation() + SimpleMath::Vector3(0, 0, _rotate));
 
@@ -86,23 +84,23 @@ void Bullet::Init()
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	_createPoint = GetPosition();
+	//_createPoint = GetPosition();
 
-	if(_targetActor->IsDelete())
-	{
-		Destroy();
-		return;
-	}
+	//if(_targetActor->IsDelete())
+	//{
+	//	Destroy();
+	//	return;
+	//}
 
-	_moveVec = _targetActor->GetPosition() - GetPosition();
-	_moveVec.Normalize();
+	//_moveVec = _targetActor->GetPosition() - GetPosition();
+	//_moveVec.Normalize();
 
-	// 相手の移動先の少し先を狙う。
-	_moveVec = (_moveVec * 6.0f + _targetActor->GetPosition()) - GetPosition();
-	_moveVec.Normalize();
+	//// 相手の移動先の少し先を狙う。
+	//_moveVec = (_moveVec * 6.0f + _targetActor->GetPosition()) - GetPosition();
+	//_moveVec.Normalize();
 
-	_point0X = Random::GetRandom(-12.0f, 12.0f);
-	_point1X = Random::GetRandom(-12.0f, 12.0f);
+	//_point0X = Random::GetRandom(-12.0f, 12.0f);
+	//_point1X = Random::GetRandom(-12.0f, 12.0f);
 
 	SetTag("PlayerBullet");
 

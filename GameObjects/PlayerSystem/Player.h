@@ -16,6 +16,7 @@ class OBBCollisionComponent;
 class PlayerCamera;
 class LockOnSystem;
 class TargetObject;
+class SpriteComponent;
 
 class Player
 	:public Actor
@@ -23,7 +24,7 @@ class Player
 public:
 	Player(const SimpleMath::Vector3& pos, GameManager* pGameManager);
 	~Player() = default;
-	void Shot(TargetObject* pTarget, const SimpleMath::Vector3& vec);
+	void Shot();
 
 	enum PlayerState
 	{
@@ -46,7 +47,7 @@ private:
 
 	PlayerCamera* _pPlayerCamera;
 	GameManager* _pGameManager;
-	
+
 	std::shared_ptr<DXRInstance> _instance;
 	OBBCollisionComponent* _pCollisionComponent;
 	std::shared_ptr<RigidBodyComponent> _rigidBodyComponent;

@@ -11,7 +11,7 @@ class Bullet
 	:public Actor
 {
 public:
-	Bullet(const float moveSpeed, TargetObject* targetActor);
+	Bullet(const float moveSpeed, const SimpleMath::Vector3& vec);
 	~Bullet() = default;
 
 private:
@@ -23,23 +23,25 @@ private:
 private:
 	float _addmoveSpeed;
 	float _moveSpeed;
-	float _point0X;
-	float _point1X;
-
 	float _moveTime;
 	float _rotate;
 	float _addRotate;
 
+	//float _point0X;
+	//float _point1X;
+
+
+
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 
-	TargetObject* _targetActor;
+	//TargetObject* _targetActor;
 
 	std::shared_ptr<DXRInstance> _instance;
 
-	SimpleMath::Vector3 _createPoint;
+	//SimpleMath::Vector3 _createPoint;
 
 	OBBCollisionComponent* _pCollisionComponent;
-	bool _isTargetLost;
+	//bool _isTargetLost;
 
 	SimpleMath::Vector3 _moveVec;
 

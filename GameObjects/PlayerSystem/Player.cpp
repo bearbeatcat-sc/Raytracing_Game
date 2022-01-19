@@ -8,6 +8,7 @@
 #include <imgui/imgui.h>
 #include <Utility/Camera.h>
 #include <Utility/Math/MathUtility.h>
+#include <Components/SpriteComponent.h>
 
 #include "Bullet.h"
 #include "LockOnSystem.h"
@@ -25,7 +26,7 @@ Player::Player(const SimpleMath::Vector3& pos, GameManager* pGameManager)
 }
 
 
-void Player::Shot(TargetObject* pTarget,const SimpleMath::Vector3& vec)
+void Player::Shot()
 {
 	//auto bullet = new Bullet(1.0f, pTarget);
 
@@ -69,20 +70,20 @@ void Player::UpdateActor()
 	auto mtx = GetWorldMatrix();
 	//_instance->SetMatrix(mtx);
 
-	//if (DirectXInput::GetInstance().IsActiveGamePad())
-	//{
-	//	if (DirectXInput::GetInstance().IsTrigger(GamePad_RightTrigger))
-	//	{
-	//		LockOn();
-	//	}
-	//}
-	//else
-	//{
-	//	if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
-	//	{
-	//		LockOn();
-	//	}
-	//}
+	if (DirectXInput::GetInstance().IsActiveGamePad())
+	{
+		if (DirectXInput::GetInstance().IsTrigger(GamePad_RightTrigger))
+		{
+			LockOn();
+		}
+	}
+	else
+	{
+		if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
+		{
+			LockOn();
+		}
+	}
 
 	auto cameraPitch = _pPlayerCamera->GetPitch();
 	SetRotation(SimpleMath::Vector3(cameraPitch, 0, 0));
@@ -97,6 +98,7 @@ void Player::UpdateActor()
 		break;
 	}
 
+	
 }
 
 void Player::LockOn()
@@ -114,7 +116,6 @@ void Player::Init()
 	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale * 1.4f, "PlayerObject");
 	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
-
 
 	//auto mtx = GetWorldMatrix();
 	//_instance->SetMatrix(mtx);
