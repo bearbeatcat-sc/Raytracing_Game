@@ -16,7 +16,8 @@ public:
 	~TargetCube() = default;
 
 private:
-	void ActiveAction() override;
+	void ActiveAction(Actor* pPlayer) override;
+	void Run();
 	void UpdateActor() override;
 	void Init() override;
 	void Shutdown() override;
@@ -33,11 +34,12 @@ private:
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand0;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand1;
 
-	std::shared_ptr<Timer> _pDamageTimer;
+	SimpleMath::Vector3 _runVec;
 
 
 	int _hp;
 	const int _maxHP;
 	SimpleMath::Vector3 _damageScale;
 	SimpleMath::Vector3 _initScale;
+	const float _runSpeed;
 };

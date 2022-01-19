@@ -20,9 +20,9 @@ private:
 	void Init() override;
 	void Shutdown() override;
 	bool IsDeath();
-	void Damage();
+	void Damage(float damage);
 	void OnCollsion(Actor* other) override;
-	void ActiveAction() override;
+	void ActiveAction(Actor* pPlayer) override;
 
 	CollisionComponent* m_pCollisionComponent;
 
@@ -36,4 +36,5 @@ private:
 	int _hp;
 	const int _maxHP;
 	SimpleMath::Vector3 _damageScale;
+	SimpleMath::Vector3 _initScale;
 };

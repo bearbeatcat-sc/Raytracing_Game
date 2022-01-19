@@ -8,45 +8,38 @@ class CollisionComponent;
 class AnimationComponent;
 class GameManager;
 
-class BlenderMonkeyObject
+class NineSideCubeBody
 	:public TargetObject
 {
 public:
-	enum BlenderMonkyObjectType
-	{
-		BlenderMonkyObjectType_Mirror,
-		BlenderMonkyObjectType_Clear,
-	};
-
-	BlenderMonkeyObject(const int maxHP,float destroyTime, BlenderMonkyObjectType blenderMonkyType, GameManager* pGameManager);
-	~BlenderMonkeyObject() = default;
-
-
+	NineSideCubeBody(const int maxHP, float destroyTime, const std::string& dxrMeshName, GameManager* pGameManager);
+	~NineSideCubeBody() = default;
 
 private:
+	void ActiveAction(Actor* pPlayer) override;
+	void Run();
 	void UpdateActor() override;
 	void Init() override;
 	void Shutdown() override;
-	void OnCollsion(Actor* other) override;
 	bool IsDeath();
-	void Damage();
-	void ActiveAction(Actor* pPlayer) override;
+	void Damage(float damage);
+	void OnCollsion(Actor* other) override;
 
+private:
 	CollisionComponent* m_pCollisionComponent;
 
-	 std::string _dxrMeshName;
-	 std::string _effectMeshName;
-
+	const std::string _dxrMeshName;
 
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand0;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand1;
 
-	BlenderMonkyObjectType _blenderMonkeyType;
 
-	float _bombRadius;
+
+
 	int _hp;
 	const int _maxHP;
 	SimpleMath::Vector3 _damageScale;
 	SimpleMath::Vector3 _initScale;
+	const float _runSpeed;
 };

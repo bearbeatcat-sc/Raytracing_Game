@@ -198,7 +198,7 @@ void BlenderMonkeyObject::Damage()
 	}
 }
 
-void BlenderMonkeyObject::ActiveAction()
+void BlenderMonkeyObject::ActiveAction(Actor* pPlayer)
 {
 
 }

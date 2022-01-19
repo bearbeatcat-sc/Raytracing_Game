@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include <Game_Object/Actor.h>
 #include <SimpleMath.h>
 #include <memory>
@@ -10,13 +9,12 @@ using namespace DirectX;
 class DXRInstance;
 class AnimationComponent;
 
-class Cube
+class FoundUI
 	:public Actor
 {
 public:
-	Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale,const std::string& meshName);
-	~Cube() = default;
-	void Delete();
+	FoundUI();
+	~FoundUI() = default;
 
 private:
 	virtual void UpdateActor() override;
@@ -24,14 +22,9 @@ private:
 	virtual void Shutdown() override;
 	virtual void OnCollsion(Actor* other) override;
 
-
 private:
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 	std::shared_ptr<DXRInstance> _instance;
 	SimpleMath::Vector3 _initScale;
 
-
-private:
-
-	std::string _DXRMeshName;
 };

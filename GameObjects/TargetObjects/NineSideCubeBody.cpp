@@ -1,4 +1,4 @@
-﻿#include "TargetCube.h"
+﻿#include "NineSideCubeBody.h"
 
 #include <algorithm>
 #include <Components/Animations/AnimationCommand.h>
@@ -14,12 +14,12 @@
 #include <Utility/Time.h>
 #include <Utility/Math/MathUtility.h>
 
-#include "FoundUI.h"
 #include "../GameSystem/GameManager.h"
 #include "../BreakEffect.h"
+#include "../Cube.h"
 
-TargetCube::TargetCube(const int maxHP, float destroyTime, const std::string& dxrMeshName, GameManager* pGameManager)
-	:_hp(maxHP), TargetObject(pGameManager, destroyTime), _maxHP(maxHP),_dxrMeshName(dxrMeshName), _runSpeed(90.0f)
+NineSideCubeBody::NineSideCubeBody(const int maxHP, float destroyTime, const std::string& dxrMeshName, GameManager* pGameManager)
+	:_hp(maxHP), TargetObject(pGameManager, destroyTime), _maxHP(maxHP), _dxrMeshName(dxrMeshName), _runSpeed(30.0f)
 {
 	_instance = DXRPipeLine::GetInstance().AddInstance(dxrMeshName, 0);
 
@@ -27,18 +27,23 @@ TargetCube::TargetCube(const int maxHP, float destroyTime, const std::string& dx
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	_runVec = SimpleMath::Vector3(Random::GetRandom(-0.5f, 0.5f), 0, Random::GetRandom(-0.2f, 0.2f));
-
 }
 
-void TargetCube::ActiveAction(Actor* pPlayer)
+void NineSideCubeBody::ActiveAction(Actor* pPlayer)
 {
+	if (_findUI == nullptr)
+	{
+		_findUI = new Cube(SimpleMath::Vector3(0, 3.0f, 0.0f), SimpleMath::Vector3(1, 1, 1), "FoundUI");
+
+		SetChild(_findUI);
+	}
+
 
 }
 
 
 
-void TargetCube::UpdateActor()
+void NineSideCubeBody::UpdateActor()
 {
 
 	auto mtx = GetWorldMatrix();
@@ -57,19 +62,23 @@ void TargetCube::UpdateActor()
 		return;
 	}
 
-	if(IsActive() )
+	if (IsActive())
 	{
 		_pDamageTimer->Update();
-		if(_pDamageTimer->IsTime())
+		if (_pDamageTimer->IsTime())
 		{
 			_pDamageTimer->Reset();
 			Damage(5.0f);
 		}
 	}
 
-	if(IsExitActive())
+	if (IsExitActive())
 	{
-
+		if (_findUI)
+		{
+			_findUI->Destroy();
+			_findUI = nullptr;
+		}
 	}
 
 	ActiveUpdate();
@@ -78,7 +87,7 @@ void TargetCube::UpdateActor()
 
 }
 
-void TargetCube::Init()
+void NineSideCubeBody::Init()
 {
 	_initScale = GetScale();
 
@@ -97,38 +106,38 @@ void TargetCube::Init()
 	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, _initScale, m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
 	auto destroyAnimation = std::make_shared<AnimationCommandList>();
-	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(GetScale(), SimpleMath::Vector3::Zero, m_Scale,6.0f));
+	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(GetScale(), SimpleMath::Vector3::Zero, m_Scale, 6.0f));
 
 	auto damageAnimationCommandList0 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.6f, m_Scale, 32.0f,AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.6f, m_Scale, 32.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList0->AddAnimation(_damageAnimationCommand0);
 
 	auto damageAnimationCommandList1 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale,32.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 32.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList1->AddAnimation(_damageAnimationCommand1);
 
 
 
-	_AnimationComponent->AddAnimationState(generateAnimationCommandList,"Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+	_AnimationComponent->AddAnimationState(generateAnimationCommandList, "Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->AddAnimationState(destroyAnimation, "Destroy", AnimationQue::AnimationStateType_End);
-	_AnimationComponent->AddAnimationState(damageAnimationCommandList0,"Damage0", "Damage1");
-	_AnimationComponent->AddAnimationState(damageAnimationCommandList1,"Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
+	_AnimationComponent->AddAnimationState(damageAnimationCommandList0, "Damage0", "Damage1");
+	_AnimationComponent->AddAnimationState(damageAnimationCommandList1, "Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 
 
 }
 
-void TargetCube::Shutdown()
+void NineSideCubeBody::Shutdown()
 {
 	_instance->Destroy();
 	m_pCollisionComponent->Delete();
 }
 
-bool TargetCube::IsDeath()
+bool NineSideCubeBody::IsDeath()
 {
 	return _hp <= 0;
 }
 
-void TargetCube::Damage(float damage)
+void NineSideCubeBody::Damage(float damage)
 {
 	if (_isDelete)return;
 
@@ -182,7 +191,7 @@ void TargetCube::Damage(float damage)
 	}
 }
 
-void TargetCube::OnCollsion(Actor* other)
+void NineSideCubeBody::OnCollsion(Actor* other)
 {
 	if (_isDelete)return;
 
@@ -219,3 +228,4 @@ void TargetCube::OnCollsion(Actor* other)
 		return;
 	}
 }
+

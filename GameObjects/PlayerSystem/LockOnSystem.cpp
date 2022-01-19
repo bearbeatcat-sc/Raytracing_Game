@@ -15,7 +15,7 @@ LockOnSystem::LockOnSystem(Actor* pUser)
 	:Component(pUser), _isPreviousLockOn(false),_isCurrentLockOn(false)
 {
 	_pLockOnArea = new LockOnArea(pUser);
-	_pLockOnArea->SetScale(SimpleMath::Vector3(50, 30, 500));
+	_pLockOnArea->SetScale(SimpleMath::Vector3(100, 200, 500));
 	ActorManager::GetInstance().AddActor(_pLockOnArea);
 	_pLockOnArea->SetActorName("PlayerLockOnArea");
 

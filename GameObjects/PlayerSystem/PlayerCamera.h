@@ -26,7 +26,7 @@ private:
 
 private:
 
-	float _cameraTargetSpeed = 3.2f;
+	float _cameraTargetSpeed = 6.2f;
 	float _cameraPositionSpeed = 3.0f;
 
 	Actor* _pTracker;

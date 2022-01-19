@@ -44,6 +44,12 @@ void ObjectGenerator::CreateTargetCube(float generateTime, float destroyTime, in
 	AddGenerateInfo(std::make_shared<TargetCubeGenerateInfo>(generateTime, destroyTime, maxHP, position,scale, dxrMeshName));
 }
 
+void ObjectGenerator::CreatePointLightObject(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
+	const SimpleMath::Color& color, float distance)
+{
+	AddGenerateInfo(std::make_shared<PointLightGenerateInfo>(generateTime, destroyTime, position, color, distance));
+}
+
 void ObjectGenerator::CreateNineSideCube(float generateTime, float destroyTime, const SimpleMath::Vector3& position, float radius)
 {
 	AddGenerateInfo(std::make_shared<NineSideGenerateInfo>(generateTime, destroyTime, position,radius));

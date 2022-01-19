@@ -7,6 +7,8 @@ class ScoreSystem;
 class Player;
 class ObjectGenerator;
 class GameTimer;
+class TitleStage;
+class PlayStage;
 
 class GameManager
 	:public Actor
@@ -50,6 +52,8 @@ private:
 	ScoreSystem* _pScoreSystem;
 	ObjectGenerator* _pObjectGenerator;
 	ScoreResultObject* _pScoreResultObject;
+	TitleStage* _pTitleStage;
+	PlayStage* _pPlayStage;
 
 	Actor* _pMirror0;
 	Actor* _pMirror1;

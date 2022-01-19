@@ -22,6 +22,8 @@ public:
 		const SimpleMath::Vector3& scale,int maxHP, BlenderMonkeyObject::BlenderMonkyObjectType type);
 	void CreateTargetCube(float generateTime, float destroyTime, int maxHP, const SimpleMath::Vector3& position,
 		const SimpleMath::Vector3& scale,const std::string& dxrMeshName);
+	void CreatePointLightObject(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
+	                            const SimpleMath::Color& color, float distance);
 
 	void CreateNineSideCube(float generateTime, float destroyTime, const SimpleMath::Vector3& position,float radius);
 	void Reset();

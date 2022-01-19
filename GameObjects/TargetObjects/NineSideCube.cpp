@@ -9,6 +9,7 @@
 #include <Utility/Time.h>
 #include <Utility/Math/MathUtility.h>
 
+#include "NineSideCubeBody.h"
 #include "TargetCube.h"
 #include "../GameSystem/GameManager.h"
 #include "../PlayerSystem/Player.h"
@@ -69,7 +70,7 @@ void NineSideCube::CreateBody()
 				}
 
 				auto pos = SimpleMath::Vector3(-2.0f + (2.0f * x), -2.0f + (2.0f * y), -2.0f + (2.0f * z));
-				auto targetCube = new TargetCube(1, _bodyDestoryTime * 0.9f, "RedCube", _pGameManager);
+				auto targetCube = new NineSideCubeBody(1, _bodyDestoryTime * 0.9f, "RedCube", _pGameManager);
 				targetCube->SetPosition(pos);
 				targetCube->SetScale(SimpleMath::Vector3::One);
 				SetChild(targetCube);
@@ -134,7 +135,7 @@ void NineSideCube::Rotate(float angle)
 
 }
 
-void NineSideCube::ActiveAction()
+void NineSideCube::ActiveAction(Actor* pPlayer)
 {
 
 }

@@ -29,7 +29,7 @@ private:
 
 	bool IsDeath();
 	void Damage();
-	void ActiveAction() override;
+	void ActiveAction(Actor* pPlayer) override;
 
 	SnakeCube* _pTarget;
 	SnakeCube* _pTracker;

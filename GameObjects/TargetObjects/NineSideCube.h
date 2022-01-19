@@ -24,7 +24,7 @@ private:
 
 	void Move();
 	void Rotate(float angle);
-	void ActiveAction() override;
+	void ActiveAction(Actor* pPlayer) override;
 
 	CollisionComponent* m_pCollisionComponent;
 

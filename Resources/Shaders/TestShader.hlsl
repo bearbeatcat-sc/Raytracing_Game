@@ -685,7 +685,7 @@ void chs(inout Payload payload, in MyAttribute attribs)
 		}
 
 		float t = RayTCurrent();
-		payload.color = lerp(payload.color, float3(1,1,1), 1.0f - exp(-0.0000001f * t * t * t));
+		//payload.color = lerp(payload.color, float3(1,1,1), 1.0f - exp(-0.0000001f * t * t * t));
 
 		return;
 	}
@@ -708,7 +708,7 @@ void chs(inout Payload payload, in MyAttribute attribs)
 	}
 
 	float t = RayTCurrent();
-	payload.color = lerp(payload.color, float3(1, 1, 1), 1.0f - exp(-0.0000001f * t * t * t));
+	//payload.color = lerp(payload.color, float3(1, 1, 1), 1.0f - exp(-0.0000001f * t * t * t));
 
 }
 

@@ -284,7 +284,7 @@ void SnakeCube::Damage()
 	}
 }
 
-void SnakeCube::ActiveAction()
+void SnakeCube::ActiveAction(Actor* pPlayer)
 {
 
 }

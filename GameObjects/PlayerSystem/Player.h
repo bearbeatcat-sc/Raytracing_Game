@@ -25,6 +25,14 @@ public:
 	~Player() = default;
 	void Shot(TargetObject* pTarget, const SimpleMath::Vector3& vec);
 
+	enum PlayerState
+	{
+		PlayerState_Stay,
+		PlayerState_Move,
+	};
+	void SetPlayerState(PlayerState playerState);
+	void Move();
+
 private:
 	virtual void UpdateActor() override;
 	void LockOn();
@@ -35,6 +43,7 @@ private:
 
 private:
 
+
 	PlayerCamera* _pPlayerCamera;
 	GameManager* _pGameManager;
 	
@@ -43,5 +52,7 @@ private:
 	std::shared_ptr<RigidBodyComponent> _rigidBodyComponent;
 	std::shared_ptr<LockOnSystem> _lockOnSystem;
 	bool _isGenerateLeft;
+
+	PlayerState _playerState;
 
 };

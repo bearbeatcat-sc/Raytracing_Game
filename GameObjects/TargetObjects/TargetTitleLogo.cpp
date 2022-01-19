@@ -35,6 +35,27 @@ void TargetTitleLogo::UpdateActor()
 	{
 		DestoryOrder();
 	}
+
+	if (IsActive())
+	{
+		_pDamageTimer->Update();
+		if (_pDamageTimer->IsTime())
+		{
+			_pDamageTimer->Reset();
+			Damage(5.0f);
+		}
+	}
+
+	if (IsExitActive())
+	{
+		if (_findUI)
+		{
+			_findUI->Destroy();
+			_findUI = nullptr;
+		}
+	}
+
+	ActiveUpdate();
 }
 
 void TargetTitleLogo::Init()
@@ -77,6 +98,7 @@ void TargetTitleLogo::Init()
 	auto cube2 = new Cube(SimpleMath::Vector3(0,-2.7f,55), SimpleMath::Vector3(1,0.5f,1), "BreakTitleUI");
 	SetChild(cube2);
 
+	_initScale = GetScale();
 }
 
 void TargetTitleLogo::Shutdown()
@@ -90,17 +112,41 @@ bool TargetTitleLogo::IsDeath()
 	return _hp <= 0;
 }
 
-void TargetTitleLogo::Damage()
+void TargetTitleLogo::Damage(float damage)
 {
-	_hp = std::clamp(_hp - 1, 0, _maxHP);
+	//_hp = std::clamp(_hp - 1, 0, _maxHP);
 
-	_damageScale = (SimpleMath::Vector3(12, 4, 1.0f) * ((float)_hp / (float)_maxHP));
+	//_damageScale = (SimpleMath::Vector3(12, 4, 1.0f) * ((float)_hp / (float)_maxHP));
 
-	_damageAnimationCommand0->_start = m_Scale;
-	_damageAnimationCommand0->_target = m_Scale * 1.2f;
+	//_damageAnimationCommand0->_start = m_Scale;
+	//_damageAnimationCommand0->_target = m_Scale * 1.2f;
 
-	_damageAnimationCommand1->_start = m_Scale * 1.2f;
-	_damageAnimationCommand1->_target = _damageScale;
+	//_damageAnimationCommand1->_start = m_Scale * 1.2f;
+	//_damageAnimationCommand1->_target = _damageScale;
+	//_AnimationComponent->PlayAnimation("Damage0");
+
+	//for (int i = 0; i < 6; ++i)
+	//{
+	//	float x = Random::GetRandom(-1.0f, 1.0f);
+	//	float y = Random::GetRandom(-1.0f, 1.0f);
+	//	float z = Random::GetRandom(-1.0f, 1.0f);
+
+	//	auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 10.0f, "RedClearCube");
+	//	breakEffect->SetPosition(GetPosition());
+	//	breakEffect->Destroy(4.0f);
+	//	breakEffect->SetScale(SimpleMath::Vector3(0.1f));
+	//	breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
+	//	ActorManager::GetInstance().AddActor(breakEffect);
+	//}
+
+	_hp = std::clamp(_hp - damage, 0.0f, (float)_maxHP);
+
+
+	_damageAnimationCommand0->_start = _initScale;
+	_damageAnimationCommand0->_target = _initScale * 1.2f;
+
+	_damageAnimationCommand1->_start = _initScale * 1.2f;
+	_damageAnimationCommand1->_target = _initScale;
 	_AnimationComponent->PlayAnimation("Damage0");
 
 	for (int i = 0; i < 6; ++i)
@@ -109,12 +155,35 @@ void TargetTitleLogo::Damage()
 		float y = Random::GetRandom(-1.0f, 1.0f);
 		float z = Random::GetRandom(-1.0f, 1.0f);
 
-		auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 10.0f, "RedClearCube");
+		auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 10.0f, _dxrMeshName);
 		breakEffect->SetPosition(GetPosition());
 		breakEffect->Destroy(4.0f);
 		breakEffect->SetScale(SimpleMath::Vector3(0.1f));
 		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 		ActorManager::GetInstance().AddActor(breakEffect);
+	}
+
+	if (IsDeath())
+	{
+		_isDelete = true;
+		_pGameManager->ChangeGameState(GameManager::GameStete_GamePlay);
+
+		for (int i = 0; i < 6; ++i)
+		{
+			float x = Random::GetRandom(-1.0f, 1.0f);
+			float y = Random::GetRandom(-1.0f, 1.0f);
+			float z = Random::GetRandom(-1.0f, 1.0f);
+
+			float cos = std::cosf(i * 30.0f);
+			float sin = std::sinf(i * 30.0f);
+
+			auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _dxrMeshName);
+			breakEffect->SetPosition(GetPosition());
+			breakEffect->Destroy(4.0f);
+			breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
+			breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
+			ActorManager::GetInstance().AddActor(breakEffect);
+		}
 	}
 
 }
@@ -127,37 +196,37 @@ void TargetTitleLogo::OnCollsion(Actor* other)
 
 	if (other->IsContainsTag("Bullet"))
 	{
-		Damage();
+		Damage(1.0f);
 
-		if (IsDeath())
-		{
-			_isDelete = true;
-			_pGameManager->ChangeGameState(GameManager::GameStete_GamePlay);
+		//if (IsDeath())
+		//{
+		//	_isDelete = true;
+		//	_pGameManager->ChangeGameState(GameManager::GameStete_GamePlay);
 
-			for (int i = 0; i < 300; ++i)
-			{
-				float x = Random::GetRandom(-1.0f, 1.0f);
-				float y = Random::GetRandom(-1.0f, 1.0f);
-				float z = Random::GetRandom(-1.0f, 1.0f);
+		//	for (int i = 0; i < 300; ++i)
+		//	{
+		//		float x = Random::GetRandom(-1.0f, 1.0f);
+		//		float y = Random::GetRandom(-1.0f, 1.0f);
+		//		float z = Random::GetRandom(-1.0f, 1.0f);
 
-				float cos = std::cosf(i * 30.0f);
-				float sin = std::sinf(i * 30.0f);
+		//		float cos = std::cosf(i * 30.0f);
+		//		float sin = std::sinf(i * 30.0f);
 
-				auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, "RedClearCube");
-				breakEffect->SetPosition(GetPosition());
-				breakEffect->Destroy(4.0f);
-				breakEffect->SetScale(SimpleMath::Vector3(0.05f) * m_Scale);
-				breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
-				ActorManager::GetInstance().AddActor(breakEffect);
-			}
-		}
+		//		auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, "RedClearCube");
+		//		breakEffect->SetPosition(GetPosition());
+		//		breakEffect->Destroy(4.0f);
+		//		breakEffect->SetScale(SimpleMath::Vector3(0.05f) * m_Scale);
+		//		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
+		//		ActorManager::GetInstance().AddActor(breakEffect);
+		//	}
+		//}
 		return;
 	}
 
 
 }
 
-void TargetTitleLogo::ActiveAction()
+void TargetTitleLogo::ActiveAction(Actor* pPlayer)
 {
 }
 

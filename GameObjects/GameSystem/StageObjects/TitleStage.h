@@ -2,23 +2,23 @@
 
 #include <Game_Object/Actor.h>
 
-class Stage
+class VerticalMoveBlock;
+
+class TitleStage
 	:public Actor
 {
 public:
-	Stage();
-	~Stage() = default;
+	TitleStage();
+	~TitleStage() = default;
+	void Delete();
 
 private:
 	void UpdateActor() override;
 	void Init() override;
 	void Shutdown() override;
-	void OnCollsion(Actor* other) override;
-
+	void OnCollsion(Actor * other) override;
 
 private:
 	const float _floorCreateTime;
-
-
-	std::vector<Actor*> _floors;
+	std::vector<VerticalMoveBlock*> _floors;
 };

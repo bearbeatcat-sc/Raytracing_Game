@@ -16,6 +16,7 @@ public:
 		:_pGameManager(pGameManager), _isDelete(false), _findUI(nullptr)
 	{
 		_deleteTimer = std::make_shared<Timer>(destroyTime);
+		_pDamageTimer = std::make_shared<Timer>(0.1f);
 	}
 
 	bool IsDelete()
@@ -38,10 +39,10 @@ public:
 		this->Destroy();
 	}
 
-	void Active()
+	void Active(Actor* pPlayer)
 	{
 		_isActive = true;
-		ActiveAction();
+		ActiveAction(pPlayer);
 	}
 
 	bool IsActive()
@@ -70,12 +71,13 @@ private:
 	virtual void Init() = 0;
 	virtual void Shutdown() = 0;
 	virtual void OnCollsion(Actor* other) = 0;
-	virtual void ActiveAction() = 0;
+	virtual void ActiveAction(Actor* pPlayer) = 0;
 
 protected:
 	std::shared_ptr<DXRInstance> _instance;
 	GameManager* _pGameManager;
 	std::shared_ptr<Timer> _deleteTimer;
+	std::shared_ptr<Timer> _pDamageTimer;
 
 	Actor* _findUI;
 

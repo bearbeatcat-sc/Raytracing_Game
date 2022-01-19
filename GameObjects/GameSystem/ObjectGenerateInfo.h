@@ -6,12 +6,13 @@
 #include "../TargetObjects/SnakeCube.h"
 #include "../TargetObjects/BlenderMonkeyObject.h"
 #include "../TargetObjects/TargetCube.h"
+#include "../PointLightObject.h"
 
 struct ObjectGenerateInfo
 {
 public:
 	ObjectGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position)
-		:_generateTime(generateTime), _generatePosition(position),_destroyTime(destroyTime)
+		:_generateTime(generateTime), _generatePosition(position), _destroyTime(destroyTime)
 	{
 
 	}
@@ -36,15 +37,15 @@ struct TargetCubeGenerateInfo
 	:public ObjectGenerateInfo
 {
 public:
-	TargetCubeGenerateInfo(float generateTime,float destroyTime,int hp,const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale,const std::string& dxrMeshName)
-		:ObjectGenerateInfo(generateTime,destroyTime,position), _dxrMeshName(dxrMeshName), _maxHP(hp), _scale(scale)
+	TargetCubeGenerateInfo(float generateTime, float destroyTime, int hp, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, const std::string& dxrMeshName)
+		:ObjectGenerateInfo(generateTime, destroyTime, position), _dxrMeshName(dxrMeshName), _maxHP(hp), _scale(scale)
 	{
-		
+
 	}
 
 	std::vector<Actor*> Create(GameManager* pGameManager) override
 	{
-		auto instance = new TargetCube(_maxHP,_destroyTime, _dxrMeshName, pGameManager);
+		auto instance = new TargetCube(_maxHP, _destroyTime, _dxrMeshName, pGameManager);
 		instance->SetPosition(_generatePosition);
 		instance->SetScale(_scale);
 
@@ -54,6 +55,28 @@ public:
 	std::string _dxrMeshName;
 	int _maxHP;
 	SimpleMath::Vector3 _scale;
+};
+
+struct PointLightGenerateInfo
+	:public ObjectGenerateInfo
+{
+public:
+	PointLightGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position, const SimpleMath::Color& color, float distance)
+		:ObjectGenerateInfo(generateTime, destroyTime, position), _color(color),_distance(distance)
+	{
+
+	}
+
+	std::vector<Actor*> Create(GameManager* pGameManager) override
+	{
+		auto instance = new PointLightObject(_generatePosition, _color, _distance);
+		instance->Destroy(_destroyTime);
+
+		return std::vector<Actor*>{instance};
+	}
+
+	float _distance;
+	SimpleMath::Color _color;
 };
 
 struct NineSideGenerateInfo
@@ -79,10 +102,10 @@ struct NineSideGenerateInfo
 struct BlenderMonkeyObjectGenerateInfo
 	:public ObjectGenerateInfo
 {
-	BlenderMonkeyObjectGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, int maxHp,BlenderMonkeyObject::BlenderMonkyObjectType type)
-		:ObjectGenerateInfo(generateTime,  destroyTime, position),_type(type),_maxHP(maxHp),_scale(scale)
+	BlenderMonkeyObjectGenerateInfo(float generateTime, float destroyTime, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, int maxHp, BlenderMonkeyObject::BlenderMonkyObjectType type)
+		:ObjectGenerateInfo(generateTime, destroyTime, position), _type(type), _maxHP(maxHp), _scale(scale)
 	{
-		
+
 	}
 
 	std::vector<Actor*> Create(GameManager* pGameManager) override
@@ -113,7 +136,7 @@ struct SnakeCubesGenerateInfo
 	{
 		std::vector<Actor*> _acts;
 
-		auto head = new SnakeCube(_maxHP, _destroyTime,_veloicty, "RedCube", pGameManager);
+		auto head = new SnakeCube(_maxHP, _destroyTime, _veloicty, "RedCube", pGameManager);
 		head->SetScale(SimpleMath::Vector3::One * 1.2f);
 		head->SetPosition(_generatePosition);
 		_acts.push_back(head);

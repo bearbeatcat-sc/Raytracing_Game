@@ -2,26 +2,23 @@
 
 #include <Game_Object/Actor.h>
 
-class Stage;
-class GameManager;
-class Tunnel;
+class VerticalMoveBlock;
 
-class TunnelManager
+class PlayStage
 	:public Actor
 {
 public:
-	TunnelManager(GameManager* pGameManager);
-	~TunnelManager() = default;
+	PlayStage();
+	~PlayStage() = default;
+	void Delete();
 
 private:
-	
 	void UpdateActor() override;
 	void Init() override;
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
 
-
 private:
-	Stage* _pStage;
-	GameManager* _pGamaManager;
+	const float _floorCreateTime;
+	std::vector<VerticalMoveBlock*> _floors;
 };

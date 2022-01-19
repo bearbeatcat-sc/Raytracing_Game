@@ -18,7 +18,7 @@
 #include "../GameSystem/GameManager.h"
 
 Player::Player(const SimpleMath::Vector3& pos, GameManager* pGameManager)
-	:Actor(), _pGameManager(pGameManager), _isGenerateLeft(false)
+	:Actor(), _pGameManager(pGameManager), _isGenerateLeft(false),_playerState(PlayerState_Stay)
 {
 	SetPosition(pos);
 	SetTag("Player");
@@ -51,33 +51,52 @@ void Player::Shot(TargetObject* pTarget,const SimpleMath::Vector3& vec)
 
 }
 
+void Player::SetPlayerState(PlayerState playerState)
+{
+	_playerState = playerState;
+}
+
+void Player::Move()
+{
+	auto position = GetPosition();
+	position += Time::DeltaTime * 3.0f * SimpleMath::Vector3::Backward;
+
+	SetPosition(position);
+}
+
 void Player::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();
 	//_instance->SetMatrix(mtx);
 
-	if (DirectXInput::GetInstance().IsActiveGamePad())
-	{
-		if (DirectXInput::GetInstance().IsTrigger(GamePad_RightTrigger))
-		{
-			LockOn();
-		}
-	}
-	else
-	{
-		if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
-		{
-			LockOn();
-		}
-	}
+	//if (DirectXInput::GetInstance().IsActiveGamePad())
+	//{
+	//	if (DirectXInput::GetInstance().IsTrigger(GamePad_RightTrigger))
+	//	{
+	//		LockOn();
+	//	}
+	//}
+	//else
+	//{
+	//	if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
+	//	{
+	//		LockOn();
+	//	}
+	//}
 
 	auto cameraPitch = _pPlayerCamera->GetPitch();
 	SetRotation(SimpleMath::Vector3(cameraPitch, 0, 0));
 
-	//auto position = GetPosition();
-	//position += Time::DeltaTime * 3.0f * SimpleMath::Vector3::Backward;
+	switch(_playerState)
+	{
+	case PlayerState_Stay:
+		break;
 
-	//SetPosition(position);
+	case PlayerState_Move:
+		Move();
+		break;
+	}
+
 }
 
 void Player::LockOn()

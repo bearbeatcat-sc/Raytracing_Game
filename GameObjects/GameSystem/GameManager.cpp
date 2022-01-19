@@ -8,7 +8,8 @@
 #include "../PlayerSystem/Player.h"
 #include "ScoreSystem.h"
 #include "ObjectGenerator.h"
-#include "Stage.h"
+#include "StageObjects/TitleStage.h"
+#include "StageObjects/PlayStage.h"
 #include "GameTimer.h"
 #include "ScoreResultObject.h"
 
@@ -53,9 +54,9 @@ void GameManager::UpdateActor()
 
 void GameManager::Init()
 {
-	auto stage = new Stage();
-	stage->SetPosition(SimpleMath::Vector3(-7.7f, 0, -56.0f));
-	ActorManager::GetInstance().AddActor(stage);
+	_pTitleStage = new TitleStage();
+	_pTitleStage->SetPosition(SimpleMath::Vector3(-7.7f, 0, -56.0f));
+	ActorManager::GetInstance().AddActor(_pTitleStage);
 
 	_pObjectGenerator = new ObjectGenerator(this);
 	ActorManager::GetInstance().AddActor(_pObjectGenerator);
@@ -78,7 +79,7 @@ void GameManager::EndGame()
 {
 	_pObjectGenerator->End();
 
-	_pGameTimer->Destroy();
+	//_pGameTimer->Destroy();
 
 	_pScoreResultObject = new ScoreResultObject();
 	_pScoreResultObject->SetPosition(SimpleMath::Vector3(0, 0, 100));
@@ -125,21 +126,22 @@ void GameManager::ResetGame()
 	_pPlayer->SetActorName("Player");
 	ActorManager::GetInstance().AddActor(_pPlayer);
 
-	_pMirror0 = new MirrorCube(this, true, 2.3f);
-	_pMirror0->SetScale(SimpleMath::Vector3(0.23f, 1.30f, 1.2f));
-	_pMirror0->SetRotation(SimpleMath::Vector3(0.65f, 0, 0));
-	_pMirror0->SetPosition(SimpleMath::Vector3(2, 0, 2.4f));
+	//_pMirror0 = new MirrorCube(this, true, 2.3f);
+	//_pMirror0->SetScale(SimpleMath::Vector3(0.23f, 1.30f, 1.2f));
+	//_pMirror0->SetRotation(SimpleMath::Vector3(0.65f, 0, 0));
+	//_pMirror0->SetPosition(SimpleMath::Vector3(2, 0, 2.4f));
 
-	_pMirror1 = new MirrorCube(this, true, 2.3f);
-	_pMirror1->SetScale(SimpleMath::Vector3(0.23f, 1.30f, 1.2f));
-	_pMirror1->SetRotation(SimpleMath::Vector3(5.620f, 0, 0));
-	_pMirror1->SetPosition(SimpleMath::Vector3(-2.060f,0,2.43f));
+	//_pMirror1 = new MirrorCube(this, true, 2.3f);
+	//_pMirror1->SetScale(SimpleMath::Vector3(0.23f, 1.30f, 1.2f));
+	//_pMirror1->SetRotation(SimpleMath::Vector3(5.620f, 0, 0));
+	//_pMirror1->SetPosition(SimpleMath::Vector3(-2.060f,0,2.43f));
 
-	_pPlayer->SetChild(_pMirror0);
-	_pPlayer->SetChild(_pMirror1);
+	//_pPlayer->SetChild(_pMirror0);
+	//_pPlayer->SetChild(_pMirror1);
+	_pPlayer->SetPlayerState(Player::PlayerState_Stay);
 
 	auto cube = new TargetTitleLogo(30, this);
-	cube->SetPosition(SimpleMath::Vector3(0, 17.6f, -18.0f));
+	cube->SetPosition(SimpleMath::Vector3(6.0f, 17.6f, 18.0f));
 	cube->SetScale(SimpleMath::Vector3(12, 4, 1.0f));
 	cube->SetActorName("TargetTitleLogo");
 	ActorManager::GetInstance().AddActor(cube);
@@ -171,12 +173,12 @@ void GameManager::ChangeGameState(GameState gameState)
 
 void GameManager::GamePlayUpdate()
 {
-	_pGameTimer->Update();
+	//_pGameTimer->Update();
 
-	if (_pGameTimer->IsEnd())
-	{
-		ChangeGameState(GameStete_Result);
-	}
+	//if (_pGameTimer->IsEnd())
+	//{
+	//	ChangeGameState(GameStete_Result);
+	//}
 }
 
 void GameManager::TitleUpdate()
@@ -203,34 +205,34 @@ void GameManager::CreateStage()
 {
 	_pObjectGenerator->CreateNineSideCube(1.0f,10.0f, SimpleMath::Vector3(100, 30, 300), 30.0f);
 
-	for(int i = 0; i < 10; ++i)
-	{
-		_pObjectGenerator->CreateTargetCube(1.0f + (0.5f * i), 2.0f, 1, SimpleMath::Vector3(1.0f + (5.0f * i), 10, -30), SimpleMath::Vector3(1.0f), "RedCube");
-	}
+	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 90, SimpleMath::Vector3(10, 10, 60), SimpleMath::Vector3(3.0f), "RedCube");
+	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 90, SimpleMath::Vector3(20, 10, 60), SimpleMath::Vector3(3.0f), "RedCube");
+	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 90, SimpleMath::Vector3(30, 10, 60), SimpleMath::Vector3(3.0f), "RedCube");
 
-	for (int i = 0; i < 10; ++i)
-	{
-		_pObjectGenerator->CreateTargetCube(1.0f + (0.5f * i), 30.0f, 1, SimpleMath::Vector3(1.0f + (5.0f * i), 10, 30), SimpleMath::Vector3(1.0f), "RedCube");
-	}
+
 }
 
 void GameManager::StartGame()
 {
+	_pPlayer->SetPlayerState(Player::PlayerState_Move);
 
+	_pTitleStage->Delete();
 
+	_pPlayStage = new PlayStage();
+	ActorManager::GetInstance().AddActor(_pPlayStage);
 
 	_pObjectGenerator->Reset();
 	CreateStage();
 
 
-	_pScoreSystem = new ScoreSystem(SimpleMath::Vector3(-0.6f, -1.0f, 2.0f));
+	_pScoreSystem = new ScoreSystem(SimpleMath::Vector3(-1.0f, -1.0f, 2.0f));
 	_pPlayer->SetChild(_pScoreSystem);
 	_pScoreSystem->SetScale(SimpleMath::Vector3(1.0f));
-	_pScoreSystem->SetRotation(SimpleMath::Vector3(0.6f, 0.0f, 0.0f));
+	_pScoreSystem->SetRotation(SimpleMath::Vector3(0.0f, 0.0f, 0.0f));
 
-	_pGameTimer = new GameTimer(220);
-	_pPlayer->SetChild(_pGameTimer);
-	_pGameTimer->SetScale(SimpleMath::Vector3(1.0f));
-	_pGameTimer->SetPosition(SimpleMath::Vector3(-1.5f, -1.0f, 1.6f));
-	_pGameTimer->SetRotation(SimpleMath::Vector3(-0.620f, 0.0f, 0.0f));
+	//_pGameTimer = new GameTimer(220);
+	//_pPlayer->SetChild(_pGameTimer);
+	//_pGameTimer->SetScale(SimpleMath::Vector3(1.0f));
+	//_pGameTimer->SetPosition(SimpleMath::Vector3(-1.5f, -1.0f, 1.6f));
+	//_pGameTimer->SetRotation(SimpleMath::Vector3(-0.620f, 0.0f, 0.0f));
 }
