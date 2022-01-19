@@ -73,6 +73,11 @@ void Player::UpdateActor()
 
 	auto cameraPitch = _pPlayerCamera->GetPitch();
 	SetRotation(SimpleMath::Vector3(cameraPitch, 0, 0));
+
+	//auto position = GetPosition();
+	//position += Time::DeltaTime * 3.0f * SimpleMath::Vector3::Backward;
+
+	//SetPosition(position);
 }
 
 void Player::LockOn()

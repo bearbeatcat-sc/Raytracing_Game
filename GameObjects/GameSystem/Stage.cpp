@@ -32,7 +32,7 @@ void Stage::Init()
 		{
 			auto pos = SimpleMath::Vector3(x * 3.9f, 0.0f, z * 4.0f) - SimpleMath::Vector3(12.0f * 3.9f, 0.0f, 0.0f);
 
-			if ((x >= 13 && x < 16) || (z >= 13 && z < 16))
+			if ((x >= 13 && x < 16) /*|| (z >= 13 && z < 16)*/)
 			{
 				auto cube = new VerticalMoveBlock(pos, SimpleMath::Vector3(1.8f), "BlackCube");
 				SetChild(cube);

@@ -107,11 +107,18 @@ void GameManager::ResetGame()
 		_pPlayer = nullptr;
 	}
 
-	if (_pMirror0)
-	{
-		_pMirror0->Destroy();
-		_pMirror0 = nullptr;
-	}
+	//if (_pMirror0)
+	//{
+	//	_pMirror0->Destroy();
+	//	_pMirror0 = nullptr;
+	//}
+
+	//if (_pMirror1)
+	//{
+	//	_pMirror1->Destroy();
+	//	_pMirror1 = nullptr;
+	//}
+
 
 	_pPlayer = new Player(SimpleMath::Vector3(0, 8.0f, 0), this);
 	_pPlayer->SetScale(SimpleMath::Vector3(0.7f));
@@ -119,10 +126,17 @@ void GameManager::ResetGame()
 	ActorManager::GetInstance().AddActor(_pPlayer);
 
 	_pMirror0 = new MirrorCube(this, true, 2.3f);
-	ActorManager::GetInstance().AddActor(_pMirror0);
-	_pMirror0->SetScale(SimpleMath::Vector3(1.2f, 2, 0.8f));
+	_pMirror0->SetScale(SimpleMath::Vector3(0.23f, 1.30f, 1.2f));
+	_pMirror0->SetRotation(SimpleMath::Vector3(0.65f, 0, 0));
+	_pMirror0->SetPosition(SimpleMath::Vector3(2, 0, 2.4f));
 
+	_pMirror1 = new MirrorCube(this, true, 2.3f);
+	_pMirror1->SetScale(SimpleMath::Vector3(0.23f, 1.30f, 1.2f));
+	_pMirror1->SetRotation(SimpleMath::Vector3(5.620f, 0, 0));
+	_pMirror1->SetPosition(SimpleMath::Vector3(-2.060f,0,2.43f));
 
+	_pPlayer->SetChild(_pMirror0);
+	_pPlayer->SetChild(_pMirror1);
 
 	auto cube = new TargetTitleLogo(30, this);
 	cube->SetPosition(SimpleMath::Vector3(0, 17.6f, -18.0f));

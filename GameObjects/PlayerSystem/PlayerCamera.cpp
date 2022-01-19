@@ -115,19 +115,19 @@ void PlayerCamera::CameraUpdate()
 	_camera->SetPosition(_pTracker->GetPosition());
 	_camera->SetPosition(_camera->GetPosition() + SimpleMath::Vector3(_shake.x, _shake.y, 0));
 
-	//if (DirectXInput::GetInstance().IsKey(DIK_LEFT))
-	//{
-	//	//_cameraTarget -= SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
-	//	//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
-	//	ViewMove(SimpleMath::Vector3::Left);
-	//}
+	if (DirectXInput::GetInstance().IsKey(DIK_LEFT))
+	{
+		//_cameraTarget -= SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
+		//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
+		ViewMove(SimpleMath::Vector3::Left);
+	}
 
-	//if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
-	//{
-	//	//_cameraTarget += SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
-	//	//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
-	//	ViewMove(SimpleMath::Vector3::Right);
-	//}
+	if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
+	{
+		//_cameraTarget += SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
+		//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
+		ViewMove(SimpleMath::Vector3::Right);
+	}
 
 
 
@@ -145,14 +145,14 @@ void PlayerCamera::CameraUpdate()
 void PlayerCamera::ViewMove(const SimpleMath::Vector3& moveVec)
 {
 
-	_Pitch = std::clamp(_Pitch + moveVec.x * 1.0f * Time::DeltaTime, -2.6f, 2.6f);
+	_Pitch = std::clamp(_Pitch + moveVec.x * 1.0f * Time::DeltaTime, -1.2f, 1.2f);
 
-	//auto up = SimpleMath::Vector3::Transform(SimpleMath::Vector3::UnitY, _pTracker->GetRotation());
-	//SimpleMath::Quaternion qu = SimpleMath::Quaternion::CreateFromAxisAngle(up, _Pitch);
+	auto up = SimpleMath::Vector3::Transform(SimpleMath::Vector3::UnitY, _pTracker->GetRotation());
+	SimpleMath::Quaternion qu = SimpleMath::Quaternion::CreateFromAxisAngle(up, _Pitch);
 
-	//SimpleMath::Vector3 viewForward = SimpleMath::Vector3::Transform(SimpleMath::Vector3::Backward, qu);
+	SimpleMath::Vector3 viewForward = SimpleMath::Vector3::Transform(SimpleMath::Vector3::Backward, qu);
 
-	//_cameraTarget = viewForward * 3.0f;
+	_cameraTarget = viewForward * 3.0f;
 
-	//_camera->SetUp(up);
+	_camera->SetUp(up);
 }

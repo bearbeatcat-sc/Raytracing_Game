@@ -24,6 +24,8 @@ TargetCube::TargetCube(const int maxHP, float destroyTime, const std::string& dx
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
+
+	_pDamageTimer = std::make_shared<Timer>(0.1f);
 }
 
 void TargetCube::ActiveAction()
@@ -53,6 +55,16 @@ void TargetCube::UpdateActor()
 	{
 		_AnimationComponent->PlayAnimation("Destroy");
 		return;
+	}
+
+	if(IsActive() )
+	{
+		_pDamageTimer->Update();
+		if(_pDamageTimer->IsTime())
+		{
+			_pDamageTimer->Reset();
+			Damage(5.0f);
+		}
 	}
 
 	if(IsExitActive())
@@ -90,11 +102,11 @@ void TargetCube::Init()
 	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(GetScale(), SimpleMath::Vector3::Zero, m_Scale,6.0f));
 
 	auto damageAnimationCommandList0 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.6f, m_Scale, 16.0f,AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand0 = std::make_shared<Vector3AnimationCommand>(m_Scale, m_Scale * 1.6f, m_Scale, 32.0f,AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList0->AddAnimation(_damageAnimationCommand0);
 
 	auto damageAnimationCommandList1 = std::make_shared<AnimationCommandList>();
-	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale, 16.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
+	_damageAnimationCommand1 = std::make_shared<Vector3AnimationCommand>(m_Scale, _damageScale, m_Scale,32.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic);
 	damageAnimationCommandList1->AddAnimation(_damageAnimationCommand1);
 
 
@@ -119,15 +131,15 @@ bool TargetCube::IsDeath()
 	return _hp <= 0;
 }
 
-void TargetCube::Damage()
+void TargetCube::Damage(float damage)
 {
-	_hp = std::clamp(_hp - 1, 0, _maxHP);
+	_hp = std::clamp(_hp - damage, 0.0f, (float)_maxHP);
 
 
 	_damageAnimationCommand0->_start = _initScale;
-	_damageAnimationCommand0->_target = _initScale * 1.6f;
+	_damageAnimationCommand0->_target = _initScale * 1.2f;
 
-	_damageAnimationCommand1->_start = _initScale * 1.6f;
+	_damageAnimationCommand1->_start = _initScale * 1.2f;
 	_damageAnimationCommand1->_target = _initScale;
 	_AnimationComponent->PlayAnimation("Damage0");
 
@@ -145,6 +157,30 @@ void TargetCube::Damage()
 		ActorManager::GetInstance().AddActor(breakEffect);
 	}
 
+	if (IsDeath())
+	{
+		_AnimationComponent->PlayAnimation("Destroy");
+		_isDelete = true;
+
+		_pGameManager->AddScore(100);
+
+		for (int i = 0; i < 6; ++i)
+		{
+			float x = Random::GetRandom(-1.0f, 1.0f);
+			float y = Random::GetRandom(-1.0f, 1.0f);
+			float z = Random::GetRandom(-1.0f, 1.0f);
+
+			float cos = std::cosf(i * 30.0f);
+			float sin = std::sinf(i * 30.0f);
+
+			auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _dxrMeshName);
+			breakEffect->SetPosition(GetPosition());
+			breakEffect->Destroy(4.0f);
+			breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
+			breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
+			ActorManager::GetInstance().AddActor(breakEffect);
+		}
+	}
 }
 
 void TargetCube::OnCollsion(Actor* other)
@@ -155,32 +191,7 @@ void TargetCube::OnCollsion(Actor* other)
 
 	if (other->IsContainsTag("Bullet"))
 	{
-		Damage();
-
-		if(IsDeath())
-		{
-			_AnimationComponent->PlayAnimation("Destroy");
-			_isDelete = true;
-
-			_pGameManager->AddScore(100);
-
-			for (int i = 0; i < 6; ++i)
-			{
-				float x = Random::GetRandom(-1.0f, 1.0f);
-				float y = Random::GetRandom(-1.0f, 1.0f);
-				float z = Random::GetRandom(-1.0f, 1.0f);
-
-				float cos = std::cosf(i * 30.0f);
-				float sin = std::sinf(i * 30.0f);
-
-				auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, y, sin) * 10.0f, _dxrMeshName);
-				breakEffect->SetPosition(GetPosition());
-				breakEffect->Destroy(4.0f);
-				breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
-				breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
-				ActorManager::GetInstance().AddActor(breakEffect);
-			}
-		}
+		Damage(1.0f);
 		return;
 	}
 

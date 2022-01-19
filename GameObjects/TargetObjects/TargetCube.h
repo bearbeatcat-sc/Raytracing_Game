@@ -21,7 +21,7 @@ private:
 	void Init() override;
 	void Shutdown() override;
 	bool IsDeath();
-	void Damage();
+	void Damage(float damage);
 	void OnCollsion(Actor * other) override;
 
 private:
@@ -32,6 +32,8 @@ private:
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand0;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand1;
+
+	std::shared_ptr<Timer> _pDamageTimer;
 
 
 	int _hp;

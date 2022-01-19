@@ -29,54 +29,54 @@ void MirrorCube::UpdateActor()
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
 
+	//Rotate(0.0f);
+	//if(DirectXInput::GetInstance().IsActiveGamePad())
+	//{
+	//	if(_controllFlag)
+	//	{
+	//		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) >= 0.2f)
+	//		{
+	//			const float input = -DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+	//			Rotate(input);
+	//		}
 
-	if(DirectXInput::GetInstance().IsActiveGamePad())
-	{
-		if(_controllFlag)
-		{
-			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) >= 0.2f)
-			{
-				const float input = -DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
-				Rotate(input);
-			}
+	//		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) <= -0.2f)
+	//		{
+	//			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+	//			Rotate(input * -1.0f);
+	//		}
+	//		return;
+	//	}
+	//	else
+	//	{
+	//		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) >= 0.2f)
+	//		{
+	//			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
+	//			Rotate(input * -1.0f);
+	//		}
 
-			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) <= -0.2f)
-			{
-				const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
-				Rotate(input * -1.0f);
-			}
-			return;
-		}
-		else
-		{
-			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) >= 0.2f)
-			{
-				const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
-				Rotate(input * -1.0f);
-			}
+	//		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) <= -0.2f)
+	//		{
+	//			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
+	//			Rotate(input * -1.0f);
+	//		}
+	//	}
 
-			if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) <= -0.2f)
-			{
-				const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
-				Rotate(input * -1.0f);
-			}
-		}
+	//	return;
+	//}
 
-		return;
-	}
+	//if(_controllFlag)
+	//{
+	//	if (DirectXInput::GetInstance().IsKey(DIK_LEFTARROW))
+	//	{
+	//		Rotate(1.0f);
+	//	}
 
-	if(_controllFlag)
-	{
-		if (DirectXInput::GetInstance().IsKey(DIK_LEFTARROW))
-		{
-			Rotate(1.0f);
-		}
-
-		if (DirectXInput::GetInstance().IsKey(DIK_RIGHTARROW))
-		{
-			Rotate(-1.0f);
-		}
-	}
+	//	if (DirectXInput::GetInstance().IsKey(DIK_RIGHTARROW))
+	//	{
+	//		Rotate(-1.0f);
+	//	}
+	//}
 
 
 
@@ -100,7 +100,6 @@ void MirrorCube::Init()
 		throw std::runtime_error("Unable to retrieve the player.");
 	}
 
-	Rotate(0.0f);
 }
 
 void MirrorCube::Shutdown()
