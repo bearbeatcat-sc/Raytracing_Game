@@ -36,8 +36,6 @@ void TargetCube::ActiveAction(Actor* pPlayer)
 
 }
 
-
-
 void TargetCube::UpdateActor()
 {
 
@@ -59,12 +57,12 @@ void TargetCube::UpdateActor()
 
 	if(IsActive() )
 	{
-		_pDamageTimer->Update();
-		if(_pDamageTimer->IsTime())
-		{
-			_pDamageTimer->Reset();
-			Damage(5.0f);
-		}
+		//_pDamageTimer->Update();
+		//if(_pDamageTimer->IsTime())
+		//{
+		//	_pDamageTimer->Reset();
+		//	Damage(5.0f);
+		//}
 	}
 
 	if(IsExitActive())
@@ -135,12 +133,12 @@ void TargetCube::Damage(float damage)
 	_hp = std::clamp(_hp - damage, 0.0f, (float)_maxHP);
 
 
-	//_damageAnimationCommand0->_start = _initScale;
-	//_damageAnimationCommand0->_target = _initScale * 1.2f;
+	_damageAnimationCommand0->_start = _initScale;
+	_damageAnimationCommand0->_target = _initScale * 1.2f;
 
-	//_damageAnimationCommand1->_start = _initScale * 1.2f;
-	//_damageAnimationCommand1->_target = _initScale;
-	//_AnimationComponent->PlayAnimation("Damage0");
+	_damageAnimationCommand1->_start = _initScale * 1.2f;
+	_damageAnimationCommand1->_target = _initScale;
+	_AnimationComponent->PlayAnimation("Damage0");
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -151,7 +149,7 @@ void TargetCube::Damage(float damage)
 		auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 10.0f, _dxrMeshName);
 		breakEffect->SetPosition(GetPosition());
 		breakEffect->Destroy(4.0f);
-		breakEffect->SetScale(SimpleMath::Vector3(0.1f));
+		breakEffect->SetScale(SimpleMath::Vector3(0.2f));
 		breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 		ActorManager::GetInstance().AddActor(breakEffect);
 	}

@@ -10,6 +10,7 @@
 #include <Utility/Camera.h>
 
 #include "Bullet.h"
+#include "BombBullet.h"
 #include "Player.h"
 #include "LockOnArea.h"
 #include "../TargetObjects/TargetObject.h"
@@ -62,50 +63,31 @@ void LockOnSystem::Attack()
 
 	_shotCoolTimer->Reset();
 
-
-
-	_isGenerateLeft = !_isGenerateLeft;
-
-	if (_isGenerateLeft)
-	{
-		auto vec = CameraManager::GetInstance().GetMainCamera()->GetTarget();
-		vec.Normalize();
-
-		auto bullet = new Bullet(2.0f, vec);
-
-		bullet->SetScale(SimpleMath::Vector3(0.4f));
-		bullet->SetRotation(SimpleMath::Vector3(0.0f, 0.0f, 2.4f));
-		ActorManager::GetInstance().AddActor(bullet);
-		bullet->SetActorName("Bullet");
-		bullet->Destroy(10.0f);
-		bullet->SetPosition(_user->GetPosition() + SimpleMath::Vector3(1, -1.0f, 0) * 2.0f);
-
-		if (DirectXInput::GetInstance().IsActiveGamePad())
-		{
-			DirectXInput::GetInstance().OnVibration(0, 30000, 0.0f, 0.1f);
-		}
-		return;
-	}
-
-	auto vec = CameraManager::GetInstance().GetMainCamera()->GetTarget();
+	auto cursorPosition = static_cast<Player*>(_user)->GetCursorPosition();
+	auto playerPosition = _user->GetPosition();
+	auto vec = cursorPosition - playerPosition;
 	vec.Normalize();
 
-	auto bullet = new Bullet(2.0f, vec);
+	auto bullet = new BombBullet(2.0f, vec);
+
+
 
 	bullet->SetScale(SimpleMath::Vector3(0.4f));
-	bullet->SetRotation(SimpleMath::Vector3(0.0f, 0.0f, 2.4f));
+	//bullet->SetRotation(SimpleMath::Vector3(0.0f, 0.0f, 2.4f));
 	ActorManager::GetInstance().AddActor(bullet);
 	bullet->SetActorName("Bullet");
 	bullet->Destroy(10.0f);
-	bullet->SetPosition(_user->GetPosition() + SimpleMath::Vector3(-1, -1.0f, 0) * 2.0f);
+	bullet->SetPosition(_user->GetPosition() + vec * 4.0f);
 
-	static_cast<Player*>(_user)->Shot();
+	auto rotate = MathUtility::LookAt(bullet->GetPosition(), _user->GetPosition());
+	bullet->SetRotation(rotate);
 
 	if (DirectXInput::GetInstance().IsActiveGamePad())
 	{
-		DirectXInput::GetInstance().OnVibration(0, 0.0f, 30000, 0.1f);
+		DirectXInput::GetInstance().OnVibration(0, 30000, 0.0f, 0.1f);
 	}
 	return;
+
 
 	//for(auto itr = _targets.begin(); itr != _targets.end(); ++itr)
 	//{

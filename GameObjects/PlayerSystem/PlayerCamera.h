@@ -12,6 +12,7 @@ public:
 	void Shake(const float shakeX,const float shakeY);
 	const SimpleMath::Vector3 GetForward();
 	const float GetPitch();
+	const float GetYaw();
 
 	std::shared_ptr<Camera> _camera;
 

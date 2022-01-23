@@ -36,24 +36,24 @@ void TargetTitleLogo::UpdateActor()
 		DestoryOrder();
 	}
 
-	if (IsActive())
-	{
-		_pDamageTimer->Update();
-		if (_pDamageTimer->IsTime())
-		{
-			_pDamageTimer->Reset();
-			Damage(5.0f);
-		}
-	}
+	//if (IsActive())
+	//{
+	//	_pDamageTimer->Update();
+	//	if (_pDamageTimer->IsTime())
+	//	{
+	//		_pDamageTimer->Reset();
+	//		Damage(5.0f);
+	//	}
+	//}
 
-	if (IsExitActive())
-	{
-		if (_findUI)
-		{
-			_findUI->Destroy();
-			_findUI = nullptr;
-		}
-	}
+	//if (IsExitActive())
+	//{
+	//	if (_findUI)
+	//	{
+	//		_findUI->Destroy();
+	//		_findUI = nullptr;
+	//	}
+	//}
 
 	ActiveUpdate();
 }
@@ -92,11 +92,11 @@ void TargetTitleLogo::Init()
 	_AnimationComponent->AddAnimationState(damageAnimationCommandList1, "Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");
 
-	auto cube1 = new Cube(SimpleMath::Vector3(0, -0.29f, 55.0f), SimpleMath::Vector3(1,1,1), "ControllUI");
-	SetChild(cube1);
+	//auto cube1 = new Cube(SimpleMath::Vector3(0, -0.29f, 55.0f), SimpleMath::Vector3(1,1,1), "ControllUI");
+	//SetChild(cube1);
 
-	auto cube2 = new Cube(SimpleMath::Vector3(0,-2.7f,55), SimpleMath::Vector3(1,0.5f,1), "BreakTitleUI");
-	SetChild(cube2);
+	//auto cube2 = new Cube(SimpleMath::Vector3(0,-2.7f,55), SimpleMath::Vector3(1,0.5f,1), "BreakTitleUI");
+	//SetChild(cube2);
 
 	_initScale = GetScale();
 }

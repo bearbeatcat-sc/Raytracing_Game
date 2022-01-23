@@ -32,4 +32,5 @@ private:
 	bool _isExpand;
 
 	std::shared_ptr<Timer> _expandTimer;
+	const float _contractionSpeed;
 };

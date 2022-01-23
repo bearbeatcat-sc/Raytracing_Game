@@ -226,7 +226,9 @@
     <ClCompile Include="GameObjects\GameSystem\ScoreSystem.cpp" />
     <ClCompile Include="GameObjects\GameSystem\StageObjects\PlayStage.cpp" />
     <ClCompile Include="GameObjects\GameSystem\StageObjects\TitleStage.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\AimCursor.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\BombArea.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\BombBullet.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\Bullet.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnArea.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp" />
@@ -261,7 +263,9 @@
     <ClInclude Include="GameObjects\GameSystem\ScoreSystem.h" />
     <ClInclude Include="GameObjects\GameSystem\StageObjects\PlayStage.h" />
     <ClInclude Include="GameObjects\GameSystem\StageObjects\TitleStage.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\AimCursor.h" />
     <ClInclude Include="GameObjects\PlayerSystem\BombArea.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\BombBullet.h" />
     <ClInclude Include="GameObjects\PlayerSystem\Bullet.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnArea.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnSystem.h" />

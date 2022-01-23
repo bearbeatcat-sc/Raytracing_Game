@@ -43,6 +43,11 @@ const float PlayerCamera::GetPitch()
 	return _Pitch;
 }
 
+const float PlayerCamera::GetYaw()
+{
+	return _Yaw;
+}
+
 void PlayerCamera::UpdateActor()
 {
 	CameraUpdate();
@@ -128,6 +133,18 @@ void PlayerCamera::CameraUpdate()
 			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
 			ViewMove(SimpleMath::Vector3(input, 0, 0));
 		}
+
+		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LY) >= 0.2f)
+		{
+			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+			ViewMove(SimpleMath::Vector3(0, input, 0));
+		}
+
+		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LY) <= -0.2f)
+		{
+			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+			ViewMove(SimpleMath::Vector3(0, input, 0));
+		}
 	}
 	else
 	{
@@ -144,6 +161,8 @@ void PlayerCamera::CameraUpdate()
 			//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
 			ViewMove(SimpleMath::Vector3::Right);
 		}
+
+
 	}
 
 
@@ -151,27 +170,39 @@ void PlayerCamera::CameraUpdate()
 
 
 
-	auto up = SimpleMath::Vector3::Transform(SimpleMath::Vector3::UnitY, _pTracker->GetRotation());
-	SimpleMath::Quaternion qu = SimpleMath::Quaternion::CreateFromAxisAngle(up, _Pitch);
+	//auto up = SimpleMath::Vector3::Transform(SimpleMath::Vector3::UnitY, _pTracker->GetRotation());
+	//SimpleMath::Quaternion qu = SimpleMath::Quaternion::CreateFromAxisAngle(up, _Pitch);
 
-	SimpleMath::Vector3 viewForward = SimpleMath::Vector3::Transform(SimpleMath::Vector3::Backward, qu);
+	//SimpleMath::Vector3 viewForward = SimpleMath::Vector3::Transform(SimpleMath::Vector3::Backward, qu);
 
-	_cameraTarget = viewForward * 30.0f;
+	//_cameraTarget = viewForward * 30.0f;
 
-	_camera->SetUp(up);
+	//_camera->SetUp(up);
 }
 
 void PlayerCamera::ViewMove(const SimpleMath::Vector3& moveVec)
 {
+	_Yaw = std::clamp(_Yaw + moveVec.x * 1.0f * Time::DeltaTime, -1.2f, 1.2f);
+	_Pitch = std::clamp(_Pitch + moveVec.y * 1.0f * Time::DeltaTime, -1.2f, 1.2f);
 
-	_Pitch = std::clamp(_Pitch + moveVec.x * 1.0f * Time::DeltaTime, -1.2f, 1.2f);
+	//auto up = SimpleMath::Vector3::Transform(SimpleMath::Vector3::UnitY, _pTracker->GetRotation());
+	//SimpleMath::Quaternion qu = SimpleMath::Quaternion::CreateFromYawPitchRoll(_Yaw, _Pitch, 0);
 
-	auto up = SimpleMath::Vector3::Transform(SimpleMath::Vector3::UnitY, _pTracker->GetRotation());
-	SimpleMath::Quaternion qu = SimpleMath::Quaternion::CreateFromAxisAngle(up, _Pitch);
+	//SimpleMath::Vector3 viewForward = SimpleMath::Vector3::Transform(SimpleMath::Vector3::Backward, qu);
+
+
+	//_camera->SetUp(up);
+
+	SimpleMath::Quaternion qu = SimpleMath::Quaternion::CreateFromYawPitchRoll(_Yaw, _Pitch, 0.0f);
 
 	SimpleMath::Vector3 viewForward = SimpleMath::Vector3::Transform(SimpleMath::Vector3::Backward, qu);
+	SimpleMath::Vector3 up = SimpleMath::Vector3::Transform(SimpleMath::Vector3::Up, qu);
 
-	_cameraTarget = viewForward * 3.0f;
+	SimpleMath::Vector3 newTarget = _camera->GetPosition() + viewForward;
 
 	_camera->SetUp(up);
+	//_camera->SetTarget(newTarget);
+
+	_cameraTarget = viewForward * 30.0f;
+
 }

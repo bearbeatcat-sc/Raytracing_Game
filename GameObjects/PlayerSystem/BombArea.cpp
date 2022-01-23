@@ -7,24 +7,27 @@
 #include <Utility/Math/MathUtility.h>
 #include <Device/Raytracing/DXRInstance.h>
 #include <Device/Raytracing/DXRPipeLine.h>
-
+#include <Game_Object/ActorManager.h>
+#include <Utility/Random.h>
 #include <Utility/Timer.h>
 
+#include "../BreakEffect.h"
+
 BombArea::BombArea(float maxRadius)
-	:_maxRadius(maxRadius), _currentRadius(0.0f), _expandSpeed(10.0f), _isExpand(true)
+	:_maxRadius(maxRadius), _currentRadius(0.0f), _expandSpeed(6.0f), _isExpand(true), _contractionSpeed(9.0f)
 {
 	SetActorName("BombArea");
 
 	// ボムだが、当たり判定を大きい弾として扱う
 	SetTag("Bullet");
 
-	_instance = DXRPipeLine::GetInstance().AddInstance("ClearCube", 0);
+	_instance = DXRPipeLine::GetInstance().AddInstance("ClearSphere", 0);
 
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	_expandTimer = std::make_shared<Timer>(1.2f);
+	_expandTimer = std::make_shared<Timer>(1.0f);
 }
 
 void BombArea::UpdateActor()
@@ -60,7 +63,7 @@ void BombArea::OnCollsion(Actor* other)
 
 void BombArea::Contraction()
 {
-	_currentRadius = MathUtility::Lerp(_currentRadius, 0.0f, Time::DeltaTime * _expandSpeed);
+	_currentRadius = MathUtility::Lerp(_currentRadius, 0.0f, Time::DeltaTime * _contractionSpeed);
 	_currentRadius = std::clamp(_currentRadius, 0.0f, _maxRadius);
 
 	auto scale = SimpleMath::Vector3(_currentRadius);
@@ -89,6 +92,8 @@ void BombArea::Expand()
 		if(_expandTimer->IsTime())
 		{
 			_isExpand = false;
+
+
 		}
 	}
 }

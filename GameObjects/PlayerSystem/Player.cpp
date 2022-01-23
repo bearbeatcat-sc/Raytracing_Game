@@ -7,19 +7,18 @@
 #include <Game_Object/ActorManager.h>
 #include <imgui/imgui.h>
 #include <Utility/Camera.h>
-#include <Utility/Math/MathUtility.h>
 #include <Components/SpriteComponent.h>
+#include <Components/Collsions/CollisionManager.h>
+#include <Device/Raytracing/DXRPipeLine.h>
 
+#include "AimCursor.h"
 #include "Bullet.h"
 #include "LockOnSystem.h"
-#include "MirrorBullet.h"
-#include "Components/Collsions/CollisionManager.h"
-#include "Device/Raytracing/DXRPipeLine.h"
 #include "PlayerCamera.h"
 #include "../GameSystem/GameManager.h"
 
 Player::Player(const SimpleMath::Vector3& pos, GameManager* pGameManager)
-	:Actor(), _pGameManager(pGameManager), _isGenerateLeft(false),_playerState(PlayerState_Stay)
+	:Actor(), _pGameManager(pGameManager), _isGenerateLeft(false),_playerState(PlayerState_Stay), _moveSpeed(8.0f)
 {
 	SetPosition(pos);
 	SetTag("Player");
@@ -60,15 +59,21 @@ void Player::SetPlayerState(PlayerState playerState)
 void Player::Move()
 {
 	auto position = GetPosition();
-	position += Time::DeltaTime * 3.0f * SimpleMath::Vector3::Backward;
+	position += Time::DeltaTime * _moveSpeed * SimpleMath::Vector3::Backward;
 
 	SetPosition(position);
+}
+
+const SimpleMath::Vector3& Player::GetCursorPosition()
+{
+	return _pAimCursor->GetCursorPosition();
 }
 
 void Player::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();
 	//_instance->SetMatrix(mtx);
+	MoveCusor();
 
 	if (DirectXInput::GetInstance().IsActiveGamePad())
 	{
@@ -86,7 +91,8 @@ void Player::UpdateActor()
 	}
 
 	auto cameraPitch = _pPlayerCamera->GetPitch();
-	SetRotation(SimpleMath::Vector3(cameraPitch, 0, 0));
+	auto cameraYaw = _pPlayerCamera->GetYaw();
+	SetRotation(SimpleMath::Vector3(cameraYaw, cameraPitch, 0));
 
 	switch(_playerState)
 	{
@@ -107,6 +113,12 @@ void Player::LockOn()
 
 }
 
+
+void Player::MoveCusor()
+{
+	_pAimCursor->MoveCusor();
+}
+
 void Player::Init()
 {
 
@@ -121,7 +133,8 @@ void Player::Init()
 	//_instance->SetMatrix(mtx);
 	//_instance->CreateRaytracingInstanceDesc();
 
-
+	_pAimCursor = new AimCursor();
+	SetChild(_pAimCursor);
 
 	_pPlayerCamera = new PlayerCamera(this);
 	SetChild(_pPlayerCamera);

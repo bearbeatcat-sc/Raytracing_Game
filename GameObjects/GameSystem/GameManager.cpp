@@ -140,8 +140,8 @@ void GameManager::ResetGame()
 	//_pPlayer->SetChild(_pMirror1);
 	_pPlayer->SetPlayerState(Player::PlayerState_Stay);
 
-	auto cube = new TargetTitleLogo(30, this);
-	cube->SetPosition(SimpleMath::Vector3(6.0f, 17.6f, 18.0f));
+	auto cube = new TargetTitleLogo(10, this);
+	cube->SetPosition(SimpleMath::Vector3(6.0f, 17.6f, 30.0f));
 	cube->SetScale(SimpleMath::Vector3(12, 4, 1.0f));
 	cube->SetActorName("TargetTitleLogo");
 	ActorManager::GetInstance().AddActor(cube);
@@ -205,9 +205,9 @@ void GameManager::CreateStage()
 {
 	_pObjectGenerator->CreateNineSideCube(1.0f,10.0f, SimpleMath::Vector3(100, 30, 300), 30.0f);
 
-	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 90, SimpleMath::Vector3(10, 10, 60), SimpleMath::Vector3(3.0f), "RedCube");
-	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 90, SimpleMath::Vector3(20, 10, 60), SimpleMath::Vector3(3.0f), "RedCube");
-	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 90, SimpleMath::Vector3(30, 10, 60), SimpleMath::Vector3(3.0f), "RedCube");
+	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 6, SimpleMath::Vector3(10, 10, 60), SimpleMath::Vector3(3.0f), "RedMirrorCube");
+	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 6, SimpleMath::Vector3(20, 10, 60), SimpleMath::Vector3(3.0f), "RedMirrorCube");
+	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 6, SimpleMath::Vector3(30, 10, 60), SimpleMath::Vector3(3.0f), "RedMirrorCube");
 
 
 }

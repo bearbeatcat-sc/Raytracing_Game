@@ -78,24 +78,41 @@ void PlayStage::Init()
 
 
 	auto rightUpPillar = new Cube(SimpleMath::Vector3(90, 90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
-	rightUpPillar->SetActorName("Pillar");
+	rightUpPillar->SetActorName("rightUpPillar");
 	SetChild(rightUpPillar);
 
 	auto leftUpPillar = new Cube(SimpleMath::Vector3(-90, 90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
-	leftUpPillar->SetActorName("Pillar");
+	leftUpPillar->SetActorName("leftUpPillar");
 	SetChild(leftUpPillar);
 
 	auto leftDownPillar = new Cube(SimpleMath::Vector3(-90, -90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
-	leftDownPillar->SetActorName("Pillar");
+	leftDownPillar->SetActorName("leftDownPillar");
 	SetChild(leftDownPillar);
 
 	auto rightDownPillar = new Cube(SimpleMath::Vector3(90, -90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
-	rightDownPillar->SetActorName("Pillar");
+	rightDownPillar->SetActorName("rightDownPillar");
 	SetChild(rightDownPillar);
 
 	//auto frontWall = new Cube(SimpleMath::Vector3(0, 0, 1000), SimpleMath::Vector3(110, 200, 1), "WhiteCube");
 	//frontWall->SetActorName("frontWall");
 	//SetChild(frontWall);
+
+	for(int i = 0; i < 30; ++i)
+	{
+		int flag = Random::GetRandom(0, 1);
+
+		if(flag == 0)
+		{
+			auto pillar = new Cube(SimpleMath::Vector3(-90, 0, i * 30), SimpleMath::Vector3(5, 50, 5), "BlackCube");
+			pillar->SetActorName("Pillar");
+			SetChild(pillar);
+			continue;
+		}
+
+		auto pillar = new Cube(SimpleMath::Vector3(100, 0, i * 30), SimpleMath::Vector3(5, 50, 5), "BlackCube");
+		pillar->SetActorName("Pillar");
+		SetChild(pillar);
+	}
 
 	auto backWall = new Cube(SimpleMath::Vector3(0, 0, -1000), SimpleMath::Vector3(110, 200, 1), "WhiteCube");
 	backWall->SetActorName("backWall");
