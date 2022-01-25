@@ -18,17 +18,14 @@
 #include "../GameSystem/GameManager.h"
 #include "../BreakEffect.h"
 
-TargetCube::TargetCube(const int maxHP, float destroyTime, const std::string& dxrMeshName, GameManager* pGameManager)
-	:_hp(maxHP), TargetObject(pGameManager, destroyTime), _maxHP(maxHP),_dxrMeshName(dxrMeshName), _runSpeed(90.0f)
+TargetCube::TargetCube(const int maxHP, float destroyTime,const std::string& dxrMeshName, GameManager* pGameManager)
+	:_hp(maxHP), TargetObject(pGameManager, destroyTime), _maxHP(maxHP),_dxrMeshName(dxrMeshName)
 {
 	_instance = DXRPipeLine::GetInstance().AddInstance(dxrMeshName, 0);
 
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
-
-	_runVec = SimpleMath::Vector3(Random::GetRandom(-0.5f, 0.5f), 0, Random::GetRandom(-0.2f, 0.2f));
-
 }
 
 void TargetCube::ActiveAction(Actor* pPlayer)
@@ -55,24 +52,10 @@ void TargetCube::UpdateActor()
 		return;
 	}
 
-	if(IsActive() )
-	{
-		//_pDamageTimer->Update();
-		//if(_pDamageTimer->IsTime())
-		//{
-		//	_pDamageTimer->Reset();
-		//	Damage(5.0f);
-		//}
-	}
-
-	if(IsExitActive())
-	{
-
-	}
 
 	ActiveUpdate();
 	SetRotation(m_EulerRotation);
-
+	Move();
 
 }
 

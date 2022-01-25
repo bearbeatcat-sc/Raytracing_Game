@@ -22,6 +22,7 @@ Player::Player(const SimpleMath::Vector3& pos, GameManager* pGameManager)
 {
 	SetPosition(pos);
 	SetTag("Player");
+
 }
 
 

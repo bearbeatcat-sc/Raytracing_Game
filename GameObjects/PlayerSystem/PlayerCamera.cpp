@@ -12,9 +12,7 @@ PlayerCamera::PlayerCamera(Actor* pTracker)
 {
 	_shakeTimer = std::make_shared<Timer>(1.0f);
 
-	_camera = std::make_shared<Camera>();
-	CameraManager::GetInstance().AddCamera("PlayerCamera", _camera);
-	CameraManager::GetInstance().SetMainCamera("PlayerCamera");
+	_camera = CameraManager::GetInstance().GetMainCamera();
 
 	_camera->SetPosition(GetPosition() + SimpleMath::Vector3(0, 4.0f, -10.0f));
 }
@@ -68,8 +66,7 @@ void PlayerCamera::ShakeUpdate()
 }
 void PlayerCamera::Init()
 {
-
-
+	ViewMove(SimpleMath::Vector3::Zero);
 }
 
 void PlayerCamera::Shutdown()

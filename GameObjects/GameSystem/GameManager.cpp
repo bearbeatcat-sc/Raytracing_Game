@@ -2,6 +2,8 @@
 
 #include <Device/DirectX/DirectXInput.h>
 #include <Game_Object/ActorManager.h>
+#include <Utility/CameraManager.h>
+#include <Utility/Camera.h>
 
 #include "ObjectGenerateInfo.h"
 #include "../TargetObjects/MirrorCube.h"
@@ -54,16 +56,16 @@ void GameManager::UpdateActor()
 
 void GameManager::Init()
 {
-	_pTitleStage = new TitleStage();
-	_pTitleStage->SetPosition(SimpleMath::Vector3(-7.7f, 0, -56.0f));
-	ActorManager::GetInstance().AddActor(_pTitleStage);
+
 
 	_pObjectGenerator = new ObjectGenerator(this);
 	ActorManager::GetInstance().AddActor(_pObjectGenerator);
 
 	ChangeGameState(GameStete_Title);
 
-
+	auto camera = std::make_shared<Camera>();
+	CameraManager::GetInstance().AddCamera("PlayerCamera", camera);
+	CameraManager::GetInstance().SetMainCamera("PlayerCamera");
 }
 
 
@@ -79,11 +81,20 @@ void GameManager::EndGame()
 {
 	_pObjectGenerator->End();
 
+	if(_pPlayStage)
+	{
+		_pPlayStage->Destroy();
+		_pPlayStage = nullptr;
+	}
+
 	//_pGameTimer->Destroy();
+
+	_pPlayer->SetPlayerState(Player::PlayerState_Stay);
+	_pPlayer->SetPosition(SimpleMath::Vector3(0, 0, 0));
 
 	_pScoreResultObject = new ScoreResultObject();
 	_pScoreResultObject->SetPosition(SimpleMath::Vector3(0, 0, 100));
-	ActorManager::GetInstance().AddActor(_pScoreResultObject);
+	_pPlayer->SetChild(_pScoreResultObject);
 
 	_pScoreSystem->ChangeResultMode();
 }
@@ -205,9 +216,13 @@ void GameManager::CreateStage()
 {
 	_pObjectGenerator->CreateNineSideCube(1.0f,10.0f, SimpleMath::Vector3(100, 30, 300), 30.0f);
 
-	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 6, SimpleMath::Vector3(10, 10, 60), SimpleMath::Vector3(3.0f), "RedMirrorCube");
-	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 6, SimpleMath::Vector3(20, 10, 60), SimpleMath::Vector3(3.0f), "RedMirrorCube");
-	_pObjectGenerator->CreateTargetCube(3.0f, 200.0f, 6, SimpleMath::Vector3(30, 10, 60), SimpleMath::Vector3(3.0f), "RedMirrorCube");
+	_pObjectGenerator->CreateSlideTargetCube(SimpleMath::Vector3(-1,0,0),10.0f, 3.0f, 20.0f, 6, SimpleMath::Vector3(10, 10, 60), SimpleMath::Vector3(1.0f), "RedMirrorCube");
+	_pObjectGenerator->CreateSlideTargetCube(SimpleMath::Vector3(-1,0,0),10.0f, 3.0f, 20.0f, 6, SimpleMath::Vector3(20, 10, 60), SimpleMath::Vector3(1.0f), "RedMirrorCube");
+	_pObjectGenerator->CreateSlideTargetCube(SimpleMath::Vector3(-1,0,0),10.0f, 3.0f, 20.0f, 6, SimpleMath::Vector3(30, 10, 60), SimpleMath::Vector3(1.0f), "RedMirrorCube");
+
+	_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(0, 1, 0), 20.0f, 10.0f, 20.0f, 6, SimpleMath::Vector3(-10, 10, 120), SimpleMath::Vector3(3.0f), "BlenderMonkeyMirror");
+	_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(0, 1, 0), 20.0f, 10.0f, 20.0f, 6, SimpleMath::Vector3(0, 10, 120), SimpleMath::Vector3(3.0f), "BlenderMonkeyMirror");
+	_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(0, 1, 0), 20.0f, 10.0f, 20.0f, 6, SimpleMath::Vector3(10, 10, 120), SimpleMath::Vector3(3.0f), "BlenderMonkeyMirror");
 
 
 }
@@ -216,9 +231,7 @@ void GameManager::StartGame()
 {
 	_pPlayer->SetPlayerState(Player::PlayerState_Move);
 
-	_pTitleStage->Delete();
-
-	_pPlayStage = new PlayStage();
+	_pPlayStage = new PlayStage(this);
 	ActorManager::GetInstance().AddActor(_pPlayStage);
 
 	_pObjectGenerator->Reset();

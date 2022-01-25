@@ -2,16 +2,16 @@
 
 #include <Game_Object/Actor.h>
 
-class VerticalMoveBlock;
+class OBBCollisionComponent;
+class DXRInstance;
 class GameManager;
 
-class PlayStage
+class GoalObject
 	:public Actor
 {
 public:
-	PlayStage(GameManager* pGameManager);
-	~PlayStage() = default;
-	void Delete();
+	GoalObject(GameManager* pGameManager);
+	~GoalObject();
 
 private:
 	void UpdateActor() override;
@@ -19,8 +19,7 @@ private:
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
 
-private:
-	const float _floorCreateTime;
-	std::vector<VerticalMoveBlock*> _floors;
+	OBBCollisionComponent* _pCollisionComponent;
 	GameManager* _pGameManager;
+	std::shared_ptr<DXRInstance> _instance;
 };

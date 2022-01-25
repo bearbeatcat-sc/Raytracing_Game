@@ -4,8 +4,9 @@
 
 #include "../TargetObjects/NineSideCube.h"
 #include "../TargetObjects/SnakeCube.h"
+#include "../TargetObjects/JumpTargetCube.h"
 #include "../TargetObjects/BlenderMonkeyObject.h"
-#include "../TargetObjects/TargetCube.h"
+#include "../TargetObjects/SlideTargetCube.h"
 #include "../PointLightObject.h"
 
 struct ObjectGenerateInfo
@@ -33,19 +34,19 @@ protected:
 	SimpleMath::Vector3 _generatePosition;
 };
 
-struct TargetCubeGenerateInfo
+struct SlideCubeGenerateInfo
 	:public ObjectGenerateInfo
 {
 public:
-	TargetCubeGenerateInfo(float generateTime, float destroyTime, int hp, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, const std::string& dxrMeshName)
-		:ObjectGenerateInfo(generateTime, destroyTime, position), _dxrMeshName(dxrMeshName), _maxHP(hp), _scale(scale)
+	SlideCubeGenerateInfo(const SimpleMath::Vector3& moveVec, float moveSpeed, float generateTime, float destroyTime, int hp, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, const std::string& dxrMeshName)
+		:ObjectGenerateInfo(generateTime, destroyTime, position), _moveVec(moveVec),_moveSpeed(moveSpeed),_dxrMeshName(dxrMeshName), _maxHP(hp), _scale(scale)
 	{
 
 	}
 
 	std::vector<Actor*> Create(GameManager* pGameManager) override
 	{
-		auto instance = new TargetCube(_maxHP, _destroyTime, _dxrMeshName, pGameManager);
+		auto instance = new SlideTargetCube(_moveVec,_moveSpeed,_maxHP, _destroyTime, _dxrMeshName, pGameManager);
 		instance->SetPosition(_generatePosition);
 		instance->SetScale(_scale);
 
@@ -55,6 +56,34 @@ public:
 	std::string _dxrMeshName;
 	int _maxHP;
 	SimpleMath::Vector3 _scale;
+	SimpleMath::Vector3 _moveVec;
+	float _moveSpeed;
+};
+
+struct JumpTargetGenerateInfo
+	:public ObjectGenerateInfo
+{
+public:
+	JumpTargetGenerateInfo(const SimpleMath::Vector3& moveVec, float moveSpeed, float generateTime, float destroyTime, int hp, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, const std::string& dxrMeshName)
+		:ObjectGenerateInfo(generateTime, destroyTime, position), _moveVec(moveVec), _moveSpeed(moveSpeed), _dxrMeshName(dxrMeshName), _maxHP(hp), _scale(scale)
+	{
+
+	}
+
+	std::vector<Actor*> Create(GameManager* pGameManager) override
+	{
+		auto instance = new JumpTargetCube(_moveVec, _moveSpeed, _maxHP, _destroyTime, _dxrMeshName, pGameManager);
+		instance->SetPosition(_generatePosition);
+		instance->SetScale(_scale);
+
+		return std::vector<Actor*>{instance};
+	}
+
+	std::string _dxrMeshName;
+	int _maxHP;
+	SimpleMath::Vector3 _scale;
+	SimpleMath::Vector3 _moveVec;
+	float _moveSpeed;
 };
 
 struct PointLightGenerateInfo

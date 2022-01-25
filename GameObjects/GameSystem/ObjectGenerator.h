@@ -20,8 +20,10 @@ public:
 		int maxHp, int bodyCount);
 	void CreateBlenderMonkeyObjcet(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
 		const SimpleMath::Vector3& scale,int maxHP, BlenderMonkeyObject::BlenderMonkyObjectType type);
-	void CreateTargetCube(float generateTime, float destroyTime, int maxHP, const SimpleMath::Vector3& position,
+	void CreateSlideTargetCube(const SimpleMath::Vector3& moveVec, float moveSpeed, float generateTime, float destroyTime, int maxHP, const SimpleMath::Vector3& position,
 		const SimpleMath::Vector3& scale,const std::string& dxrMeshName);
+	void CreateJumpTargetCube(const SimpleMath::Vector3& moveVec, float moveSpeed, float generateTime, float destroyTime, int maxHP, const SimpleMath::Vector3& position,
+		const SimpleMath::Vector3& scale, const std::string& dxrMeshName);
 	void CreatePointLightObject(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
 	                            const SimpleMath::Color& color, float distance);
 

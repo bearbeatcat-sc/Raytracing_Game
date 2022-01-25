@@ -6,10 +6,10 @@
 
 #include "../../../GameObjects/VerticalMoveBlock.h"
 #include "../../Cube.h"
-#include "../../PointLightObject.h"
+#include "../GoalObject.h"
 
-PlayStage::PlayStage()
-	: _floorCreateTime(0.1f)
+PlayStage::PlayStage(GameManager* pGameManager)
+	: _floorCreateTime(0.1f),_pGameManager(pGameManager)
 {
 }
 
@@ -59,37 +59,37 @@ void PlayStage::Init()
 	//	}
 	//}
 
-	auto leftWall = new Cube(SimpleMath::Vector3(-100, 0, 0), SimpleMath::Vector3(1, 100, 1000), "WhiteCube");
+	auto leftWall = new Cube(SimpleMath::Vector3(-100, 0, 0), SimpleMath::Vector3(1, 100, 1500), "WhiteCube");
 	leftWall->SetActorName("leftWall");
 	SetChild(leftWall);
 
-	auto rightWall = new Cube(SimpleMath::Vector3(100, 0, 0), SimpleMath::Vector3(1, 100, 1000), "WhiteCube");
+	auto rightWall = new Cube(SimpleMath::Vector3(100, 0, 0), SimpleMath::Vector3(1, 100, 1500), "WhiteCube");
 	rightWall->SetActorName("rightWall");
 	SetChild(rightWall);
 
-	auto topWall = new Cube(SimpleMath::Vector3(0, 100, 0), SimpleMath::Vector3(100, 1, 1000), "WhiteCube");
+	auto topWall = new Cube(SimpleMath::Vector3(0, 100, 0), SimpleMath::Vector3(100, 1, 1500), "WhiteCube");
 	topWall->SetActorName("topWall");
 	SetChild(topWall);
 
-	auto downWall = new Cube(SimpleMath::Vector3(0, -100, 0), SimpleMath::Vector3(100, 1, 1000), "WhiteCube");
+	auto downWall = new Cube(SimpleMath::Vector3(0, -100, 0), SimpleMath::Vector3(100, 1, 1500), "WhiteCube");
 	downWall->SetActorName("downWall");
 	SetChild(downWall);
 
 
 
-	auto rightUpPillar = new Cube(SimpleMath::Vector3(90, 90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
+	auto rightUpPillar = new Cube(SimpleMath::Vector3(90, 90, 0), SimpleMath::Vector3(10, 50, 1500), "BlackCube");
 	rightUpPillar->SetActorName("rightUpPillar");
 	SetChild(rightUpPillar);
 
-	auto leftUpPillar = new Cube(SimpleMath::Vector3(-90, 90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
+	auto leftUpPillar = new Cube(SimpleMath::Vector3(-90, 90, 0), SimpleMath::Vector3(10, 50, 1500), "BlackCube");
 	leftUpPillar->SetActorName("leftUpPillar");
 	SetChild(leftUpPillar);
 
-	auto leftDownPillar = new Cube(SimpleMath::Vector3(-90, -90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
+	auto leftDownPillar = new Cube(SimpleMath::Vector3(-90, -90, 0), SimpleMath::Vector3(10, 50, 1500), "BlackCube");
 	leftDownPillar->SetActorName("leftDownPillar");
 	SetChild(leftDownPillar);
 
-	auto rightDownPillar = new Cube(SimpleMath::Vector3(90, -90, 0), SimpleMath::Vector3(10, 50, 1000), "BlackCube");
+	auto rightDownPillar = new Cube(SimpleMath::Vector3(90, -90, 0), SimpleMath::Vector3(10, 50, 1500), "BlackCube");
 	rightDownPillar->SetActorName("rightDownPillar");
 	SetChild(rightDownPillar);
 
@@ -118,6 +118,10 @@ void PlayStage::Init()
 	backWall->SetActorName("backWall");
 	SetChild(backWall);
 
+	auto goal = new GoalObject(_pGameManager);
+	goal->SetPosition(SimpleMath::Vector3(0, 10, 300));
+	goal->SetScale(SimpleMath::Vector3(10, 10, 30));
+	SetChild(goal);
 }
 
 void PlayStage::Shutdown()

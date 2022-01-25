@@ -35,17 +35,24 @@ void ObjectGenerator::CreateBlenderMonkeyObjcet(float generateTime, float destro
 	const SimpleMath::Vector3& scale, int maxHP, BlenderMonkeyObject::BlenderMonkyObjectType type)
 {
 	AddGenerateInfo(std::make_shared<BlenderMonkeyObjectGenerateInfo>(generateTime, destroyTime, position,scale, maxHP, type));
-
 }
 
-void ObjectGenerator::CreateTargetCube(float generateTime, float destroyTime, int maxHP,
-	const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale, const std::string& dxrMeshName)
+void ObjectGenerator::CreateSlideTargetCube(const SimpleMath::Vector3& moveVec, float moveSpeed, float generateTime,
+	float destroyTime, int maxHP, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale,
+	const std::string& dxrMeshName)
 {
-	AddGenerateInfo(std::make_shared<TargetCubeGenerateInfo>(generateTime, destroyTime, maxHP, position,scale, dxrMeshName));
+	AddGenerateInfo(std::make_shared<SlideCubeGenerateInfo>(moveVec, moveSpeed,generateTime, destroyTime, maxHP, position, scale, dxrMeshName));
+}
+
+void ObjectGenerator::CreateJumpTargetCube(const SimpleMath::Vector3& moveVec, float moveSpeed, float generateTime,
+	float destroyTime, int maxHP, const SimpleMath::Vector3& position, const SimpleMath::Vector3& scale,
+	const std::string& dxrMeshName)
+{
+	AddGenerateInfo(std::make_shared<JumpTargetGenerateInfo>(moveVec, moveSpeed, generateTime, destroyTime, maxHP, position, scale, dxrMeshName));
 }
 
 void ObjectGenerator::CreatePointLightObject(float generateTime, float destroyTime, const SimpleMath::Vector3& position,
-	const SimpleMath::Color& color, float distance)
+                                             const SimpleMath::Color& color, float distance)
 {
 	AddGenerateInfo(std::make_shared<PointLightGenerateInfo>(generateTime, destroyTime, position, color, distance));
 }
