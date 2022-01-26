@@ -32,6 +32,7 @@ public:
 	{
 		PlayerState_Stay,
 		PlayerState_Move,
+		PlayerState_Run,
 	};
 	void SetPlayerState(PlayerState playerState);
 	void Move();
@@ -61,5 +62,5 @@ private:
 
 	PlayerState _playerState;
 	float _curosrRadius = 10.0f;
-	const float _moveSpeed;
+	 float _moveSpeed;
 };

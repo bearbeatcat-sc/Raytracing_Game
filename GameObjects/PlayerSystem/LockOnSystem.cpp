@@ -68,7 +68,7 @@ void LockOnSystem::Attack()
 	auto vec = cursorPosition - playerPosition;
 	vec.Normalize();
 
-	auto bullet = new BombBullet(2.0f, vec);
+	auto bullet = new BombBullet(1.0f, vec);
 
 
 
@@ -81,6 +81,8 @@ void LockOnSystem::Attack()
 
 	auto rotate = MathUtility::LookAt(bullet->GetPosition(), _user->GetPosition());
 	bullet->SetRotation(rotate);
+
+	static_cast<Player*>(_user)->Shot();
 
 	if (DirectXInput::GetInstance().IsActiveGamePad())
 	{

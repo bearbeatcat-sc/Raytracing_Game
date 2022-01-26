@@ -60,10 +60,10 @@ void BombBullet:: Explode()
 		float cos = std::cosf(i * 1.0f);
 		float sin = std::sinf(i * 1.0f);
 
-		auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, 0, sin) * 40.0f, "ClearCube");
+		auto breakEffect = new BreakEffect(SimpleMath::Vector3(cos, 0.0f, sin) * 40.0f, "ClearCube");
 		breakEffect->SetPosition(GetPosition());
 		breakEffect->Destroy(4.0f);
-		breakEffect->SetScale(SimpleMath::Vector3(0.1f) * 1.0f);
+		breakEffect->SetScale(SimpleMath::Vector3(0.3f));
 		breakEffect->SetRotation(SimpleMath::Vector3(x, 0, z));
 		ActorManager::GetInstance().AddActor(breakEffect);
 	}
@@ -71,15 +71,15 @@ void BombBullet:: Explode()
 	for (int i = 0; i < 120; ++i)
 	{
 		float x = Random::GetRandom(-1.0f, 1.0f);
+		float y = Random::GetRandom(-1.0f, 1.0f);
 		float z = Random::GetRandom(-1.0f, 1.0f);
 
-		float cos = std::cosf(i * 1.0f);
-		float sin = std::sinf(i * 1.0f);
 
-		auto breakEffect = new BreakEffect(SimpleMath::Vector3(0, cos, sin) * 40.0f, "ClearCube");
+
+		auto breakEffect = new BreakEffect(SimpleMath::Vector3(x, y, z) * 40.0f, "ClearCube");
 		breakEffect->SetPosition(GetPosition());
 		breakEffect->Destroy(4.0f);
-		breakEffect->SetScale(SimpleMath::Vector3(0.1f) * 1.0f);
+		breakEffect->SetScale(SimpleMath::Vector3(0.8f) * std::abs(x));
 		breakEffect->SetRotation(SimpleMath::Vector3(x, 0, z));
 		ActorManager::GetInstance().AddActor(breakEffect);
 	}

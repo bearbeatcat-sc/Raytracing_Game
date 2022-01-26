@@ -26,25 +26,28 @@ void GoalObject::Init()
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
 	_pCollisionComponent->SetAdjustPos(SimpleMath::Vector3(0, 0, 30));
 
-	_instance = DXRPipeLine::GetInstance().AddInstance("ClearCube", 0);
+	//_instance = DXRPipeLine::GetInstance().AddInstance("ClearCube", 0);
 
-	auto mtx = GetWorldMatrix();;
-	_instance->SetMatrix(mtx);
-	_instance->CreateRaytracingInstanceDesc();
+	//auto mtx = GetWorldMatrix();;
+	//_instance->SetMatrix(mtx);
+	//_instance->CreateRaytracingInstanceDesc();
 
 	SetTag("GoalObject");
 }
 
 void GoalObject::Shutdown()
 {
-	_instance->Destroy();
+	//_instance->Destroy();
 	_pCollisionComponent->Delete();
 }
 
 void GoalObject::OnCollsion(Actor* other)
 {
-	if(other->IsContainsTag("Player"))
+	if(!other->IsContainsTag("Player") || other->IsContainsTag("Bullet"))
 	{
-		_pGameManager->ChangeGameState(GameManager::GameStete_Result);
+		return;
 	}
+
+	_pGameManager->ChangeGameState(GameManager::GameStete_Result);
+
 }

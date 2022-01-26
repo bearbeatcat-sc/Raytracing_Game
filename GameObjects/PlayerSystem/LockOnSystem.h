@@ -44,7 +44,7 @@ private:
 	std::shared_ptr<Timer> _shotCoolTimer;
 
 	const float _lockonCoolTime = 0.002f;
-	const float _shotCollTime = 0.1f;
+	const float _shotCollTime = 0.2f;
 
 	bool _isPreviousLockOn;
 	bool _isCurrentLockOn;

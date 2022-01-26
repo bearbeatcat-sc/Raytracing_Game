@@ -55,6 +55,23 @@ void Player::Shot()
 void Player::SetPlayerState(PlayerState playerState)
 {
 	_playerState = playerState;
+
+	if(playerState == PlayerState_Stay)
+	{
+		_pPlayerCamera->Shake(0.1f, 0.2f);
+	}
+
+	if(playerState == PlayerState_Run)
+	{
+		_pPlayerCamera->Shake(0.2f, 1.0f);
+		_moveSpeed = 32.0f;
+	}
+
+	if (playerState == PlayerState_Move)
+	{
+		_pPlayerCamera->Shake(0.1f, 1.0f);
+		_moveSpeed = 8.0f;
+	}
 }
 
 void Player::Move()
@@ -101,6 +118,10 @@ void Player::UpdateActor()
 		break;
 
 	case PlayerState_Move:
+		Move();
+		break;
+
+	case PlayerState_Run:
 		Move();
 		break;
 	}

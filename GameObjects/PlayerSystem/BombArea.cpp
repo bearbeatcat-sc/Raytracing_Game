@@ -3,18 +3,18 @@
 #include <algorithm>
 #include <Components/Collsions/CollisionManager.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
+#include <Components/Collsions/SphereCollisionComponent.h>
 #include <Utility/Time.h>
 #include <Utility/Math/MathUtility.h>
 #include <Device/Raytracing/DXRInstance.h>
 #include <Device/Raytracing/DXRPipeLine.h>
-#include <Game_Object/ActorManager.h>
 #include <Utility/Random.h>
 #include <Utility/Timer.h>
 
 #include "../BreakEffect.h"
 
 BombArea::BombArea(float maxRadius)
-	:_maxRadius(maxRadius), _currentRadius(0.0f), _expandSpeed(6.0f), _isExpand(true), _contractionSpeed(9.0f)
+	:_maxRadius(maxRadius), _currentRadius(0.0f), _expandSpeed(8.0f), _isExpand(true), _contractionSpeed(18.0f)
 {
 	SetActorName("BombArea");
 
@@ -27,7 +27,7 @@ BombArea::BombArea(float maxRadius)
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	_expandTimer = std::make_shared<Timer>(1.0f);
+	_expandTimer = std::make_shared<Timer>(0.8f);
 }
 
 void BombArea::UpdateActor()
@@ -46,7 +46,7 @@ void BombArea::UpdateActor()
 
 void BombArea::Init()
 {
-	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), GetScale(), "PlayerObject");
+	_pCollisionComponent = new SphereCollisionComponent(this, GetScale().x, "PlayerObject");
 	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
 }
@@ -67,7 +67,7 @@ void BombArea::Contraction()
 	_currentRadius = std::clamp(_currentRadius, 0.0f, _maxRadius);
 
 	auto scale = SimpleMath::Vector3(_currentRadius);
-	_pCollisionComponent->SetSize(scale);
+	_pCollisionComponent->SetRadius(scale.x);
 	SetScale(scale);
 
 	if (_currentRadius <= 0.0f)
@@ -82,7 +82,7 @@ void BombArea::Expand()
 	_currentRadius = std::clamp(_currentRadius, 0.0f, _maxRadius);
 
 	auto scale = SimpleMath::Vector3(_currentRadius);
-	_pCollisionComponent->SetSize(scale);
+	_pCollisionComponent->SetRadius(scale.x);
 	SetScale(scale);
 
 	if (_currentRadius >= _maxRadius)
@@ -92,8 +92,6 @@ void BombArea::Expand()
 		if(_expandTimer->IsTime())
 		{
 			_isExpand = false;
-
-
 		}
 	}
 }

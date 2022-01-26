@@ -2,7 +2,7 @@
 
 #include <Game_Object/Actor.h>
 
-class OBBCollisionComponent;
+class SphereCollisionComponent;
 class DXRInstance;
 
 class BombArea
@@ -26,7 +26,7 @@ private:
 	float _currentRadius;
 	const float _expandSpeed;
 
-	OBBCollisionComponent* _pCollisionComponent;
+	SphereCollisionComponent* _pCollisionComponent;
 	std::shared_ptr<DXRInstance> _instance;
 
 	bool _isExpand;

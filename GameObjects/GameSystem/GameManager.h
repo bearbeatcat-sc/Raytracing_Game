@@ -9,6 +9,7 @@ class ObjectGenerator;
 class GameTimer;
 class TitleStage;
 class PlayStage;
+class PlayerTimeline;
 
 class GameManager
 	:public Actor
@@ -21,7 +22,6 @@ public:
 	void DestroyObject(Actor* pObject);
 
 	Player* GetPlayer();
-
 
 	enum GameState
 	{
@@ -51,6 +51,7 @@ private:
 	Player* _pPlayer;
 	ScoreSystem* _pScoreSystem;
 	ObjectGenerator* _pObjectGenerator;
+	PlayerTimeline* _pPlayerTimeline;
 	ScoreResultObject* _pScoreResultObject;
 	TitleStage* _pTitleStage;
 	PlayStage* _pPlayStage;
