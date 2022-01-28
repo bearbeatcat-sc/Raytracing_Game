@@ -1,5 +1,6 @@
 ﻿#include "AimCursor.h"
 
+#include <algorithm>
 #include <Device/DirectX/DirectXInput.h>
 #include <Utility/Time.h>
 #include <Device/Raytracing/DXRPipeLine.h>
@@ -36,26 +37,77 @@ const SimpleMath::Vector3& AimCursor::GetCursorPosition()
 
 void AimCursor::MoveCusor()
 {
-	if (DirectXInput::GetInstance().IsKey(DIK_A))
+	if (DirectXInput::GetInstance().IsActiveGamePad())
 	{
-		_cursorPosition.x -= Time::DeltaTime * 6.0f;
+		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) >= 0.2f)
+		{
+			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
+			//_cursorPosition.x += Time::DeltaTime * input * 20.0f;
+
+			_cursorPosition.x += (input * 0.4f);
+			_cursorPosition.x = std::clamp(_cursorPosition.x, -9.0f, 9.0f);
+
+		}
+
+		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX) <= -0.2f)
+		{
+			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RX);
+			//_cursorPosition.x -= Time::DeltaTime * input * 20.0f;
+
+			_cursorPosition.x += (input * 0.4f);
+			_cursorPosition.x = std::clamp(_cursorPosition.x, -9.0f, 9.0f);
+		}
+
+		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RY) >= 0.2f)
+		{
+			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RY);
+			//_Pitch -= Time::DeltaTime * input * 20.0f;
+
+			//_cursorPosition.y -= Time::DeltaTime * 8.0f * (input * 2.0f);
+			//_cursorPosition.y = std::clamp(_cursorPosition.y, -0.4f, 0.4f);
+
+			_cursorPosition.y += (input * 0.3f);
+			_cursorPosition.y = std::clamp(_cursorPosition.y, -9.0f, 9.0f);
+		}
+
+		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RY) <= -0.2f)
+		{
+			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_RY);
+			//_Pitch += Time::DeltaTime * input * 20.0f;
+
+			//_cursorPosition.y += Time::DeltaTime * 8.0f * (input * 2.0f);
+			//_cursorPosition.y = std::clamp(_cursorPosition.y, -0.4f, 0.4f);
+
+			_cursorPosition.y += (input * 0.3f);
+			_cursorPosition.y = std::clamp(_cursorPosition.y, -9.0f, 9.0f);
+		}
+
+	}
+	else
+	{
+
+		if (DirectXInput::GetInstance().IsKey(DIK_LEFTARROW))
+		{
+			_cursorPosition.x -= Time::DeltaTime * 8.0f;
+		}
+
+		if (DirectXInput::GetInstance().IsKey(DIK_RIGHTARROW))
+		{
+			_cursorPosition.x += Time::DeltaTime * 8.0f;
+		}
+
+		if (DirectXInput::GetInstance().IsKey(DIK_UPARROW))
+		{
+			_cursorPosition.y += Time::DeltaTime * 8.0f;
+		}
+
+		if (DirectXInput::GetInstance().IsKey(DIK_DOWNARROW))
+		{
+			_cursorPosition.y -= Time::DeltaTime * 8.0f;
+		}
 	}
 
-	if (DirectXInput::GetInstance().IsKey(DIK_D))
-	{
-		_cursorPosition.x += Time::DeltaTime * 6.0f;
-	}
 
-	if (DirectXInput::GetInstance().IsKey(DIK_W))
-	{
-		_Pitch -= Time::DeltaTime * 1.0f;
-	}
-
-	if (DirectXInput::GetInstance().IsKey(DIK_S))
-	{
-		_Pitch += Time::DeltaTime * 1.0f;
-	}
-
-	_pCursor->SetPosition(SimpleMath::Vector3(_cursorPosition.x, _cursorPosition.y,10));
-	SetRotation(SimpleMath::Vector3(0, _Pitch, 0));
+	_pCursor->SetPosition(SimpleMath::Vector3(_cursorPosition.x, _cursorPosition.y, 10));
+	//SetRotation(SimpleMath::Vector3(0, _Pitch, 0));
 }

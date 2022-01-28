@@ -237,6 +237,7 @@
     <ClCompile Include="GameObjects\PlayerSystem\MirrorBullet.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\PlayerCamera.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\PlayerTimeline.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\TraceEffect.cpp" />
     <ClCompile Include="GameObjects\PointLightObject.cpp" />
     <ClCompile Include="GameObjects\TargetObjects\BlenderMonkeyObject.cpp" />
     <ClCompile Include="GameObjects\TargetObjects\FoundUI.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="GameObjects\PlayerSystem\MirrorBullet.h" />
     <ClInclude Include="GameObjects\PlayerSystem\PlayerCamera.h" />
     <ClInclude Include="GameObjects\PlayerSystem\PlayerTimeline.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\TraceEffect.h" />
     <ClInclude Include="GameObjects\PointLightObject.h" />
     <ClInclude Include="GameObjects\TargetObjects\BlenderMonkeyObject.h" />
     <ClInclude Include="GameObjects\TargetObjects\FoundUI.h" />

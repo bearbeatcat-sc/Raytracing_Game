@@ -54,6 +54,7 @@ void BombArea::Init()
 void BombArea::Shutdown()
 {
 	_pCollisionComponent->Delete();
+	_instance->Destroy();
 }
 
 void BombArea::OnCollsion(Actor* other)

@@ -34,4 +34,5 @@ private:
 
 	OBBCollisionComponent* _pCollisionComponent;
 	SimpleMath::Vector3 _moveVec;
+	std::shared_ptr<Timer> _traceEffectTimer;
 };

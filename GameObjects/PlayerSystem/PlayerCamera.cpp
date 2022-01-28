@@ -117,50 +117,38 @@ void PlayerCamera::CameraUpdate()
 	_camera->SetPosition(_pTracker->GetPosition());
 	_camera->SetPosition(_camera->GetPosition() + SimpleMath::Vector3(_shake.x, _shake.y, 0));
 
-	if (DirectXInput::GetInstance().IsActiveGamePad())
-	{
-		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) >= 0.2f)
-		{
-			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
-			ViewMove(SimpleMath::Vector3(input,0,0));
-		}
+	//if (DirectXInput::GetInstance().IsActiveGamePad())
+	//{
+	//	if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) >= 0.2f)
+	//	{
+	//		const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+	//		ViewMove(SimpleMath::Vector3(input,0,0));
+	//	}
 
-		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) <= -0.2f)
-		{
-			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
-			ViewMove(SimpleMath::Vector3(input, 0, 0));
-		}
+	//	if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX) <= -0.2f)
+	//	{
+	//		const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
+	//		ViewMove(SimpleMath::Vector3(input, 0, 0));
+	//	}
+	//}
+	//else
+	//{
+	//	if (DirectXInput::GetInstance().IsKey(DIK_LEFT))
+	//	{
+	//		//_cameraTarget -= SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
+	//		//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
+	//		ViewMove(SimpleMath::Vector3::Left);
+	//	}
 
-		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LY) >= 0.2f)
-		{
-			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
-			ViewMove(SimpleMath::Vector3(0, input, 0));
-		}
-
-		if (DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LY) <= -0.2f)
-		{
-			const float input = DirectXInput::GetInstance().GetGamePadValue(GAMEPAD_ThubStick_LX);
-			ViewMove(SimpleMath::Vector3(0, input, 0));
-		}
-	}
-	else
-	{
-		if (DirectXInput::GetInstance().IsKey(DIK_LEFT))
-		{
-			//_cameraTarget -= SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
-			//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
-			ViewMove(SimpleMath::Vector3::Left);
-		}
-
-		if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
-		{
-			//_cameraTarget += SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
-			//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
-			ViewMove(SimpleMath::Vector3::Right);
-		}
+	//	if (DirectXInput::GetInstance().IsKey(DIK_RIGHT))
+	//	{
+	//		//_cameraTarget += SimpleMath::Vector3(10.0f, 0.0f, 0.0f) * Time::DeltaTime;
+	//		//_cameraTarget.Clamp(SimpleMath::Vector3(-8.0f, 0.0f, 1.0f), SimpleMath::Vector3(8.0f, 10.0f, 1.0f));
+	//		ViewMove(SimpleMath::Vector3::Right);
+	//	}
 
 
-	}
+	//}
 
 
 

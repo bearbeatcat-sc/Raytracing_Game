@@ -50,6 +50,7 @@ void Player::Shot()
 	_pPlayerCamera->Shake(0.1f, 0.1f);
 
 
+
 }
 
 void Player::SetPlayerState(PlayerState playerState)
@@ -59,18 +60,33 @@ void Player::SetPlayerState(PlayerState playerState)
 	if(playerState == PlayerState_Stay)
 	{
 		_pPlayerCamera->Shake(0.1f, 0.2f);
+
+		if (DirectXInput::GetInstance().IsActiveGamePad())
+		{
+			DirectXInput::GetInstance().OnVibration(0, 10000, 10000, 0.2f);
+		}
 	}
 
 	if(playerState == PlayerState_Run)
 	{
 		_pPlayerCamera->Shake(0.2f, 1.0f);
 		_moveSpeed = 32.0f;
+
+		if (DirectXInput::GetInstance().IsActiveGamePad())
+		{
+			DirectXInput::GetInstance().OnVibration(0, 20000, 20000, 1.0f);
+		}
 	}
 
 	if (playerState == PlayerState_Move)
 	{
 		_pPlayerCamera->Shake(0.1f, 1.0f);
 		_moveSpeed = 8.0f;
+
+		if (DirectXInput::GetInstance().IsActiveGamePad())
+		{
+			DirectXInput::GetInstance().OnVibration(0, 10000, 10000, 1.0f);
+		}
 	}
 }
 

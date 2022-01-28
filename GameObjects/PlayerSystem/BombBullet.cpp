@@ -11,14 +11,17 @@
 #include <Components/Animations/AnimationQue.h>
 #include <Device/DirectX/DirectXInput.h>
 #include <Game_Object/ActorManager.h>
+#include <Utility/Timer.h>
 
 #include "BombArea.h"
+#include "TraceEffect.h"
 #include "../BreakEffect.h"
 
 
 BombBullet::BombBullet(const float moveSpeed, const SimpleMath::Vector3& vec)
 :_moveSpeed(120.0f), _addmoveSpeed(moveSpeed), _moveVec(vec), _moveTime(0.0f), _rotate(0.0f)
 {
+	_traceEffectTimer = std::make_shared<Timer>(0.01f);
 }
 
 void BombBullet::UpdateActor()
@@ -37,10 +40,38 @@ void BombBullet::UpdateActor()
 	SetRotation(GetEulerRotation() + SimpleMath::Vector3(0, 0, _rotate));
 	SetPosition(pos);
 
-	if(DirectXInput::GetInstance().IsKeyDown(DIK_B))
+
+	if(DirectXInput::GetInstance().IsActiveGamePad())
 	{
-		Destroy();
-		Explode();
+		if (DirectXInput::GetInstance().IsDownTrigger(GamePad_LeftTrigger))
+		{
+			Destroy();
+			Explode();
+		}
+
+	}
+	else
+	{
+		if (DirectXInput::GetInstance().IsKeyDown(DIK_Z))
+		{
+			Destroy();
+			Explode();
+		}
+
+	}
+
+	_traceEffectTimer->Update();
+	if(_traceEffectTimer->IsTime())
+	{
+		_traceEffectTimer->Reset();
+		float x = Random::GetRandom(-1.0f, 1.0f);
+
+		auto traceEffect = new TraceEffect("ClearCube");
+		traceEffect->SetPosition(GetPosition());
+		traceEffect->Destroy(4.0f);
+		traceEffect->SetScale(SimpleMath::Vector3(0.2f));
+		traceEffect->SetRotation(GetRotation());
+		ActorManager::GetInstance().AddActor(traceEffect);
 	}
 
 }

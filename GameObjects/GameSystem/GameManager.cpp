@@ -220,9 +220,7 @@ void GameManager::CreateStage()
 	_pObjectGenerator->CreateSlideTargetCube(SimpleMath::Vector3(-1, 0, 0), 6.0f, baseTime + 2.0f, 20.0f, 6, SimpleMath::Vector3(15, 10, 60), SimpleMath::Vector3(1.0f), "RedMirrorCube");
 	_pObjectGenerator->CreateSlideTargetCube(SimpleMath::Vector3(-1, 0, 0), 6.0f, baseTime + 2.0f, 20.0f, 6, SimpleMath::Vector3(20, 10, 60), SimpleMath::Vector3(1.0f), "RedMirrorCube");
 
-	_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(0, 1, 0), 20.0f, baseTime + 10.0f, 20.0f, 6, SimpleMath::Vector3(-10, 10, 120), SimpleMath::Vector3(3.0f), "BlenderMonkeyMirror");
-	_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(0, 1, 0), 20.0f, baseTime + 10.0f, 20.0f, 6, SimpleMath::Vector3(0, 10, 120), SimpleMath::Vector3(3.0f), "BlenderMonkeyMirror");
-	_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(0, 1, 0), 20.0f, baseTime + 10.0f, 20.0f, 6, SimpleMath::Vector3(10, 10, 120), SimpleMath::Vector3(3.0f), "BlenderMonkeyMirror");
+	_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(0, 1, 0), 20.0f, baseTime + 10.0f, 20.0f, 6, SimpleMath::Vector3(0, 10, 160), SimpleMath::Vector3(12.0f), "BlenderMonkeyMirror");
 
 	_pObjectGenerator->CreateSlideTargetCube(SimpleMath::Vector3(-1, 0, 0), 6.0f, baseTime + 15.0f, 20.0f, 6, SimpleMath::Vector3(10, 10, 160), SimpleMath::Vector3(1.0f), "RedMirrorCube");
 	_pObjectGenerator->CreateSlideTargetCube(SimpleMath::Vector3(-1, 0, 0), 6.0f, baseTime + 15.0f, 20.0f, 6, SimpleMath::Vector3(15, 10, 160), SimpleMath::Vector3(1.0f), "RedMirrorCube");
@@ -234,6 +232,8 @@ void GameManager::CreateStage()
 
 	_pObjectGenerator->CreateNineSideCube(baseTime + 18.0f, 10.0f, SimpleMath::Vector3(100, 30, 300), 30.0f);
 
+
+	// 中盤
 	baseTime = 20.0f;
 
 	_pPlayerTimeline->AddTask(baseTime + 4.0f, Player::PlayerState_Run);
@@ -262,14 +262,20 @@ void GameManager::CreateStage()
 
 	_pPlayerTimeline->AddTask(baseTime, Player::PlayerState_Stay);
 
-	for(int i = 0; i < 30; ++i)
+	for(int i = 0; i < 90; ++i)
 	{
 		float pos_x = Random::GetRandom(-0.5f, 0.5f);
 		float pos_z = Random::GetRandom(-0.5f, 0.5f);
 
-		_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(pos_x * -1.0f, 0.5f, pos_z * -1.0f), 20.0f, baseTime + (i * 1.0f), 30.0f, 6,  SimpleMath::Vector3(pos_x, 0, 600 + pos_z), SimpleMath::Vector3(0.5f), "RedMirrorCube");
+		_pObjectGenerator->CreateJumpTargetCube(SimpleMath::Vector3(pos_x * -1.0f, 1.0f, pos_z * -1.0f), 20.0f, baseTime + (i * 0.1f), 30.0f, 6,  SimpleMath::Vector3(pos_x, 5, 730 + pos_z), SimpleMath::Vector3(0.5f), "RedMirrorCube");
 
 	}
+
+	// 後半
+	baseTime = 51.0f;
+
+	_pPlayerTimeline->AddTask(baseTime, Player::PlayerState_Run);
+
 }
 
 void GameManager::StartGame()

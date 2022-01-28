@@ -8,6 +8,7 @@
 #include <Components/Animations/Vector3AnimationCommand.h>
 #include <Components/Collsions/CollisionManager.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
+#include <Device/DirectX/DirectXInput.h>
 #include <Device/Raytracing/DXRPipeLine.h>
 #include <Game_Object/ActorManager.h>
 #include <Utility/Random.h>
@@ -92,11 +93,21 @@ void TargetTitleLogo::Init()
 	_AnimationComponent->AddAnimationState(damageAnimationCommandList1, "Damage1", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");
 
-	//auto cube1 = new Cube(SimpleMath::Vector3(0, -0.29f, 55.0f), SimpleMath::Vector3(1,1,1), "ControllUI");
-	//SetChild(cube1);
+	if(DirectXInput::GetInstance().IsActiveGamePad())
+	{
+		auto cube1 = new Cube(SimpleMath::Vector3(0, -1.7f, 55.0f), SimpleMath::Vector3(3, 2, 1), "ControllUI_Pad");
+		SetChild(cube1);
+	}
+	else
+	{
+		auto cube1 = new Cube(SimpleMath::Vector3(0, -1.7f, 55.0f), SimpleMath::Vector3(3, 2, 1), "ControllUI_Key");
+		SetChild(cube1);
+	}
 
-	//auto cube2 = new Cube(SimpleMath::Vector3(0,-2.7f,55), SimpleMath::Vector3(1,0.5f,1), "BreakTitleUI");
-	//SetChild(cube2);
+
+
+	auto cube2 = new Cube(SimpleMath::Vector3(0,-7.5f,55), SimpleMath::Vector3(2,1,1), "BreakTitleUI");
+	SetChild(cube2);
 
 	_initScale = GetScale();
 }

@@ -59,38 +59,40 @@ void PlayStage::Init()
 
 	//	}
 	//}
+	const float goalPoint = 1100;
 
-	auto leftWall = new Cube(SimpleMath::Vector3(-100, 0, 0), SimpleMath::Vector3(1, 100, 5000), "WhiteCube");
+
+	auto leftWall = new Cube(SimpleMath::Vector3(-100, 0, 0), SimpleMath::Vector3(1, 100, goalPoint), "WhiteCube");
 	leftWall->SetActorName("leftWall");
 	SetChild(leftWall);
 
-	auto rightWall = new Cube(SimpleMath::Vector3(100, 0, 0), SimpleMath::Vector3(1, 100, 5000), "WhiteCube");
+	auto rightWall = new Cube(SimpleMath::Vector3(100, 0, 0), SimpleMath::Vector3(1, 100, goalPoint), "WhiteCube");
 	rightWall->SetActorName("rightWall");
 	SetChild(rightWall);
 
-	auto topWall = new Cube(SimpleMath::Vector3(0, 100, 0), SimpleMath::Vector3(100, 1, 5000), "WhiteCube");
+	auto topWall = new Cube(SimpleMath::Vector3(0, 100, 0), SimpleMath::Vector3(100, 1, goalPoint), "WhiteCube");
 	topWall->SetActorName("topWall");
 	SetChild(topWall);
 
-	auto downWall = new Cube(SimpleMath::Vector3(0, -100, 0), SimpleMath::Vector3(100, 1, 5000), "WhiteCube");
+	auto downWall = new Cube(SimpleMath::Vector3(0, -100, 0), SimpleMath::Vector3(100, 1, goalPoint), "WhiteCube");
 	downWall->SetActorName("downWall");
 	SetChild(downWall);
 
 
 
-	auto rightUpPillar = new Cube(SimpleMath::Vector3(90, 90, 0), SimpleMath::Vector3(10, 50, 5000), "BlackCube");
+	auto rightUpPillar = new Cube(SimpleMath::Vector3(90, 90, 0), SimpleMath::Vector3(10, 50, goalPoint), "BlackCube");
 	rightUpPillar->SetActorName("rightUpPillar");
 	SetChild(rightUpPillar);
 
-	auto leftUpPillar = new Cube(SimpleMath::Vector3(-90, 90, 0), SimpleMath::Vector3(10, 50, 5000), "BlackCube");
+	auto leftUpPillar = new Cube(SimpleMath::Vector3(-90, 90, 0), SimpleMath::Vector3(10, 50, goalPoint), "BlackCube");
 	leftUpPillar->SetActorName("leftUpPillar");
 	SetChild(leftUpPillar);
 
-	auto leftDownPillar = new Cube(SimpleMath::Vector3(-90, -90, 0), SimpleMath::Vector3(10, 50, 5000), "BlackCube");
+	auto leftDownPillar = new Cube(SimpleMath::Vector3(-90, -90, 0), SimpleMath::Vector3(10, 50, goalPoint), "BlackCube");
 	leftDownPillar->SetActorName("leftDownPillar");
 	SetChild(leftDownPillar);
 
-	auto rightDownPillar = new Cube(SimpleMath::Vector3(90, -90, 0), SimpleMath::Vector3(10, 50, 5000), "BlackCube");
+	auto rightDownPillar = new Cube(SimpleMath::Vector3(90, -90, 0), SimpleMath::Vector3(10, 50, goalPoint), "BlackCube");
 	rightDownPillar->SetActorName("rightDownPillar");
 	SetChild(rightDownPillar);
 
@@ -98,36 +100,39 @@ void PlayStage::Init()
 	//frontWall->SetActorName("frontWall");
 	//SetChild(frontWall);
 
+
 	for(int i = 0; i < 30; ++i)
 	{
 		int flag = Random::GetRandom(0, 1);
 
 		if(flag == 0)
 		{
-			auto pillar = new Cube(SimpleMath::Vector3(-90, 0, i * (5000 / 30)), SimpleMath::Vector3(5, 50, 5), "BlackCube");
+			auto pillar = new Cube(SimpleMath::Vector3(-90, 0, i * (goalPoint / 30)), SimpleMath::Vector3(5, 50, 5), "BlackCube");
 			pillar->SetActorName("Pillar");
 			SetChild(pillar);
 			continue;
 		}
 
-		auto pillar = new Cube(SimpleMath::Vector3(100, 0, i * (5000 / 30)), SimpleMath::Vector3(5, 50, 5), "BlackCube");
+		auto pillar = new Cube(SimpleMath::Vector3(100, 0, i * (goalPoint / 30)), SimpleMath::Vector3(5, 50, 5), "BlackCube");
 		pillar->SetActorName("Pillar");
 		SetChild(pillar);
 	}
 
-	for (int i = 0; i < 30; ++i)
+	const int pillarCount = 10;
+
+	for (int i = 0; i < pillarCount; ++i)
 	{
 		int flag = Random::GetRandom(0, 1);
 
 		if (flag == 0)
 		{
-			auto pillar = new Cube(SimpleMath::Vector3(-90, 0, 4000 + i * 30), SimpleMath::Vector3(5, 50, 5), "BlackCube");
+			auto pillar = new Cube(SimpleMath::Vector3(-90, 0, goalPoint + i * pillarCount), SimpleMath::Vector3(5, 50, 5), "BlackCube");
 			pillar->SetActorName("Pillar");
 			SetChild(pillar);
 			continue;
 		}
 
-		auto pillar = new Cube(SimpleMath::Vector3(100, 0, 4000 + i * 30), SimpleMath::Vector3(5, 50, 5), "BlackCube");
+		auto pillar = new Cube(SimpleMath::Vector3(100, 0, goalPoint + i * pillarCount), SimpleMath::Vector3(5, 50, 5), "BlackCube");
 		pillar->SetActorName("Pillar");
 		SetChild(pillar);
 	}
@@ -137,7 +142,7 @@ void PlayStage::Init()
 	SetChild(backWall);
 
 	auto goal = new GoalObject(_pGameManager);
-	goal->SetPosition(SimpleMath::Vector3(0, 10, 5000));
+	goal->SetPosition(SimpleMath::Vector3(0, 10, goalPoint + 100));
 	goal->SetScale(SimpleMath::Vector3(20, 20, 30));
 	SetChild(goal);
 
