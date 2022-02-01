@@ -10,6 +10,7 @@
 
 #include <Components/Animations/AnimationQue.h>
 #include <Device/DirectX/DirectXInput.h>
+#include <Device/DirectX/Core/Sounds/SoundManager.h>
 #include <Game_Object/ActorManager.h>
 #include <Utility/Timer.h>
 
@@ -81,6 +82,9 @@ void BombBullet:: Explode()
 	auto bombArea = new BombArea(8.0f);
 	bombArea->SetPosition(GetPosition());
 	ActorManager::GetInstance().AddActor(bombArea);
+
+	SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass.sound",0.5f);
+
 
 	for (int i = 0; i < 120; ++i)
 	{

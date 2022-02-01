@@ -39,25 +39,24 @@ void MainGame::Init()
 
 	MeshManager::GetInstance().GetSpehereMesh(12, "NormalMeshEffect");
 	MeshManager::GetInstance().loadMesh("Resources/Models/Model/", "blenderMonkey.obj", "BlenderMonkey");
-	MeshManager::GetInstance().loadMesh("Resources/Models/Model/", "cube0.obj", "Cube0");
-	TextureManager::GetInstance().AddTexture("Resources/TestUI.png", "TestUI");
-	TextureManager::GetInstance().AddTexture("Resources/ScoreResult.png", "ScoreResult");
-	TextureManager::GetInstance().AddTexture("Resources/TitleLogo.png", "TitleLogo");
-	TextureManager::GetInstance().AddTexture("Resources/ControllUI_Key.png", "ControllUI_Key");
-	TextureManager::GetInstance().AddTexture("Resources/ControllUI_Pad.png", "ControllUI_Pad");
-	TextureManager::GetInstance().AddTexture("Resources/BreakTitleUI.png", "BreakTitleUI");
-	TextureManager::GetInstance().AddTexture("Resources/FoundUI.png", "FoundUI");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/TestUI.png", "TestUI");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/ScoreResult.png", "ScoreResult");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/TitleLogo.png", "TitleLogo");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/ControllUI_Key.png", "ControllUI_Key");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/ControllUI_Pad.png", "ControllUI_Pad");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/BreakTitleUI.png", "BreakTitleUI");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/FoundUI.png", "FoundUI");
 
-	TextureManager::GetInstance().AddTexture("Resources/Number0.png", "Number0");
-	TextureManager::GetInstance().AddTexture("Resources/Number1.png", "Number1");
-	TextureManager::GetInstance().AddTexture("Resources/Number2.png", "Number2");
-	TextureManager::GetInstance().AddTexture("Resources/Number3.png", "Number3");
-	TextureManager::GetInstance().AddTexture("Resources/Number4.png", "Number4");
-	TextureManager::GetInstance().AddTexture("Resources/Number5.png", "Number5");
-	TextureManager::GetInstance().AddTexture("Resources/Number6.png", "Number6");
-	TextureManager::GetInstance().AddTexture("Resources/Number7.png", "Number7");
-	TextureManager::GetInstance().AddTexture("Resources/Number8.png", "Number8");
-	TextureManager::GetInstance().AddTexture("Resources/Number9.png", "Number9");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number0.png", "Number0");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number1.png", "Number1");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number2.png", "Number2");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number3.png", "Number3");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number4.png", "Number4");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number5.png", "Number5");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number6.png", "Number6");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number7.png", "Number7");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number8.png", "Number8");
+	TextureManager::GetInstance().AddTexture("Resources/Texture/Number9.png", "Number9");
 
 	auto cubeMeshData = MeshManager::GetInstance().GetMeshData("CubeModelData");
 	cubeMeshData->SetPhysicsBaseMaterial(PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(1.0f, 10.0f, 1.0f, 0.5f), 0.5f));
@@ -120,7 +119,7 @@ void MainGame::Init()
 
 
 
-	RenderingPipeLine::GetInstance().SetSkyBox("Resources/SpaceSkyBox.dds", SimpleMath::Vector3(10.0f));
+	RenderingPipeLine::GetInstance().SetSkyBox("Resources/Texture/SpaceSkyBox.dds", SimpleMath::Vector3(10.0f));
 	RenderingPipeLine::GetInstance().SetDrawFluidFlag(false);
 
 

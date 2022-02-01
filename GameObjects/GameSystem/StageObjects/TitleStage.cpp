@@ -1,5 +1,6 @@
 ﻿#include "TitleStage.h"
 
+#include <Device/DirectX/Core/Sounds/SoundManager.h>
 #include <Game_Object/ActorManager.h>
 #include <Utility/Random.h>
 #include <Utility/Math/MathUtility.h>

@@ -2,6 +2,7 @@
 
 #include <Game_Object/Actor.h>
 
+class SoundInstance;
 class ScoreResultObject;
 class ScoreSystem;
 class Player;
@@ -10,6 +11,7 @@ class GameTimer;
 class TitleStage;
 class PlayStage;
 class PlayerTimeline;
+class IXAudio2SourceVoice;
 
 class GameManager
 	:public Actor
@@ -62,5 +64,6 @@ private:
 	GameState _gameState;
 
 	GameTimer* _pGameTimer;
-	
+
+	std::shared_ptr<SoundInstance> _pBGMSoundInstance;
 };

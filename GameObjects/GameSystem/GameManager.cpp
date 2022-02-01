@@ -1,6 +1,8 @@
 ﻿#include "GameManager.h"
 
 #include <Device/DirectX/DirectXInput.h>
+#include <Device/DirectX/Core/Sounds/SoundManager.h>
+#include <Device/DirectX/Core/Sounds/SoundInstance.h>
 #include <Game_Object/ActorManager.h>
 #include <Utility/CameraManager.h>
 #include <Utility/Camera.h>
@@ -54,8 +56,6 @@ void GameManager::UpdateActor()
 
 void GameManager::Init()
 {
-
-
 	_pObjectGenerator = new ObjectGenerator(this);
 	ActorManager::GetInstance().AddActor(_pObjectGenerator);
 
@@ -67,11 +67,16 @@ void GameManager::Init()
 	auto camera = std::make_shared<Camera>();
 	CameraManager::GetInstance().AddCamera("PlayerCamera", camera);
 	CameraManager::GetInstance().SetMainCamera("PlayerCamera");
+
+	_pBGMSoundInstance = SoundManager::GetInstance().CreateSoundInstance("./Resources/Sound/BGM.sound",true);
+	_pBGMSoundInstance->Play(0.2f, 2.0f);
 }
 
 
 void GameManager::Shutdown()
 {
+	_pBGMSoundInstance->Destroy();
+	//_pBGMAudioVoice->DestroyVoice();
 }
 
 void GameManager::OnCollsion(Actor* other)
@@ -80,6 +85,7 @@ void GameManager::OnCollsion(Actor* other)
 
 void GameManager::EndGame()
 {
+	_pBGMSoundInstance->Play(0.1f, 2.0f);
 	_pObjectGenerator->End();
 
 	if (_pPlayStage)
@@ -102,6 +108,7 @@ void GameManager::EndGame()
 
 void GameManager::ResetGame()
 {
+
 	if (_pScoreSystem)
 	{
 		_pScoreSystem->Destroy();
@@ -280,6 +287,11 @@ void GameManager::CreateStage()
 
 void GameManager::StartGame()
 {
+	if(_pBGMSoundInstance)
+	{
+		_pBGMSoundInstance->Play(0.2f, 2.0f);
+	}
+
 	_pPlayer->SetPlayerState(Player::PlayerState_Move);
 
 	_pPlayStage = new PlayStage(this);
