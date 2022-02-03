@@ -83,7 +83,8 @@ void BombBullet:: Explode()
 	bombArea->SetPosition(GetPosition());
 	ActorManager::GetInstance().AddActor(bombArea);
 
-	SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass.sound",0.5f);
+	SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass.sound",0.8f);
+	SoundManager::GetInstance().OneShot("./Resources/Sound/Explo.sound", 0.8f);
 
 
 	for (int i = 0; i < 120; ++i)

@@ -59,7 +59,7 @@ void PlayStage::Init()
 
 	//	}
 	//}
-	const float goalPoint = 1100;
+	const float goalPoint = 1300;
 
 
 	auto leftWall = new Cube(SimpleMath::Vector3(-100, 0, 0), SimpleMath::Vector3(1, 100, goalPoint), "WhiteCube");

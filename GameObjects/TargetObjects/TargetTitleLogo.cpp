@@ -9,6 +9,7 @@
 #include <Components/Collsions/CollisionManager.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
 #include <Device/DirectX/DirectXInput.h>
+#include <Device/DirectX/Core/Sounds/SoundManager.h>
 #include <Device/Raytracing/DXRPipeLine.h>
 #include <Game_Object/ActorManager.h>
 #include <Utility/Random.h>
@@ -178,6 +179,8 @@ void TargetTitleLogo::Damage(float damage)
 	{
 		_isDelete = true;
 		_pGameManager->ChangeGameState(GameManager::GameStete_GamePlay);
+
+		SoundManager::GetInstance().OneShot("./Resources/Sound/SystemSE.sound", 0.8f);
 
 		for (int i = 0; i < 6; ++i)
 		{

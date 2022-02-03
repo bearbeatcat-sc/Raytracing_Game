@@ -65,5 +65,6 @@ private:
 
 	GameTimer* _pGameTimer;
 
+	std::shared_ptr<SoundInstance> _pAmbientBGMSoundInstance;
 	std::shared_ptr<SoundInstance> _pBGMSoundInstance;
 };

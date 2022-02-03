@@ -88,8 +88,7 @@ void MainGame::Init()
 	DXRPipeLine::GetInstance().AddMeshData(planeMeshData, L"HitGroup", "NumberObject8", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.8f), "Number8");
 	DXRPipeLine::GetInstance().AddMeshData(planeMeshData, L"HitGroup", "NumberObject9", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.8f), "Number9");
 	
-	DXRPipeLine::GetInstance().AddMeshData(blenderMonkyMeshData, L"HitGroup", "BlenderMonkeyMirror", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.1f, 1.24f));
-	DXRPipeLine::GetInstance().AddMeshData(blenderMonkyMeshData, L"HitGroup", "BlenderMonkeyClear", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.1f, 1.24f));
+	DXRPipeLine::GetInstance().AddMeshData(blenderMonkyMeshData, L"HitGroup", "BlenderMonkeyClear", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.1f, 1.64f));
 	DXRPipeLine::GetInstance().AddMeshData(sphereMeshData, L"HitGroup", "ClearSphere", PhysicsBaseMaterial(SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.1f, 0.1f, 2.24));
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "ClearCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.1f, 0.1f, 2.24));
 
@@ -101,7 +100,8 @@ void MainGame::Init()
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "RedClearCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f, 0.4f, 1.24f));
 
 	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "RedMirrorCube", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f), SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 0.5f), 0.2f));
-
+	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "BlueMirrorCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.0f, 0.0f, 1.0f, 1.0f), SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 0.5f), 0.2f));
+	DXRPipeLine::GetInstance().AddMeshData(cubeMeshData, L"HitGroup", "GreenMirrorCube", PhysicsBaseMaterial(SimpleMath::Vector4(0.0f, 1.0f, 0.0f, 1.0f), SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 0.5f), 0.2f));
 
 	DXRPipeLine::GetInstance().AddMeshData(sphereMeshData, L"HitGroup", "Sphere", PhysicsBaseMaterial(SimpleMath::Vector4(0.2f, 0.2f, 0.2f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0.2f));
 	DXRPipeLine::GetInstance().AddMeshData(sphereMeshData, L"HitGroup", "RoughSphere", PhysicsBaseMaterial(SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f), SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 0.0f), 0.5f));

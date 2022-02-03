@@ -1,6 +1,7 @@
 ﻿#include "TargetCube.h"
 
 #include <algorithm>
+#include <string>
 #include <Components/Animations/AnimationCommand.h>
 #include <Components/Animations/AnimationCommandList.h>
 #include <Components/Animations/AnimationComponent.h>
@@ -8,6 +9,7 @@
 #include <Components/Animations/Vector3AnimationCommand.h>
 #include <Components/Collsions/CollisionManager.h>
 #include <Components/Collsions/OBBCollisionComponent.h>
+#include <Device/DirectX/Core/Sounds/SoundManager.h>
 #include <Device/Raytracing/DXRPipeLine.h>
 #include <Game_Object/ActorManager.h>
 #include <Utility/Random.h>
@@ -160,6 +162,15 @@ void TargetCube::Damage(float damage)
 			breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 			ActorManager::GetInstance().AddActor(breakEffect);
 		}
+		
+		if(_dxrMeshName.find("Clear") != std::string::npos)
+		{
+			SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass2.sound", 0.5f);
+		}
+		else
+		{
+			SoundManager::GetInstance().OneShot("./Resources/Sound/CrashMetal.sound", 0.5f);
+		}
 	}
 }
 
@@ -195,6 +206,7 @@ void TargetCube::OnCollsion(Actor* other)
 			breakEffect->SetScale(SimpleMath::Vector3(0.1f) * m_Scale);
 			breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 			ActorManager::GetInstance().AddActor(breakEffect);
+
 		}
 
 		return;

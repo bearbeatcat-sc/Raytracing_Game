@@ -47,14 +47,31 @@ public:
 
 	std::vector<Actor*> Create(GameManager* pGameManager) override
 	{
+		int colorFlag = Random::GetRandom(0, 2);
+
+		if (colorFlag == 0)
+		{
+			_dxrMeshName = "RedMirrorCube";
+		}
+		else if(colorFlag == 1)
+		{
+			_dxrMeshName = "BlueMirrorCube";
+		}
+		else
+		{
+			_dxrMeshName = "GreenMirrorCube";
+		}
+
 		auto instance = new SlideTargetCube(_moveVec,_moveSpeed,_maxHP, _destroyTime, _dxrMeshName, pGameManager);
 		instance->SetPosition(_generatePosition);
 		instance->SetScale(_scale);
 
-		float rotate_x = Random::GetRandom(-1.0f, 1.0f);
-		float rotate_y = Random::GetRandom(-1.0f, 1.0f);
 
-		instance->SetRotation(SimpleMath::Vector3(rotate_x, rotate_y, 0));
+
+		//float rotate_x = Random::GetRandom(-1.0f, 1.0f);
+		//float rotate_y = Random::GetRandom(-1.0f, 1.0f);
+
+		//instance->SetRotation(SimpleMath::Vector3(rotate_x, rotate_y, 0));
 
 		return std::vector<Actor*>{instance};
 	}
@@ -78,14 +95,30 @@ public:
 
 	std::vector<Actor*> Create(GameManager* pGameManager) override
 	{
+		int colorFlag = Random::GetRandom(0, 2);
+
+		if (colorFlag == 0)
+		{
+			_dxrMeshName = "RedMirrorCube";
+		}
+		else if (colorFlag == 1)
+		{
+			_dxrMeshName = "BlueMirrorCube";
+		}
+		else
+		{
+			_dxrMeshName = "GreenMirrorCube";
+		}
+
+
 		auto instance = new JumpTargetCube(_moveVec, _moveSpeed, _maxHP, _destroyTime, _dxrMeshName, pGameManager);
 		instance->SetPosition(_generatePosition);
 		instance->SetScale(_scale);
 
-		float rotate_x = Random::GetRandom(-1.0f, 1.0f);
-		float rotate_y = Random::GetRandom(-1.0f, 1.0f);
+		//float rotate_x = Random::GetRandom(-1.0f, 1.0f);
+		//float rotate_y = Random::GetRandom(-1.0f, 1.0f);
 
-		instance->SetRotation(SimpleMath::Vector3(rotate_x, rotate_y, 0));
+		//instance->SetRotation(SimpleMath::Vector3(rotate_x, rotate_y, 0));
 
 		return std::vector<Actor*>{instance};
 	}
