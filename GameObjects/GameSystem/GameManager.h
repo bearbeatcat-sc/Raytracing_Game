@@ -40,6 +40,7 @@ private:
 	void OnCollsion(Actor* other) override;
 
 	void EndGame();
+	void CreateTitleStage();
 	void ResetGame();
 
 	void GamePlayUpdate();
@@ -50,16 +51,13 @@ private:
 	void StartGame();
 
 private:
-	Player* _pPlayer;
-	ScoreSystem* _pScoreSystem;
-	ObjectGenerator* _pObjectGenerator;
-	PlayerTimeline* _pPlayerTimeline;
-	ScoreResultObject* _pScoreResultObject;
-	TitleStage* _pTitleStage;
-	PlayStage* _pPlayStage;
-
-	Actor* _pMirror0;
-	Actor* _pMirror1;
+	Player* _pPlayer = nullptr;
+	ScoreSystem* _pScoreSystem = nullptr;
+	ObjectGenerator* _pObjectGenerator = nullptr;
+	PlayerTimeline* _pPlayerTimeline = nullptr;
+	ScoreResultObject* _pScoreResultObject = nullptr;
+	TitleStage* _pTitleStage = nullptr;
+	PlayStage* _pPlayStage = nullptr;
 
 	GameState _gameState;
 

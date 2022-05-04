@@ -11,6 +11,11 @@ TraceEffect::TraceEffect(const std::string& meshName)
 	_instance->CreateRaytracingInstanceDesc();
 }
 
+TraceEffect::~TraceEffect()
+{
+	_instance->Destroy();
+}
+
 void TraceEffect::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();;
@@ -23,7 +28,6 @@ void TraceEffect::Init()
 
 void TraceEffect::Shutdown()
 {
-	_instance->Destroy();
 }
 
 void TraceEffect::OnCollsion(Actor* other)

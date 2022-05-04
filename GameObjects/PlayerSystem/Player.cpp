@@ -88,6 +88,17 @@ void Player::SetPlayerState(PlayerState playerState)
 			DirectXInput::GetInstance().OnVibration(0, 10000, 10000, 1.0f);
 		}
 	}
+
+	if(playerState == PlayerState_Stop)
+	{
+		if (DirectXInput::GetInstance().IsActiveGamePad())
+		{
+			DirectXInput::GetInstance().OnVibration(0, 20000, 20000, 1.0f);
+		}
+
+		_pAimCursor->Destroy();
+		_pAimCursor = nullptr;
+	}
 }
 
 void Player::Move()
@@ -105,28 +116,6 @@ const SimpleMath::Vector3& Player::GetCursorPosition()
 
 void Player::UpdateActor()
 {
-	auto mtx = GetWorldMatrix();
-	//_instance->SetMatrix(mtx);
-	MoveCusor();
-
-	if (DirectXInput::GetInstance().IsActiveGamePad())
-	{
-		if (DirectXInput::GetInstance().IsTrigger(GamePad_RightTrigger))
-		{
-			LockOn();
-		}
-	}
-	else
-	{
-		if (DirectXInput::GetInstance().IsKey(DIK_SPACE))
-		{
-			LockOn();
-		}
-	}
-
-	auto cameraPitch = _pPlayerCamera->GetPitch();
-	auto cameraYaw = _pPlayerCamera->GetYaw();
-	SetRotation(SimpleMath::Vector3(cameraYaw, cameraPitch, 0));
 
 	switch(_playerState)
 	{
@@ -140,9 +129,35 @@ void Player::UpdateActor()
 	case PlayerState_Run:
 		Move();
 		break;
+
+	// 攻撃もできない状態
+	case PlayerState_Stop:
+		return;
 	}
 
-	
+	auto mtx = GetWorldMatrix();
+	//_instance->SetMatrix(mtx);
+	MoveCusor();
+
+	if (DirectXInput::GetInstance().IsActiveGamePad())
+	{
+		if (DirectXInput::GetInstance().IsDownTrigger(GamePad_RightTrigger))
+		{
+			LockOn();
+		}
+	}
+	else
+	{
+		if (DirectXInput::GetInstance().IsKeyDown(DIK_SPACE))
+		{
+			LockOn();
+		}
+	}
+
+	auto cameraPitch = _pPlayerCamera->GetPitch();
+	auto cameraYaw = _pPlayerCamera->GetYaw();
+	SetRotation(SimpleMath::Vector3(cameraYaw, cameraPitch, 0));
+
 }
 
 void Player::LockOn()
@@ -159,13 +174,12 @@ void Player::MoveCusor()
 
 void Player::Init()
 {
-
-
-
-	//_instance = DXRPipeLine::GetInstance().AddInstance("BlueCube", 0);
 	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), m_Scale * 1.4f, "PlayerObject");
 	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
+
+
+
 
 	//auto mtx = GetWorldMatrix();
 	//_instance->SetMatrix(mtx);
@@ -184,7 +198,6 @@ void Player::Init()
 void Player::Shutdown()
 {
 	_pCollisionComponent->Delete();
-	//_instance->Destroy();
 }
 
 void Player::Damage()
@@ -200,9 +213,6 @@ void Player::Damage()
 
 void Player::OnCollsion(Actor* other)
 {
-	if(other->IsContainsTag("Target"))
-	{
-		Damage();
-	}
+
 }
 

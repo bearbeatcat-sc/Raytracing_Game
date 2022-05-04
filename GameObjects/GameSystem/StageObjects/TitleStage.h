@@ -2,6 +2,7 @@
 
 #include <Game_Object/Actor.h>
 
+class AnimationComponent;
 class VerticalMoveBlock;
 
 class TitleStage
@@ -21,4 +22,7 @@ private:
 private:
 	const float _floorCreateTime;
 	std::vector<VerticalMoveBlock*> _floors;
+
+	std::shared_ptr<AnimationComponent> _AnimationComponent;
+
 };

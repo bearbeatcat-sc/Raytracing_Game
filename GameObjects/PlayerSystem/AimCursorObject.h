@@ -9,14 +9,12 @@ using namespace DirectX;
 class DXRInstance;
 class AnimationComponent;
 
-
-class Cube
+class AimCursorObject
 	:public Actor
 {
 public:
-	Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale,const std::string& meshName,float scalingTime = 2.0f);
-	~Cube() = default;
-	void Delete();
+	AimCursorObject() = default;
+	~AimCursorObject() = default;
 
 private:
 	virtual void UpdateActor() override;
@@ -24,14 +22,6 @@ private:
 	virtual void Shutdown() override;
 	virtual void OnCollsion(Actor* other) override;
 
-
 private:
-	std::shared_ptr<AnimationComponent> _AnimationComponent;
 	std::shared_ptr<DXRInstance> _instance;
-	SimpleMath::Vector3 _initScale;
-	const float _scalingTime;
-
-private:
-
-	std::string _DXRMeshName;
 };

@@ -17,16 +17,67 @@
 #include "BombArea.h"
 #include "TraceEffect.h"
 #include "../BreakEffect.h"
+#include "../Cube.h"
 
 
 BombBullet::BombBullet(const float moveSpeed, const SimpleMath::Vector3& vec)
-:_moveSpeed(120.0f), _addmoveSpeed(moveSpeed), _moveVec(vec), _moveTime(0.0f), _rotate(0.0f)
+:_moveSpeed(120.0f), _addmoveSpeed(moveSpeed), _moveVec(vec), _moveTime(0.0f), _rotate(0.0f), _isExploding(false)
 {
 	_traceEffectTimer = std::make_shared<Timer>(0.01f);
+	_explodeTimer = std::make_shared<Timer>(_explodeTime);
+}
+
+bool BombBullet::IsDelete()
+{
+	return _isDeleteFlag;
+}
+
+void BombBullet::GenerateTraceEffect()
+{
+	_traceEffectTimer->Update();
+	if(_traceEffectTimer->IsTime())
+	{
+		_traceEffectTimer->Reset();
+		float x = Random::GetRandom(-1.0f, 1.0f);
+
+		auto traceEffect = new TraceEffect("ClearCube");
+		traceEffect->SetPosition(GetPosition());
+		traceEffect->Destroy(0.8f);
+		traceEffect->SetScale(SimpleMath::Vector3(0.2f));
+		traceEffect->SetRotation(GetRotation());
+
+		//auto cube = new Cube(GetPosition(), SimpleMath::Vector3::One , "ClearCube");
+		//cube->Destroy(4.0f);
+
+		ActorManager::GetInstance().AddActor(traceEffect);
+	}
+}
+
+void BombBullet::GenerateRedTraceEffect()
+{
+	_traceEffectTimer->Update();
+	if (_traceEffectTimer->IsTime())
+	{
+		_traceEffectTimer->Reset();
+		float x = Random::GetRandom(-1.0f, 1.0f);
+
+		auto traceEffect = new TraceEffect("RedClearCube");
+		traceEffect->SetPosition(GetPosition());
+		traceEffect->Destroy(0.8f);
+		traceEffect->SetScale(SimpleMath::Vector3(0.2f));
+		traceEffect->SetRotation(GetRotation());
+
+		//auto cube = new Cube(GetPosition(), SimpleMath::Vector3::One , "ClearCube");
+		//cube->Destroy(4.0f);
+
+		ActorManager::GetInstance().AddActor(traceEffect);
+	}
 }
 
 void BombBullet::UpdateActor()
 {
+	if (_isDeleteFlag)return;
+
 	auto mtx = GetWorldMatrix();
 	_instance->SetMatrix(mtx);
 
@@ -42,49 +93,38 @@ void BombBullet::UpdateActor()
 	SetPosition(pos);
 
 
-	if(DirectXInput::GetInstance().IsActiveGamePad())
+	if(_isExploding)
 	{
-		if (DirectXInput::GetInstance().IsDownTrigger(GamePad_LeftTrigger))
-		{
-			Destroy();
-			Explode();
-		}
-
-	}
-	else
-	{
-		if (DirectXInput::GetInstance().IsKeyDown(DIK_Z))
-		{
-			Destroy();
-			Explode();
-		}
-
+		GenerateRedTraceEffect();
+		Exploding();
+		return;
 	}
 
-	_traceEffectTimer->Update();
-	if(_traceEffectTimer->IsTime())
+	GenerateTraceEffect();
+	_explodeTimer->Update();
+	if(_explodeTimer->IsTime())
 	{
-		_traceEffectTimer->Reset();
-		float x = Random::GetRandom(-1.0f, 1.0f);
+		_explodeTimer->Reset();
 
-		auto traceEffect = new TraceEffect("ClearCube");
-		traceEffect->SetPosition(GetPosition());
-		traceEffect->Destroy(4.0f);
-		traceEffect->SetScale(SimpleMath::Vector3(0.2f));
-		traceEffect->SetRotation(GetRotation());
-		ActorManager::GetInstance().AddActor(traceEffect);
+		Explode();
+		return;
 	}
+
+
+
 
 }
 
 void BombBullet:: Explode()
 {
+	_isDeleteFlag = true;
+
 	auto bombArea = new BombArea(8.0f);
 	bombArea->SetPosition(GetPosition());
 	ActorManager::GetInstance().AddActor(bombArea);
 
-	SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass.sound",0.8f);
-	SoundManager::GetInstance().OneShot("./Resources/Sound/Explo.sound", 0.8f);
+	SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass.sound",0.6f);
+	SoundManager::GetInstance().OneShot("./Resources/Sound/Explo.sound", 0.6f);
 
 
 	for (int i = 0; i < 120; ++i)
@@ -123,7 +163,7 @@ void BombBullet:: Explode()
 
 void BombBullet::Init()
 {
-	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), SimpleMath::Vector3(0.4f), "PlayerObject");
+	_pCollisionComponent = new OBBCollisionComponent(this, GetPosition(), SimpleMath::Vector3(1.4f), "PlayerObject");
 	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
 
@@ -133,7 +173,7 @@ void BombBullet::Init()
 	_instance->SetMatrix(mtx);
 	_instance->CreateRaytracingInstanceDesc();
 
-	SetTag("PlayerBullet");
+	SetTag("PlayerBombBullet");
 
 }
 
@@ -143,10 +183,27 @@ void BombBullet::Shutdown()
 	_pCollisionComponent->Delete();
 }
 
+void BombBullet::Exploding()
+{
+	_explodingTimer->Update();
+	if(_explodingTimer->IsTime())
+	{
+		Explode();
+	}
+}
+
 void BombBullet::OnCollsion(Actor* other)
 {
-	if (other->IsContainsTag("Player") || other->IsContainsTag("LockOnArea"))return;
+	//if (other->IsContainsTag("Player") || other->IsContainsTag("LockOnArea"))return;
 
-	Destroy();
+	if(other->IsContainsTag("Bullet"))
+	{
+		_isExploding = true;
+		_explodingTimer = std::make_shared<Timer>(1.0f);
+
+		_moveSpeed *= 1.5f;
+		return;
+	}
+
 	Explode();
 }

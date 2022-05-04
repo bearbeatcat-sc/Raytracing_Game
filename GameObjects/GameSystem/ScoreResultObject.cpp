@@ -5,8 +5,11 @@
 #include <Components/Animations/AnimationComponent.h>
 #include <Device/Raytracing/DXRPipeLine.h>
 
+#include "ChangeResultUIObject.h"
+
 ScoreResultObject::ScoreResultObject()
 {
+	
 }
 
 ScoreResultObject::~ScoreResultObject()
@@ -26,6 +29,7 @@ void ScoreResultObject::Init()
 
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
+
 	_instance->CreateRaytracingInstanceDesc();
 
 	_AnimationComponent = std::make_shared<AnimationComponent>(this);
@@ -37,11 +41,21 @@ void ScoreResultObject::Init()
 
 	_AnimationComponent->AddAnimationState(generateAnimationCommandList, "Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");
+
+	auto changeResultUIObject = new ChangeResultUIObject();
+	SetChild(changeResultUIObject);
+
+	changeResultUIObject->SetPosition(SimpleMath::Vector3(1.5, -1, 0));
+	changeResultUIObject->SetScale(SimpleMath::Vector3(0.8, 0.2, 1));
+	changeResultUIObject->SetRotation(SimpleMath::Vector3(0.6f, 0, 0));
 }
 
 void ScoreResultObject::Shutdown()
 {
-	_instance->Destroy();
+	if (_instance)
+	{
+		_instance->Destroy();
+	}
 }
 
 void ScoreResultObject::OnCollsion(Actor* other)

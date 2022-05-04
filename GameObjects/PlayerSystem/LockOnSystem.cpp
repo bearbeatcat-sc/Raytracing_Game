@@ -11,26 +11,41 @@
 
 #include "Bullet.h"
 #include "BombBullet.h"
+#include "BombInterFace.h"
 #include "Player.h"
 #include "LockOnArea.h"
 #include "../TargetObjects/TargetObject.h"
 
 
 LockOnSystem::LockOnSystem(Actor* pUser)
-	:Component(pUser), _isPreviousLockOn(false), _isCurrentLockOn(false), m_AimSpeed(3.0f)
+	:Component(pUser),  m_AimSpeed(3.0f), _generateBombBulletCount(0)
 {
-	_pLockOnArea = new LockOnArea(pUser);
-	_pLockOnArea->SetScale(SimpleMath::Vector3(100, 200, 500));
-	ActorManager::GetInstance().AddActor(_pLockOnArea);
-	_pLockOnArea->SetActorName("PlayerLockOnArea");
 
-	_lockonCoolTimer = std::make_shared<Timer>(_lockonCoolTime);
-	_shotCoolTimer = std::make_shared<Timer>(_shotCollTime);
+
+
+	_pBombInterFace = new BombInterFace();
+	_user->SetChild(_pBombInterFace);
+	_pBombInterFace->SetPosition(SimpleMath::Vector3(-0.69f, -0.43f, 1.14f));
+	_pBombInterFace->SetScale(SimpleMath::Vector3(0.3f,0.02f,1.0f));
+	_pBombInterFace->SetRotation(SimpleMath::Vector3(-0.87f, 0, 0));
+
+	_generatedBombBullets.emplace(0, nullptr);
+	_generatedBombBullets.emplace(1, nullptr);
+	_generatedBombBullets.emplace(2, nullptr);
 }
 
 LockOnSystem::~LockOnSystem()
 {
-	_pLockOnArea->Destroy();
+
+	for(auto bullet : _generatedBombBullets)
+	{
+		if(bullet.second != nullptr)
+		{
+			bullet.second->Destroy();
+		}
+	}
+
+	_generatedBombBullets.clear();
 }
 
 void LockOnSystem::LockOn()
@@ -52,43 +67,30 @@ void LockOnSystem::LockOn()
 }
 
 
+bool LockOnSystem::IsGenerateBullet()
+{
+	for(auto bulletData : _generatedBombBullets)
+	{
+		if(bulletData.second == nullptr)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void LockOnSystem::Attack()
 {
-	_shotCoolTimer->Update();
 
-	if (!_shotCoolTimer->IsTime())
+	if ( !IsGenerateBullet())
 	{
 		return;
 	}
 
-	_shotCoolTimer->Reset();
 
-	auto cursorPosition = static_cast<Player*>(_user)->GetCursorPosition();
-	auto playerPosition = _user->GetPosition();
-	auto vec = cursorPosition - playerPosition;
-	vec.Normalize();
+	GenerateBullet();
 
-	auto bullet = new BombBullet(1.0f, vec);
-
-
-
-	bullet->SetScale(SimpleMath::Vector3(0.4f));
-	//bullet->SetRotation(SimpleMath::Vector3(0.0f, 0.0f, 2.4f));
-	ActorManager::GetInstance().AddActor(bullet);
-	bullet->SetActorName("Bullet");
-	bullet->Destroy(10.0f);
-	bullet->SetPosition(_user->GetPosition() + vec * 4.0f);
-
-	auto rotate = MathUtility::LookAt(bullet->GetPosition(), _user->GetPosition());
-	bullet->SetRotation(rotate);
-
-	static_cast<Player*>(_user)->Shot();
-
-	if (DirectXInput::GetInstance().IsActiveGamePad())
-	{
-		DirectXInput::GetInstance().OnVibration(0, 30000, 0.0f, 0.1f);
-	}
-	return;
 
 
 	//for(auto itr = _targets.begin(); itr != _targets.end(); ++itr)
@@ -155,27 +157,89 @@ void LockOnSystem::Attack()
 	//}
 }
 
-void LockOnSystem::ClearTarget()
-{
 
-	_targets.clear();
+
+void LockOnSystem::UpdateBombUIs()
+{
+	//auto playerPosition = _user->GetPosition();
+	//auto basePosition = playerPosition + SimpleMath::Vector3(0.5f, 0, 2);
+
+	//for(int i = 0; i < 3; ++i)
+	//{
+	//	auto bombUI = _bombUIObjects[i];
+	//	auto position = basePosition + SimpleMath::Vector3(0.25f * i, 0, 0);
+
+	//	bombUI->SetPosition(position);
+	//}
 }
 
 void LockOnSystem::Update()
 {
-	// 1フレーム、ロックオンをやめたとき
-	//if(_isCurrentLockOn == false && _isPreviousLockOn == true)
-	//{
-	//	Attack();
-	//	ClearTarget();
-	//	_lockonCoolTimer->Reset();
-	//}
+	Explosion();
+
+	for(auto itr = _generatedBombBullets.begin(); itr != _generatedBombBullets.end();)
+	{
+		if((*itr).second != nullptr)
+		{
+			// ボムが消滅したときにUIを再生成する。
+			if ((*itr).second->IsDelete())
+			{
+				(*itr).second->Destroy();
+				(*itr).second = nullptr;
+
+				auto index = (*itr).first;
+				_pBombInterFace->Generate(index);
+
+				continue;
+			}
+		}
+		++itr;
+	}
 
 
-	ClearTarget();
+}
 
-	_isPreviousLockOn = _isCurrentLockOn;
-	_isCurrentLockOn = false;
+void LockOnSystem::Explosion()
+{
+	if(DirectXInput::GetInstance().IsActiveGamePad())
+	{
+		if (DirectXInput::GetInstance().IsDownTrigger(GamePad_LeftTrigger))
+		{
+			for (auto itr = _generatedBombBullets.begin(); itr != _generatedBombBullets.end(); ++itr)
+			{
+				if ((*itr).second == nullptr) continue;
+
+				(*itr).second->Explode();
+				(*itr).second->Destroy();
+				(*itr).second = nullptr;
+
+				auto index = (*itr).first;
+				_pBombInterFace->Generate(index);
+
+				return;
+			}
+		}
+	}
+	else
+	{
+		if (DirectXInput::GetInstance().IsKeyDown(DIK_Z))
+		{
+			for (auto itr = _generatedBombBullets.begin(); itr != _generatedBombBullets.end(); ++itr)
+			{
+				if ((*itr).second == nullptr) continue;
+
+				(*itr).second->Explode();
+				(*itr).second->Destroy();
+				(*itr).second = nullptr;
+
+				auto index = (*itr).first;
+				_pBombInterFace->Generate(index);
+
+				return;
+			}
+		}
+	}
+
 }
 
 
@@ -184,36 +248,52 @@ void LockOnSystem::DrawProperties()
 {
 }
 
-void LockOnSystem::AddTarget(const LockOnArea::LockOnInfo& target)
+void LockOnSystem::GenerateBullet()
 {
-	for (auto itr = _targets.begin(); itr != _targets.end(); ++itr)
+	auto cursorPosition = static_cast<Player*>(_user)->GetCursorPosition();
+	auto playerPosition = _user->GetPosition();
+	auto vec = cursorPosition - playerPosition;
+	vec += SimpleMath::Vector3(0, 2, 0);
+	vec.Normalize();
+
+	auto bullet = new BombBullet(1.0f, vec);
+
+	bullet->SetScale(SimpleMath::Vector3(6.0f));
+	//bullet->SetRotation(SimpleMath::Vector3(0.0f, 0.0f, 2.4f));
+	ActorManager::GetInstance().AddActor(bullet);
+	bullet->SetActorName("Bullet");
+	bullet->Destroy(5.0f);
+	bullet->SetPosition(cursorPosition);
+
+	auto rotate = MathUtility::LookAt(bullet->GetPosition(), _user->GetPosition());
+	bullet->SetRotation(rotate);
+
+	AddBullet(bullet);
+
+	static_cast<Player*>(_user)->Shot();
+
+	if (DirectXInput::GetInstance().IsActiveGamePad())
 	{
-		if (target._pTarget == (*itr)._target)
+		DirectXInput::GetInstance().OnVibration(0, 30000, 0.0f, 0.1f);
+	}
+}
+
+int LockOnSystem::FindIndex()
+{
+	for (auto bulletData : _generatedBombBullets)
+	{
+		if (bulletData.second == nullptr)
 		{
-			return;
+			return bulletData.first;
 		}
 	}
-
-	//if(!_lockonCoolTimer->IsTime())
-	//{
-	//	return;
-	//}
-
-	//_lockonCoolTimer->Reset();
-
-
-	auto targetInfo = AttackTargetInfo
-	{
-		target._pTarget,
-		target._lockOnCount,
-	};
-
-
-
-
-
-
-
-
-	_targets.push_back(targetInfo);
 }
+
+void LockOnSystem::AddBullet(BombBullet* pBombBullet)
+{
+	auto index = FindIndex();
+	_generatedBombBullets[index] = pBombBullet;
+	_pBombInterFace->Throw(index);
+
+}
+

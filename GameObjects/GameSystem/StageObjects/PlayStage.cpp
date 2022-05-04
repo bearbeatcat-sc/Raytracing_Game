@@ -62,19 +62,19 @@ void PlayStage::Init()
 	const float goalPoint = 1300;
 
 
-	auto leftWall = new Cube(SimpleMath::Vector3(-100, 0, 0), SimpleMath::Vector3(1, 100, goalPoint), "WhiteCube");
+	auto leftWall = new Cube(SimpleMath::Vector3(-100, 0, 0), SimpleMath::Vector3(1, 100, goalPoint), "WhiteCube",0.4f);
 	leftWall->SetActorName("leftWall");
 	SetChild(leftWall);
 
-	auto rightWall = new Cube(SimpleMath::Vector3(100, 0, 0), SimpleMath::Vector3(1, 100, goalPoint), "WhiteCube");
+	auto rightWall = new Cube(SimpleMath::Vector3(100, 0, 0), SimpleMath::Vector3(1, 100, goalPoint), "WhiteCube", 0.4f);
 	rightWall->SetActorName("rightWall");
 	SetChild(rightWall);
 
-	auto topWall = new Cube(SimpleMath::Vector3(0, 100, 0), SimpleMath::Vector3(100, 1, goalPoint), "WhiteCube");
+	auto topWall = new Cube(SimpleMath::Vector3(0, 100, 0), SimpleMath::Vector3(100, 1, goalPoint), "WhiteCube", 0.4f);
 	topWall->SetActorName("topWall");
 	SetChild(topWall);
 
-	auto downWall = new Cube(SimpleMath::Vector3(0, -100, 0), SimpleMath::Vector3(100, 1, goalPoint), "WhiteCube");
+	auto downWall = new Cube(SimpleMath::Vector3(0, -100, 0), SimpleMath::Vector3(100, 1, goalPoint), "WhiteCube", 0.4f);
 	downWall->SetActorName("downWall");
 	SetChild(downWall);
 

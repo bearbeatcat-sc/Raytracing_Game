@@ -6,13 +6,14 @@ class AnimationComponent;
 class AnimationQue;
 class DXRInstance;
 
-class ScoreObject
+class BombUIObject
 	:public Actor
 {
 public:
-	ScoreObject(const int number);
-	~ScoreObject() = default;
-
+	BombUIObject() = default;
+	~BombUIObject() = default;
+	void Generate();
+	void Throw();
 
 private:
 	void UpdateActor() override;
@@ -20,11 +21,10 @@ private:
 	void Shutdown() override;
 	void OnCollsion(Actor* other) override;
 
-	void EndUpdate();
-
 private:
-	 std::string _meshName;
-	 std::shared_ptr<DXRInstance> _instance;
-	 std::shared_ptr<AnimationComponent> _AnimationComponent;
+	std::shared_ptr<DXRInstance> _bombUIInstance;
+	std::shared_ptr<DXRInstance> _bombThrowUIInstance;
+	std::shared_ptr<AnimationComponent> _AnimationComponent;
 
+	bool _isThrow;
 };

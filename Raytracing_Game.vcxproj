@@ -218,6 +218,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\BreakEffect.cpp" />
+    <ClCompile Include="GameObjects\GameSystem\ChangeResultUIObject.cpp" />
     <ClCompile Include="GameObjects\GameSystem\GameManager.cpp" />
     <ClCompile Include="GameObjects\GameSystem\GameTimer.cpp" />
     <ClCompile Include="GameObjects\GameSystem\GoalObject.cpp" />
@@ -228,10 +229,12 @@
     <ClCompile Include="GameObjects\GameSystem\StageObjects\PlayStage.cpp" />
     <ClCompile Include="GameObjects\GameSystem\StageObjects\TitleStage.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\AimCursor.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\AimCursorObject.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\BombArea.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\BombBullet.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\BombInterFace.cpp" />
+    <ClCompile Include="GameObjects\PlayerSystem\BombUIObject.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\Bullet.cpp" />
-    <ClCompile Include="GameObjects\PlayerSystem\LockOnArea.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnSystem.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\LockOnUIObject.cpp" />
     <ClCompile Include="GameObjects\PlayerSystem\MirrorBullet.cpp" />
@@ -259,6 +262,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObjects\BreakEffect.h" />
+    <ClInclude Include="GameObjects\GameSystem\ChangeResultUIObject.h" />
     <ClInclude Include="GameObjects\GameSystem\GameManager.h" />
     <ClInclude Include="GameObjects\GameSystem\GameTimer.h" />
     <ClInclude Include="GameObjects\GameSystem\GoalObject.h" />
@@ -270,10 +274,12 @@
     <ClInclude Include="GameObjects\GameSystem\StageObjects\PlayStage.h" />
     <ClInclude Include="GameObjects\GameSystem\StageObjects\TitleStage.h" />
     <ClInclude Include="GameObjects\PlayerSystem\AimCursor.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\AimCursorObject.h" />
     <ClInclude Include="GameObjects\PlayerSystem\BombArea.h" />
     <ClInclude Include="GameObjects\PlayerSystem\BombBullet.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\BombInterFace.h" />
+    <ClInclude Include="GameObjects\PlayerSystem\BombUIObject.h" />
     <ClInclude Include="GameObjects\PlayerSystem\Bullet.h" />
-    <ClInclude Include="GameObjects\PlayerSystem\LockOnArea.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnSystem.h" />
     <ClInclude Include="GameObjects\PlayerSystem\LockOnUIObject.h" />
     <ClInclude Include="GameObjects\PlayerSystem\MirrorBullet.h" />

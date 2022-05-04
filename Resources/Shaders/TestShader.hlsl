@@ -67,10 +67,6 @@ struct IncidentLight
 	bool visible;
 };
 
-struct HitResult
-{
-	int _isHit;
-};
 
 // GlobalSignature
 RaytracingAccelerationStructure gRtScene : register(t0);
@@ -87,7 +83,6 @@ StructuredBuffer<uint> indexBuffer : register(t0, space1);
 StructuredBuffer<Vertex> vertexBuffer : register(t1, space1);
 Texture2D<float4> texture : register(t2, space1);
 ConstantBuffer<Material> matBuffer : register(b0, space1);
-RWStructuredBuffer<HitResult> hitResultBuffer : register(u1);
 
 
 static const float PI = 3.1415926f;
@@ -559,8 +554,8 @@ bool CheckShadow(in float3 lightDir, in float3 worldPosition)
 void miss(inout Payload payload)
 {
 	//payload.color = float3(0.2f, 0.2f, 0.2f);
-	float3 color = gBackGround.SampleLevel(
-		gSampler, WorldRayDirection(), 0.0).xyz;
+	//float3 color = gBackGround.SampleLevel(
+	//	gSampler, WorldRayDirection(), 0.0).xyz;
 
 	payload.color = float4(1, 1, 1, 1);
 
@@ -580,7 +575,7 @@ void anyHit(inout Payload payload, in MyAttribute attribs)
 
 	float4 tex = texture.SampleLevel(gSampler, vtx.uv, 0.0f);
 
-	if (tex.w <= 0.0f)
+	if (tex.w <= 0.2f)
 	{
 		IgnoreHit();
 	}
@@ -598,8 +593,6 @@ void chs(inout Payload payload, in MyAttribute attribs)
 	Vertex vtx = GetHitVertex(attribs);
 	uint id = InstanceID();
 	uint3 dispatchRayIndex = DispatchRaysIndex();
-
-	hitResultBuffer[id]._isHit = 1;
 
 	float3 worldNormal = normalize(mul(vtx.normal, (float3x3) ObjectToWorld4x3()));
 	float3 worldPosition = mul(float4(vtx.pos, 1), ObjectToWorld4x3());
@@ -621,7 +614,12 @@ void chs(inout Payload payload, in MyAttribute attribs)
 	float3 diffuseColor = lerp(albedo.rgb, float3(0.0f, 0.0f, 0.0f), metallic.w);
 	float3 specularColor = lerp(float3(0.04f, 0.04f, 0.04f), albedo.rgb, metallic.w);
 
-
+	// ¡‚Í–³—‚â‚èAUI—p‚Æ‚µ‚Äˆ—‚·‚éB
+	if(id == 1)
+	{
+		payload.color = tex;
+		return;
+	}
 
 	IncidentLight light;
 
@@ -684,8 +682,8 @@ void chs(inout Payload payload, in MyAttribute attribs)
 			payload.color.rgb *= 0.5;
 		}
 
-		float t = RayTCurrent();
-		//payload.color = lerp(payload.color, float3(1,1,1), 1.0f - exp(-0.0000001f * t * t * t));
+		//float t = RayTCurrent();
+		////payload.color = lerp(payload.color, float3(1,1,1), 1.0f - exp(-0.0000001f * t * t * t));
 
 		return;
 	}
@@ -707,7 +705,7 @@ void chs(inout Payload payload, in MyAttribute attribs)
 		payload.color.rgb *= 0.5;
 	}
 
-	float t = RayTCurrent();
+	//float t = RayTCurrent();
 	//payload.color = lerp(payload.color, float3(1, 1, 1), 1.0f - exp(-0.0000001f * t * t * t));
 
 }

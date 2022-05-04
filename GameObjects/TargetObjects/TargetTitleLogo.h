@@ -1,7 +1,8 @@
 ﻿#pragma once
 
-#include "../TargetObjects/TargetObject.h"
+#include <Game_Object/Actor.h>
 
+class DXRInstance;
 class Vector3AnimationCommand;
 class AnimationQue;
 class CollisionComponent;
@@ -9,7 +10,7 @@ class AnimationComponent;
 class GameManager;
 
 class TargetTitleLogo
-	:public TargetObject
+	:public Actor
 {
 public:
 	TargetTitleLogo(const int maxHP,GameManager* pGameManager);
@@ -22,9 +23,14 @@ private:
 	bool IsDeath();
 	void Damage(float damage);
 	void OnCollsion(Actor* other) override;
-	void ActiveAction(Actor* pPlayer) override;
+
+	void ChangeInstance(float damage);
+
+private:
+
 
 	CollisionComponent* m_pCollisionComponent;
+	GameManager* _pGameManager;
 
 	const std::string _dxrMeshName;
 
@@ -32,6 +38,9 @@ private:
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand0;
 	std::shared_ptr<Vector3AnimationCommand> _damageAnimationCommand1;
 
+	std::shared_ptr<DXRInstance> _titleLogoInstance3;
+	std::shared_ptr<DXRInstance> _titleLogoInstance2;
+	std::shared_ptr<DXRInstance> _titleLogoInstance1;
 
 	int _hp;
 	const int _maxHP;

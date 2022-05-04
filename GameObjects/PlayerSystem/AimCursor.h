@@ -3,7 +3,7 @@
 #include <Game_Object/Actor.h>
 
 class DXRInstance;
-class Cube;
+class AimCursorObject;
 
 class AimCursor
 	:public Actor
@@ -23,7 +23,7 @@ private:
 	float _Pitch;
 
 private:
-	Cube* _pCursor;
 	SimpleMath::Vector2 _cursorPosition;
 	std::shared_ptr<DXRInstance> _instance;
+	AimCursorObject* _pAimCursorObject;
 };

@@ -21,19 +21,19 @@ BombArea::BombArea(float maxRadius)
 	// ボムだが、当たり判定を大きい弾として扱う
 	SetTag("Bullet");
 
-	_instance = DXRPipeLine::GetInstance().AddInstance("ClearSphere", 0);
+	//_instance = DXRPipeLine::GetInstance().AddInstance("ClearSphere", 0);
 
 	auto mtx = GetWorldMatrix();;
-	_instance->SetMatrix(mtx);
-	_instance->CreateRaytracingInstanceDesc();
+	//_instance->SetMatrix(mtx);
+	//_instance->CreateRaytracingInstanceDesc();
 
-	_expandTimer = std::make_shared<Timer>(0.8f);
+	_expandTimer = std::make_shared<Timer>(0.4f);
 }
 
 void BombArea::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();;
-	_instance->SetMatrix(mtx);
+	//_instance->SetMatrix(mtx);
 
 	if(_isExpand)
 	{
@@ -46,7 +46,7 @@ void BombArea::UpdateActor()
 
 void BombArea::Init()
 {
-	_pCollisionComponent = new SphereCollisionComponent(this, GetScale().x, "PlayerObject");
+	_pCollisionComponent = new SphereCollisionComponent(this, GetScale().x, "AllHitObject");
 	CollisionManager::GetInstance().AddComponent(_pCollisionComponent);
 	CollisionManager::GetInstance().AddRegistTree(_pCollisionComponent);
 }
@@ -54,7 +54,7 @@ void BombArea::Init()
 void BombArea::Shutdown()
 {
 	_pCollisionComponent->Delete();
-	_instance->Destroy();
+	//_instance->Destroy();
 }
 
 void BombArea::OnCollsion(Actor* other)

@@ -19,45 +19,35 @@
 #include "../Cube.h"
 
 TargetTitleLogo::TargetTitleLogo(const int maxHP, GameManager* pGameManager)
-	:_hp(maxHP), TargetObject(pGameManager,100000.0f), _maxHP(maxHP), _dxrMeshName("TitleLogo")
+	:_hp(maxHP), _maxHP(maxHP), _dxrMeshName("TitleLogo"),_pGameManager(pGameManager)
 {
-	_instance = DXRPipeLine::GetInstance().AddInstance("TitleLogo", 0);
+	_titleLogoInstance3 = DXRPipeLine::GetInstance().AddInstance("TitleLogo3", 0);
 
 	auto mtx = GetWorldMatrix();;
-	_instance->SetMatrix(mtx);
-	_instance->CreateRaytracingInstanceDesc();
+	_titleLogoInstance3->SetMatrix(mtx);
+	_titleLogoInstance3->CreateRaytracingInstanceDesc();
 }
 
 void TargetTitleLogo::UpdateActor()
 {
 	auto mtx = GetWorldMatrix();
-	_instance->SetMatrix(mtx);
 
-	if (_isDelete)
+	if(_hp == 3)
 	{
-		DestoryOrder();
+		_titleLogoInstance3->SetMatrix(mtx);
+		return;
+	}
+	else if(_hp == 2)
+	{
+		_titleLogoInstance2->SetMatrix(mtx);
+		return;
 	}
 
-	//if (IsActive())
-	//{
-	//	_pDamageTimer->Update();
-	//	if (_pDamageTimer->IsTime())
-	//	{
-	//		_pDamageTimer->Reset();
-	//		Damage(5.0f);
-	//	}
-	//}
+	_titleLogoInstance1->SetMatrix(mtx);
+	return;
 
-	//if (IsExitActive())
-	//{
-	//	if (_findUI)
-	//	{
-	//		_findUI->Destroy();
-	//		_findUI = nullptr;
-	//	}
-	//}
 
-	ActiveUpdate();
+
 }
 
 void TargetTitleLogo::Init()
@@ -96,18 +86,20 @@ void TargetTitleLogo::Init()
 
 	if(DirectXInput::GetInstance().IsActiveGamePad())
 	{
-		auto cube1 = new Cube(SimpleMath::Vector3(0, -1.7f, 55.0f), SimpleMath::Vector3(3, 2, 1), "ControllUI_Pad");
+		auto cube1 = new Cube(SimpleMath::Vector3(3, -2, 8), SimpleMath::Vector3(2.5f, 1.0f, 1), "ControllUI_Pad");
 		SetChild(cube1);
+		cube1->SetRotation(SimpleMath::Vector3(1,0,0));
 	}
 	else
 	{
-		auto cube1 = new Cube(SimpleMath::Vector3(0, -1.7f, 55.0f), SimpleMath::Vector3(3, 2, 1), "ControllUI_Key");
+		auto cube1 = new Cube(SimpleMath::Vector3(3, -2, 8), SimpleMath::Vector3(2.5f, 1.0f, 1), "ControllUI_Key");
 		SetChild(cube1);
+		cube1->SetRotation(SimpleMath::Vector3(1, 0, 0));
 	}
 
 
 
-	auto cube2 = new Cube(SimpleMath::Vector3(0,-7.5f,55), SimpleMath::Vector3(2,1,1), "BreakTitleUI");
+	auto cube2 = new Cube(SimpleMath::Vector3(0,-1.5f,40), SimpleMath::Vector3(2.3f,0.740f,1), "BreakTitleUI");
 	SetChild(cube2);
 
 	_initScale = GetScale();
@@ -115,7 +107,21 @@ void TargetTitleLogo::Init()
 
 void TargetTitleLogo::Shutdown()
 {
-	_instance->Destroy();
+	if(_titleLogoInstance3)
+	{
+		_titleLogoInstance3->Destroy();
+	}
+
+	if (_titleLogoInstance2)
+	{
+		_titleLogoInstance2->Destroy();
+	}
+
+	if (_titleLogoInstance1)
+	{
+		_titleLogoInstance1->Destroy();
+	}
+
 	m_pCollisionComponent->Delete();
 }
 
@@ -151,7 +157,7 @@ void TargetTitleLogo::Damage(float damage)
 	//	ActorManager::GetInstance().AddActor(breakEffect);
 	//}
 
-	_hp = std::clamp(_hp - damage, 0.0f, (float)_maxHP);
+	ChangeInstance(damage);
 
 
 	_damageAnimationCommand0->_start = _initScale;
@@ -177,10 +183,9 @@ void TargetTitleLogo::Damage(float damage)
 
 	if (IsDeath())
 	{
-		_isDelete = true;
 		_pGameManager->ChangeGameState(GameManager::GameStete_GamePlay);
 
-		SoundManager::GetInstance().OneShot("./Resources/Sound/SystemSE.sound", 0.8f);
+		SoundManager::GetInstance().OneShot("./Resources/Sound/SystemSE.sound", 0.4f);
 
 		for (int i = 0; i < 6; ++i)
 		{
@@ -198,17 +203,15 @@ void TargetTitleLogo::Damage(float damage)
 			breakEffect->SetRotation(SimpleMath::Vector3(x, y, z));
 			ActorManager::GetInstance().AddActor(breakEffect);
 		}
+
+		Destroy();
 	}
 
 }
 
 void TargetTitleLogo::OnCollsion(Actor* other)
 {
-	if (_isDelete)return;
-
-
-
-	if (other->IsContainsTag("Bullet"))
+	if (other->GetTag() == "PlayerBombBullet")
 	{
 		Damage(1.0f);
 
@@ -240,7 +243,35 @@ void TargetTitleLogo::OnCollsion(Actor* other)
 
 }
 
-void TargetTitleLogo::ActiveAction(Actor* pPlayer)
+void TargetTitleLogo::ChangeInstance(float damage)
 {
-}
+	const int currentHP = _hp;
 
+	_hp = std::clamp(_hp - damage, 0.0f, (float)_maxHP);
+
+	if(_hp == 2)
+	{
+		_titleLogoInstance3->Destroy();
+		_titleLogoInstance3 = nullptr;
+
+		_titleLogoInstance2 = DXRPipeLine::GetInstance().AddInstance("TitleLogo2", 0);
+		auto mtx = GetWorldMatrix();;
+		_titleLogoInstance2->SetMatrix(mtx);
+		_titleLogoInstance2->CreateRaytracingInstanceDesc();
+
+		return;
+	}
+
+	if(_hp == 1)
+	{
+		_titleLogoInstance2->Destroy();
+		_titleLogoInstance2 = nullptr;
+
+		_titleLogoInstance1 = DXRPipeLine::GetInstance().AddInstance("TitleLogo1", 0);
+		auto mtx = GetWorldMatrix();;
+		_titleLogoInstance1->SetMatrix(mtx);
+		_titleLogoInstance1->CreateRaytracingInstanceDesc();
+	}
+
+
+}

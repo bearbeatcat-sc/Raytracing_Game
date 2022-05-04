@@ -21,6 +21,11 @@ void BreakEffect::UpdateActor()
 
 	position += _velocity * Time::DeltaTime;
 
+	auto rotate = GetEulerRotation();
+
+	rotate += _velocity * Time::DeltaTime;
+	SetRotation(rotate);
+
 	SetPosition(position);
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);
@@ -33,6 +38,8 @@ void BreakEffect::Init()
 
 void BreakEffect::Shutdown()
 {
+	if (_instance == nullptr)return;
+
 	_instance->Destroy();
 }
 

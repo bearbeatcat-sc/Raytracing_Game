@@ -1,17 +1,18 @@
 ﻿#pragma once
 
-#include <memory>
 #include <Game_Object/Actor.h>
 
+class AnimationComponent;
 class DXRInstance;
 
-class TraceEffect
+class ChangeResultUIObject
 	:public Actor
 {
 public:
-	TraceEffect(const std::string& meshName);
-	~TraceEffect();
+	ChangeResultUIObject() = default;
+	~ChangeResultUIObject() = default;
 
+private:
 	void UpdateActor() override;
 	void Init() override;
 	void Shutdown() override;
@@ -19,5 +20,6 @@ public:
 
 private:
 	std::shared_ptr<DXRInstance> _instance;
-	const std::string _dxrMeshName;
+	//std::shared_ptr<AnimationComponent> _AnimationComponent;
+
 };

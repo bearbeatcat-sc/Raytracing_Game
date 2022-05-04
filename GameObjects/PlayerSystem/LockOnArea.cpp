@@ -22,7 +22,7 @@ const std::vector<LockOnArea::LockOnInfo>& LockOnArea::GetLockOnTargets()
 void LockOnArea::UpdateActor()
 {
 	// 毎フレームクリアは効率は悪いかもしれない。
-	_lockOnTargets.clear();
+	//_lockOnTargets.clear();
 
 	SetPosition(_pActor->GetPosition());
 }
@@ -45,29 +45,29 @@ void LockOnArea::Shutdown()
 
 void LockOnArea::AddTarget(LockOnInfo target)
 {
-	_lockOnTargets.push_back(target);
+	//_lockOnTargets.push_back(target);
 }
 
 void LockOnArea::OnCollsion(Actor* other)
 {
 
-	if(other->IsContainsTag("Target"))
-	{
-		auto hitList = DXRPipeLine::GetInstance().GetHitResult();
+	//if(other->IsContainsTag("Target"))
+	//{
+	//	auto hitList = DXRPipeLine::GetInstance().GetHitResult();
 
-		auto instanceID = static_cast<TargetObject*>(other)->GetInstanceID();
+	//	auto instanceID = static_cast<TargetObject*>(other)->GetInstanceID();
 
-		if (instanceID == -1)return;
+	//	if (instanceID == -1)return;
 
-		if(hitList.at(instanceID)._isHit == 1)
-		{
-			auto target = static_cast<TargetObject*>(other);
-			target->Active(_pActor);
+	//	if(hitList.at(instanceID)._isHit == 1)
+	//	{
+	//		auto target = static_cast<TargetObject*>(other);
+	//		target->Active(_pActor);
 
-			AddTarget(LockOnInfo(target,hitList.at(instanceID)._isHit));
-		}
+	//		AddTarget(LockOnInfo(target,hitList.at(instanceID)._isHit));
+	//	}
 
-	}
+	//}
 
 }
 	

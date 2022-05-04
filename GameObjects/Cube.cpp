@@ -7,8 +7,8 @@
 #include <Device/Raytracing/DXRPipeLine.h>
 
 
-Cube::Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale, const std::string& meshName)
-	:_initScale(scale),_DXRMeshName(meshName),Actor()
+Cube::Cube(const SimpleMath::Vector3& pos, const SimpleMath::Vector3& scale, const std::string& meshName,float scalingTime)
+	:_initScale(scale),_DXRMeshName(meshName),Actor(), _scalingTime(scalingTime)
 {
 	SetPosition(pos);
 	SetScale(scale);
@@ -47,7 +47,7 @@ void Cube::Init()
 	AddComponent(_AnimationComponent);
 
 	auto generateAnimationCommandList = std::make_shared<AnimationCommandList>();
-	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, _initScale, m_Scale, 2.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, _initScale, m_Scale, _scalingTime, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
 	auto destroyAnimation = std::make_shared<AnimationCommandList>();
 	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(GetScale(), SimpleMath::Vector3::Zero, m_Scale, 6.0f));

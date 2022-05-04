@@ -21,11 +21,6 @@ VerticalMoveBlock::VerticalMoveBlock(const SimpleMath::Vector3& pos, const Simpl
 
 void VerticalMoveBlock::Delete()
 {
-	auto destroyAnimation = std::make_shared<AnimationCommandList>();
-	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(GetPosition(), SimpleMath::Vector3(0, _initPosition.y, _initPosition.z), m_Position, 6.0f));
-	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(_initScale, SimpleMath::Vector3::Zero, m_Scale, 6.0f));
-
-	_AnimationComponent->AddAnimationState(destroyAnimation, "Destroy", AnimationQue::AnimationStateType_End);
 
 	_AnimationComponent->PlayAnimation("Destroy");
 }
@@ -58,6 +53,10 @@ void VerticalMoveBlock::Init()
 	auto generateAnimationCommandList = std::make_shared<AnimationCommandList>();
 	generateAnimationCommandList->AddAnimation(std::make_shared<Vector3AnimationCommand>(SimpleMath::Vector3::Zero, _initScale, m_Scale, 1.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
 
+	auto destroyAnimation = std::make_shared<AnimationCommandList>();
+	destroyAnimation->AddAnimation(std::make_shared<Vector3AnimationCommand>(_initScale, SimpleMath::Vector3::Zero, m_Scale, 8.0f, AnimationCommand::AnimationSpeedType::AnimationSpeedType_InCubic));
+
+	_AnimationComponent->AddAnimationState(destroyAnimation, "Destroy", AnimationQue::AnimationStateType_End);
 
 	_AnimationComponent->AddAnimationState(generateAnimationCommandList, "Generate", AnimationQue::StandardAnimationStateType::AnimationStateType_None);
 	_AnimationComponent->PlayAnimation("Generate");

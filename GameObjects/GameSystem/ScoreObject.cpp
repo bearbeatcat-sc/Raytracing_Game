@@ -22,7 +22,7 @@ void ScoreObject::UpdateActor()
 
 void ScoreObject::Init()
 {
-	_instance = DXRPipeLine::GetInstance().AddInstance(_meshName, 0);
+	_instance = DXRPipeLine::GetInstance().AddInstance(_meshName, 0, 1);
 
 	auto mtx = GetWorldMatrix();;
 	_instance->SetMatrix(mtx);

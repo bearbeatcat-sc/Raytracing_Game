@@ -13,6 +13,7 @@
 #include "ScoreSystem.h"
 #include "ObjectGenerator.h"
 #include "StageObjects/PlayStage.h"
+#include "StageObjects/TitleStage.h"
 #include "ScoreResultObject.h"
 
 #include "../TargetObjects/TargetTitleLogo.h"
@@ -69,8 +70,7 @@ void GameManager::Init()
 	CameraManager::GetInstance().SetMainCamera("PlayerCamera");
 
 	_pBGMSoundInstance = SoundManager::GetInstance().CreateSoundInstance("./Resources/Sound/BGM.sound", true);
-	_pBGMSoundInstance->Play(0.2f, 2.0f);
-
+	_pBGMSoundInstance->Play(0.1f, 2.0f);
 
 }
 
@@ -87,8 +87,10 @@ void GameManager::OnCollsion(Actor* other)
 void GameManager::EndGame()
 {
 	//_pAmbientBGMSoundInstance->Play(0.1f, 2.0f);
-	_pBGMSoundInstance->Play(0.2f, 2.0f);
+	_pBGMSoundInstance->Play(0.1f, 2.0f);
 	_pObjectGenerator->End();
+
+	CreateTitleStage();
 
 	if (_pPlayStage)
 	{
@@ -98,7 +100,7 @@ void GameManager::EndGame()
 
 	//_pGameTimer->Destroy();
 
-	_pPlayer->SetPlayerState(Player::PlayerState_Stay);
+	_pPlayer->SetPlayerState(Player::PlayerState_Stop);
 	_pPlayer->SetPosition(SimpleMath::Vector3(0, 0, 0));
 
 	_pScoreResultObject = new ScoreResultObject();
@@ -106,6 +108,20 @@ void GameManager::EndGame()
 	_pPlayer->SetChild(_pScoreResultObject);
 
 	_pScoreSystem->ChangeResultMode();
+}
+
+void GameManager::CreateTitleStage()
+{
+	if(_pTitleStage != nullptr)
+	{
+		_pTitleStage->Delete();
+		_pTitleStage = nullptr;
+	}
+
+	_pTitleStage = new TitleStage();
+	ActorManager::GetInstance().AddActor(_pTitleStage);
+	_pTitleStage->SetActorName("TitleStage");
+	_pTitleStage->SetPosition(SimpleMath::Vector3(-6, -10, 0));
 }
 
 void GameManager::ResetGame()
@@ -128,6 +144,8 @@ void GameManager::ResetGame()
 		_pPlayer->Destroy();
 		_pPlayer = nullptr;
 	}
+
+	
 
 	//if (_pMirror0)
 	//{
@@ -155,17 +173,18 @@ void GameManager::ResetGame()
 	//_pMirror1 = new MirrorCube(this, true, 2.3f);
 	//_pMirror1->SetScale(SimpleMath::Vector3(0.23f, 1.30f, 1.2f));
 	//_pMirror1->SetRotation(SimpleMath::Vector3(5.620f, 0, 0));
-	//_pMirror1->SetPosition(SimpleMath::Vector3(-2.060f,0,2.43f));
+	//_pMirror1->SetPosition(SimpleMath::Vector3(-2.060f,0,2.43f));0
 
 	//_pPlayer->SetChild(_pMirror0);
 	//_pPlayer->SetChild(_pMirror1);
 
-	auto cube = new TargetTitleLogo(10, this);
-	cube->SetPosition(SimpleMath::Vector3(3.0f, 17.6f, 30.0f));
+	auto cube = new TargetTitleLogo(3, this);
+	cube->SetPosition(SimpleMath::Vector3(0.8f, 18, 50));
 	cube->SetScale(SimpleMath::Vector3(12, 4, 1.0f));
 	cube->SetActorName("TargetTitleLogo");
 	ActorManager::GetInstance().AddActor(cube);
 
+	CreateTitleStage();
 }
 
 void GameManager::ChangeGameState(GameState gameState)
@@ -209,7 +228,7 @@ void GameManager::ResultUpdate()
 	if (DirectXInput::GetInstance().IsKeyDown(DIK_SPACE))
 	{
 		ChangeGameState(GameStete_Title);
-		SoundManager::GetInstance().OneShot("./Resources/Sound/SystemSE.sound", 0.8f);
+		SoundManager::GetInstance().OneShot("./Resources/Sound/SystemSE.sound", 0.4f);
 	}
 
 	if (DirectXInput::GetInstance().IsActiveGamePad())
@@ -217,7 +236,7 @@ void GameManager::ResultUpdate()
 		if (DirectXInput::GetInstance().isButtonDown(GAMEPAD_BUTTON_A))
 		{
 			ChangeGameState(GameStete_Title);
-			SoundManager::GetInstance().OneShot("./Resources/Sound/SystemSE.sound", 0.8f);
+			SoundManager::GetInstance().OneShot("./Resources/Sound/SystemSE.sound", 0.4f);
 		}
 	}
 }
@@ -343,9 +362,15 @@ void GameManager::CreateStage()
 
 void GameManager::StartGame()
 {
+	if(_pTitleStage)
+	{
+		_pTitleStage->Delete();
+		_pTitleStage = nullptr;
+	}
+
 	if (_pBGMSoundInstance)
 	{
-		_pBGMSoundInstance->Play(0.8f, 2.0f);
+		_pBGMSoundInstance->Play(0.2f, 2.0f);
 	}
 
 	_pPlayer->SetPlayerState(Player::PlayerState_Move);
@@ -356,7 +381,6 @@ void GameManager::StartGame()
 	_pObjectGenerator->Reset();
 	_pPlayerTimeline->Reset();
 	CreateStage();
-
 
 	_pScoreSystem = new ScoreSystem(SimpleMath::Vector3(-1.0f, -1.0f, 2.0f));
 	_pPlayer->SetChild(_pScoreSystem);

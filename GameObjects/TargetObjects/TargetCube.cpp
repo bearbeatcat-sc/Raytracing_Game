@@ -165,11 +165,11 @@ void TargetCube::Damage(float damage)
 		
 		if(_dxrMeshName.find("Clear") != std::string::npos)
 		{
-			SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass2.sound", 0.5f);
+			SoundManager::GetInstance().OneShot("./Resources/Sound/CrashGlass2.sound", 0.3f);
 		}
 		else
 		{
-			SoundManager::GetInstance().OneShot("./Resources/Sound/CrashMetal.sound", 0.5f);
+			SoundManager::GetInstance().OneShot("./Resources/Sound/CrashMetal.sound", 0.3f);
 		}
 	}
 }

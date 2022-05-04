@@ -33,6 +33,7 @@ public:
 		PlayerState_Stay,
 		PlayerState_Move,
 		PlayerState_Run,
+		PlayerState_Stop,
 	};
 	void SetPlayerState(PlayerState playerState);
 	void Move();
@@ -50,12 +51,12 @@ private:
 
 private:
 
+	OBBCollisionComponent* _pCollisionComponent;
 
 	PlayerCamera* _pPlayerCamera;
 	GameManager* _pGameManager;
 	AimCursor* _pAimCursor;
 
-	OBBCollisionComponent* _pCollisionComponent;
 	std::shared_ptr<RigidBodyComponent> _rigidBodyComponent;
 	std::shared_ptr<LockOnSystem> _lockOnSystem;
 	bool _isGenerateLeft;

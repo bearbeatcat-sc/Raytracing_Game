@@ -1,15 +1,17 @@
 ﻿#pragma once
 
+#include <map>
 #include <memory>
 #include <vector>
 #include <Components/Component.h>
 
 #include "LockOnArea.h"
 
+class BombBullet;
 class SpriteComponent;
 class Timer;
 class TargetObject;
-class LockOnArea;
+class BombInterFace;
 
 
 class LockOnSystem
@@ -30,25 +32,24 @@ public:
 	};
 
 private:
+	bool IsGenerateBullet();
 	void Attack();
-	void ClearTarget();
+	void UpdateBombUIs();
 	void Update() override;
+	void Explosion();
 	void DrawProperties() override;
 
-	void AddTarget(const LockOnArea::LockOnInfo& target);
+	void GenerateBullet();
+	int FindIndex();
+	void AddBullet(BombBullet* pBombBullet);
 
 private:
-	LockOnArea* _pLockOnArea;
-	std::vector<AttackTargetInfo> _targets;
-	std::shared_ptr<Timer> _lockonCoolTimer;
-	std::shared_ptr<Timer> _shotCoolTimer;
 
-	const float _lockonCoolTime = 0.002f;
-	const float _shotCollTime = 0.2f;
+	std::map<int,BombBullet*> _generatedBombBullets;
+	BombInterFace* _pBombInterFace;
 
-	bool _isPreviousLockOn;
-	bool _isCurrentLockOn;
+	int _generateBombBulletCount;
 
-	bool _isGenerateLeft;
 	const float m_AimSpeed;
+	const size_t _MaxGenerateBulletCount = 3;
 };

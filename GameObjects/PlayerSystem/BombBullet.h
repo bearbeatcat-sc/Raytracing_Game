@@ -13,12 +13,16 @@ class BombBullet
 public:
 	BombBullet(const float moveSpeed, const SimpleMath::Vector3& vec);
 	~BombBullet() = default;
+	bool IsDelete();
+	void GenerateTraceEffect();
+	void GenerateRedTraceEffect();
+	void Explode();
 
 private:
 	void UpdateActor() override;
-	void Explode();
 	void Init() override;
 	void Shutdown() override;
+	void Exploding();
 	void OnCollsion(Actor* other) override;
 
 private:
@@ -28,9 +32,16 @@ private:
 	float _rotate;
 	float _addRotate;
 
+	bool _isDeleteFlag;
+	bool _isExploding;
 
 	std::shared_ptr<AnimationComponent> _AnimationComponent;
 	std::shared_ptr<DXRInstance> _instance;
+
+	std::shared_ptr<Timer> _explodeTimer;
+	std::shared_ptr<Timer> _explodingTimer;
+
+	const float _explodeTime = 3.0f;
 
 	OBBCollisionComponent* _pCollisionComponent;
 	SimpleMath::Vector3 _moveVec;

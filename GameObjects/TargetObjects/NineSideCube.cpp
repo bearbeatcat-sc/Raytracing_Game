@@ -43,7 +43,6 @@ void NineSideCube::UpdateActor()
 	if(GetChildren().size() == 0)
 	{
 		DestoryOrder();
-		_pGameManager->AddScore(100 * _radius);
 		return;
 	}
 
